@@ -16,112 +16,124 @@ import React from "react";
 import { Button, Header, Form, Icon, Input } from "semantic-ui-react";
 import validateField from "../../utility/formValidation";
 import ErrorMessage from "./Message";
+import { Controller } from "react-hook-form";
 
-const Contact = ({ formData, setFormData, errors, setErrors }) => {
-  const onContactChange = (event) => {
-    event.preventDefault();
-    event.persist();
-    setFormData((prev) => {
-      const { contact } = formData;
-      validateField(
-        "contact",
-        event.target.name,
-        event.target.value,
-        errors,
-        setErrors
-      );
-      contact = {
-        ...contact,
-        [event.target.name]: event.target.value,
-      };
-      return {
-        ...prev,
-        contact,
-      };
-    });
-  };
+const Contact = ({ errors, watch, control, setValue }) => {
   return (
     <>
       <Header as="h3">Contact Information</Header>
       <Form.Group widths="equal">
         <Form.Field required>
-          <Input
-            required
-            icon="mail"
-            iconPosition="left"
-            placeholder="Email ID *"
-            name="email"
-            value={formData.contact.email}
-            onChange={(e) => onContactChange(e)}
-          />
+        <Controller
+          name="contact.email"
+          control={control}
+          rules={{ required: true }}
+          render={({ field }) => <Input
+          required
+          icon="mail"
+          iconPosition="left"
+          placeholder="Email ID *"
+          name="email"
+          {...field}
+        />
+        }
+        />
+          
         </Form.Field>
         <Form.Field required>
-          <Input
-            icon="phone"
-            iconPosition="left"
-            placeholder="Contact Number *"
-            name="phone"
-            value={formData.contact.phone}
-            onChange={(e) => onContactChange(e)}
-          />
+        <Controller
+          name="contact.phone"
+          control={control}
+          rules={{ required: true }}
+          render={({ field }) => <Input
+          required
+          icon="phone"
+          iconPosition="left"
+          placeholder="Contact Number *"
+          name="phone"
+          {...field}
+        />
+        }
+        />
         </Form.Field>
       </Form.Group>
       <Form.Group widths="equal">
         <Form.Field>
-          <Input
-            icon="at"
-            iconPosition="left"
-            placeholder="Website"
-            name="website"
-            value={formData.contact.website}
-            onChange={(e) => onContactChange(e)}
-          />
+        <Controller
+          name="contact.website"
+          control={control}
+          render={({ field }) => <Input
+          icon="at"
+          iconPosition="left"
+          placeholder="Website"
+          name="website"
+          {...field}
+        />
+        }
+        />
         </Form.Field>
         <Form.Field>
-          <Input
-            icon="github"
-            iconPosition="left"
-            placeholder="Github"
-            name="github"
-            value={formData.contact.github}
-            onChange={(e) => onContactChange(e)}
-          />
+        <Controller
+          name="contact.github"
+          control={control}
+          render={({ field }) => <Input
+          icon="github"
+          iconPosition="left"
+          placeholder="Github"
+          name="github"
+          {...field}
+        />
+        }
+        />
         </Form.Field>
       </Form.Group>
       <Form.Group widths="equal">
         <Form.Field>
-          <Input
-            icon="linkedin"
-            iconPosition="left"
-            placeholder="LinkedIn"
-            name="linkedin"
-            value={formData.contact.linkedin}
-            onChange={(e) => onContactChange(e)}
-          />
+        <Controller
+          name="contact.linkedin"
+          control={control}
+          render={({ field }) => <Input
+          icon="linkedin"
+          iconPosition="left"
+          placeholder="LinkedIn"
+          name="linkedin"
+          {...field}
+        />
+        }
+        />
         </Form.Field>
         <Form.Field>
-          <Input
-            icon="twitter"
-            iconPosition="left"
-            placeholder="Twitter"
-            name="twitter"
-            value={formData.contact.twitter}
-            onChange={(e) => onContactChange(e)}
-          />
+        <Controller
+          name="contact.twitter"
+          control={control}
+          render={({ field }) => <Input
+          icon="twitter"
+          iconPosition="left"
+          placeholder="Twitter"
+          name="twitter"
+          {...field}
+        />
+        }
+        />
         </Form.Field>
       </Form.Group>
       <Form.Field required>
         <label style={{ color: "gray" }}>
           <Icon name="home" /> Address
         </label>
-        <Form.TextArea
+        <Controller
+          name="contact.address"
+          control={control}
+          rules={{ required: true }}
+          render={({ field }) => <Form.TextArea
           placeholder="Enter your permanent address..."
           name="address"
-          value={formData.contact.address}
-          onChange={(e) => onContactChange(e)}
+          {...field}
+        />
+        }
         />
       </Form.Field>
-      {errors.contact.length !== 0 ? ErrorMessage(errors.contact) : ""}
+    
     </>
   );
 };

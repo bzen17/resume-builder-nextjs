@@ -12,82 +12,81 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { Button, Grid, Form, Popup, Header } from "semantic-ui-react";
 import validateField from "../../utility/formValidation";
 import ErrorMessage from "./Message";
+import { Controller,useFieldArray } from "react-hook-form";
 
-const Skills = ({ formData, setFormData, errors, setErrors }) => {
+const Skills = ({ errors, watch, control, setValue }) => {
+  const { fields:expertise, append:e_append, update:e_update, remove:e_remove } = useFieldArray({ name: 'expertise', control });
+  const { fields:skills, append:s_append, update:s_update, remove:s_remove } = useFieldArray({ name: 'skills', control });
+  useEffect(() => {
+    if (expertise.length===0) {
+      e_append( {
+        title: "",
+        desc: "",
+      });
+  }
+  if (skills.length===0) {
+    s_append({skill:[["",""]]});
+}
+}, []);
+console.log('skills',skills)
   const onExpChange = (event, i) => {
     event.preventDefault();
     event.persist();
-
-    setFormData((prev) => {
-      const { expertise } = formData;
-      validateField(
-        "skills",
-        event.target.name,
-        event.target.value,
-        errors,
-        setErrors
-      );
-      expertise[i] = {
-        ...expertise[i],
-        [event.target.name]: event.target.value,
-      };
-      return {
-        ...prev,
-        expertise,
-      };
-    });
+    console.log('change',event.target.name, event.target.value);
+    setValue(`expertise[${i}].${event.target.name}`, event.target.value);
   };
-  const onSkillChange = (event, i_sg, i_s) => {
+  const onSkillChange = (event, i_tsg, i_ts) => {
+    console.log('change',event.target.name, event.target.value);
     event.preventDefault();
     event.persist();
-
-    setFormData((prev) => {
-      const { skills } = formData;
-      skills[i_sg][i_s] = event.target.value;
-      validateField("skills", "skill", event.target.value, errors, setErrors);
-      return {
-        ...prev,
-        skills,
-      };
-    });
+    setValue(`skills[0].skill[${i_tsg}][${i_ts}]`, event.target.value);
   };
   const renderExp = (e) => {
     let index = 0;
     return (
       <Form.Field>
-        {formData.expertise.map((e, i) => {
+        {expertise.map((e, i) => {
           index++;
           return (
-            <Form.Group key={i}>
-              <Form.Input
+            <Form.Group key={'exp',i}>
+              <Controller
+                name={`expertise[${i}]title`}
+                control={control}
+                rules={i===0?{ required: true }:{}}
+                render={() => {
+                return <Form.Input
                 name="title"
-                required={i === 0}
                 fluid
                 placeholder={
                   i === 0
                     ? "Title (Skill/Expertise) *"
                     : "Title (Skill/Expertise)"
                 }
+                value={watch(`expertise[${i}].title`)}
                 width={6}
-                value={formData.expertise[i].title}
                 onChange={(e) => onExpChange(e, i)}
+              />}}
               />
-
-              <Form.TextArea
+              <Controller
+                name={`expertise[${i}]desc`}
+                control={control}
+                rules={i===0?{ required: true }:{}}
+                render={() => {
+                return <Form.TextArea
                 name="desc"
-                required={i === 0}
                 placeholder={
                   i === 0
                     ? "Describe your experience on your skill/expertise... *"
                     : "Describe your experience on your skill/expertise..."
                 }
+                value={watch(`expertise[${i}]desc`)}
                 width={10}
-                value={formData.expertise[i].desc}
                 onChange={(e) => onExpChange(e, i)}
+              />}}
               />
               {i === 0 ? (
                 <Popup
@@ -95,14 +94,10 @@ const Skills = ({ formData, setFormData, errors, setErrors }) => {
                   position="top right"
                   trigger={
                     <Button
-                      onClick={(e) =>
-                        setFormData({
-                          ...formData,
-                          expertise: [
-                            { title: "", desc: "" },
-                            ...formData.expertise,
-                          ],
-                        })
+                      onClick={(e) =>e_append( {
+                        title: "",
+                        desc: "",
+                      })
                       }
                       icon="plus"
                       secondary
@@ -115,14 +110,7 @@ const Skills = ({ formData, setFormData, errors, setErrors }) => {
                   position="top right"
                   trigger={
                     <Button
-                      onClick={(e) => {
-                        let expertise = formData.expertise.filter(
-                          (ex, index) => {
-                            return index !== i;
-                          }
-                        );
-                        setFormData({ ...formData, expertise });
-                      }}
+                      onClick={(e) => e_remove(i)}
                       icon="minus"
                       negative
                     />
@@ -139,25 +127,33 @@ const Skills = ({ formData, setFormData, errors, setErrors }) => {
     let index = 0;
     return (
       <Form.Field required>
-        {formData.skills.map((sg, i_sg) => {
+        {skills.length!==0&&skills[0].skill.map((sg, i_sg) => {
           index++;
           return (
-            <Form.Group widths="equal" key={i_sg}>
+            <Form.Group widths="equal" key={'skill_g'+i_sg}>
               {sg.map((s, i_s) => {
                 return (
-                  <Form.Input
-                    required={i_sg === 0}
-                    key={i_s}
-                    name={`skill${i_sg + i_s + index}`}
-                    fluid
-                    placeholder={
-                      i_sg === 0
-                        ? `#${i_sg + i_s + index} *`
-                        : `#${i_sg + i_s + index}`
-                    }
-                    value={formData.skills[i_sg][i_s]}
-                    onChange={(e) => onSkillChange(e, i_sg, i_s)}
-                  />
+                  <Controller
+                  key={'skill'+i_s}
+                name={`skills[${i_sg}][${i_s}]`}
+                control={control}
+                rules={i_sg===0?{ required: true }:{}}
+                render={() => {
+                return <Form.Input
+                required={i_sg === 0}
+                key={i_s}
+                name={`skill${i_sg + i_s + index}`}
+                fluid
+                placeholder={
+                  i_sg === 0
+                    ? `#${2*i_sg + i_s + 1} *`
+                    : `#${2*i_sg + i_s + 1}`
+                }
+                value={watch(`skills[0].skill[${i_sg}][${i_s}]`)}
+                onChange={(e) => onSkillChange(e, i_sg, i_s)}
+              />}}
+              />
+                  
                 );
               })}
 
@@ -167,29 +163,19 @@ const Skills = ({ formData, setFormData, errors, setErrors }) => {
                   position="top right"
                   trigger={
                     <Button
-                      onClick={(e) =>
-                        setFormData({
-                          ...formData,
-                          skills: [...formData.skills, ["", ""]],
-                        })
-                      }
+                      onClick={(e) => s_update(0,{skill:[...skills[0].skill,["",""]]})}
                       icon="plus"
                       secondary
                     />
                   }
                 />
-              ) : i_sg === formData.skills.length - 1 ? (
+              ) : i_sg === skills[0].skill.length - 1 ? (
                 <Popup
                   content="Remove Skills"
                   position="top right"
                   trigger={
                     <Button
-                      onClick={(e) =>
-                        setFormData({
-                          ...formData,
-                          skills: [...formData.skills.slice(0, -1)],
-                        })
-                      }
+                      onClick={(e) =>s_update(0,{skill:[...skills[0].skill.slice(0,-1)]})}
                       icon="minus"
                       negative
                     />
@@ -211,7 +197,6 @@ const Skills = ({ formData, setFormData, errors, setErrors }) => {
       <hr />
       <Header as="h3">Skills</Header>
       {renderSkills()}
-      {errors.skills.length !== 0 ? ErrorMessage(errors.skills) : ""}
     </>
   );
 };

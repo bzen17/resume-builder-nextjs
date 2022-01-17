@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import {
   Button,
   Grid,
@@ -23,35 +23,36 @@ import {
 } from "semantic-ui-react";
 import validateField from "../../utility/formValidation";
 import ErrorMessage from "./Message";
+import { Controller,useFieldArray } from "react-hook-form";
 
-const Experience = ({ formData, setFormData, errors, setErrors }) => {
+
+const Experience = ({ errors, watch, control, setValue  }) => {
+  const { fields, append, remove } = useFieldArray({ name: 'exp', control });
+  useEffect(() => {
+    if (fields.length===0) {
+    append({
+      org: "",
+      title: "",
+      startMonth: "",
+      startYear: "",
+      endMonth: "",
+      endYear: "",
+      desc: "",
+    });
+  }
+}, []);
+
+console.log('Fields', watch('exp'));
   const onChange = (event, i) => {
     event.preventDefault();
     event.persist();
-
-    setFormData((prev) => {
-      let { exp } = formData;
-      validateField(
-        "experience",
-        event.target.name,
-        event.target.value,
-        errors,
-        setErrors
-      );
-      exp[i] = {
-        ...exp[i],
-        [event.target.name]: event.target.value,
-      };
-      return {
-        ...prev,
-        exp,
-      };
-    });
+    console.log('change',event.target.name, event.target.value);
+    setValue(`exp[${i}].${event.target.name}`, event.target.value);
   };
   const renderWorkExperience = (e, num) => {
     return (
       <>
-        {formData.exp.map((e, i) => {
+        {fields.map((e, i) => {
           return (
             <div key={i} id={`exp${i + 1}`}>
               {i !== 0 ? <hr style={{ marginBottom: "1rem" }} /> : ""}
@@ -61,29 +62,23 @@ const Experience = ({ formData, setFormData, errors, setErrors }) => {
                     {i === 0 ? <Header as="h3">Work Experience</Header> : ""}
                   </Grid.Column>
                   <Grid.Column width={8} verticalAlign="top">
-                    {formData.exp.length - 1 === i ? (
+                    {fields.length - 1 === i ? (
                       <Popup
                         content="Add Work Experience"
                         position="left center"
                         trigger={
-                          <a href={`#exp${formData.exp.length}`}>
+                          <a href={`#exp${fields.length}`}>
                             <Button
                               onClick={(e) =>
-                                setFormData({
-                                  ...formData,
-                                  exp: [
-                                    ...formData.exp,
-                                    {
-                                      org: "",
-                                      title: "",
-                                      startMonth: "",
-                                      startYear: "",
-                                      endMonth: "",
-                                      endYear: "",
-                                      desc: "",
-                                    },
-                                  ],
-                                })
+                                append({
+                                org: "",
+                                title: "",
+                                startMonth: "",
+                                startYear: "",
+                                endMonth: "",
+                                endYear: "",
+                                desc: "",
+                              })
                               }
                               icon="plus"
                               floated="right"
@@ -98,16 +93,7 @@ const Experience = ({ formData, setFormData, errors, setErrors }) => {
                         position="left center"
                         trigger={
                           <Button
-                            onClick={(e) => {
-                              let exp = formData.exp.filter((ex, index) => {
-                                return i !== index;
-                              });
-
-                              setFormData({
-                                ...formData,
-                                exp,
-                              });
-                            }}
+                            onClick={(e) => remove(i)}
                             icon="minus"
                             floated="right"
                             negative
@@ -119,29 +105,44 @@ const Experience = ({ formData, setFormData, errors, setErrors }) => {
                 </Grid.Row>
               </Grid>
 
-              <Container id={`exp${i + 1}`} style={{ marginBottom: "1rem" }}>
+              <Container style={{ marginBottom: "1rem" }}>
                 <Grid columns={2}>
                   <Grid.Row>
                     <Grid.Column>
+                    
                       <Form.Group widths="equal">
-                        <Form.Input
-                          name="org"
-                          required
-                          fluid
-                          label="Organization"
-                          placeholder="Organization"
-                          value={formData.exp[i].org}
-                          onChange={(e) => onChange(e, i)}
-                        />
-                        <Form.Input
-                          name="title"
-                          required
-                          fluid
-                          label="Designation"
-                          placeholder="Designation"
-                          value={formData.exp[i].title}
-                          onChange={(e) => onChange(e, i)}
-                        />
+                      <Controller
+                        name={`exp[${i}]org`}
+                        control={control}
+                        rules={{ required: true }}
+                        render={() => {
+                        return <Form.Input
+                        name='org'
+                        required
+                        fluid
+                        label="Organization"
+                        placeholder="Organization"
+                        value={watch(`exp[${i}].org`)}
+                        onChange={(e) => onChange(e, i)}
+                        {...fields[i].org}
+                      />}}
+                      />
+                        <Controller
+                        name={`exp[${i}]title`}
+                        control={control}
+                        rules={{ required: true }}
+                        render={() => {
+                        return <Form.Input
+                        name='title'
+                        required
+                        fluid
+                        label="Designation"
+                        placeholder="Designation"
+                        value={watch(`exp[${i}].title`)}
+                        onChange={(e) => onChange(e, i)}
+                        {...fields[i].title}
+                      />}}
+                      />
                       </Form.Group>
                     </Grid.Column>
                     <Grid.Column>
@@ -151,20 +152,36 @@ const Experience = ({ formData, setFormData, errors, setErrors }) => {
                             <Form.Field required>
                               <label>Start Date</label>
                               <Form.Group widths="equal">
-                                <Form.Input
-                                  name="startMonth"
-                                  fluid
-                                  placeholder="Month"
-                                  value={formData.exp[i].startMonth}
-                                  onChange={(e) => onChange(e, i)}
-                                />
-                                <Form.Input
-                                  name="startYear"
-                                  fluid
-                                  placeholder="Year"
-                                  value={formData.exp[i].startYear}
-                                  onChange={(e) => onChange(e, i)}
-                                />
+                              <Controller
+                                name={`exp[${i}]startMonth`}
+                                control={control}
+                                rules={{ required: true }}
+                                render={() => {
+                                return <Form.Input
+                                name="startMonth"
+                                required
+                                fluid
+                                placeholder="Month"
+                                value={watch(`exp[${i}].startMonth`)}
+                                onChange={(e) => onChange(e, i)}
+                                {...fields[i].startMonth}
+                              />}}
+                              />
+                                <Controller
+                                name={`exp[${i}]startYear`}
+                                control={control}
+                                rules={{ required: true }}
+                                render={() => {
+                                return <Form.Input
+                                name="startYear"
+                                required
+                                fluid
+                                placeholder="Year"
+                                value={watch(`exp[${i}].startYear`)}
+                                onChange={(e) => onChange(e, i)}
+                                {...fields[i].startYear}
+                              />}}
+                              />
                               </Form.Group>
                             </Form.Field>
                           </Grid.Column>
@@ -172,20 +189,36 @@ const Experience = ({ formData, setFormData, errors, setErrors }) => {
                             <Form.Field required>
                               <label>End Date</label>
                               <Form.Group widths="equal">
-                                <Form.Input
-                                  name="endMonth"
-                                  fluid
-                                  placeholder="Month"
-                                  value={formData.exp[i].endMonth}
-                                  onChange={(e) => onChange(e, i)}
-                                />
-                                <Form.Input
-                                  name="endYear"
-                                  fluid
-                                  placeholder="Year"
-                                  value={formData.exp[i].endYear}
-                                  onChange={(e) => onChange(e, i)}
-                                />
+                              <Controller
+                                name={`exp[${i}]endMonth`}
+                                control={control}
+                                rules={{ required: true }}
+                                render={() => {
+                                return <Form.Input
+                                name="endMonth"
+                                required
+                                fluid
+                                placeholder="Month"
+                                value={watch(`exp[${i}].endMonth`)}
+                                onChange={(e) => onChange(e, i)}
+                                {...fields[i].endMonth}
+                              />}}
+                              />
+                                <Controller
+                                name={`exp[${i}]endYear`}
+                                control={control}
+                                rules={{ required: true }}
+                                render={() => {
+                                return <Form.Input
+                                name="endYear"
+                                required
+                                fluid
+                                placeholder="Year"
+                                value={watch(`exp[${i}].endYear`)}
+                                onChange={(e) => onChange(e, i)}
+                                {...fields[i].endYear}
+                              />}}
+                              />
                               </Form.Group>
                             </Form.Field>
                           </Grid.Column>
@@ -194,12 +227,18 @@ const Experience = ({ formData, setFormData, errors, setErrors }) => {
                     </Grid.Column>
                   </Grid.Row>
                 </Grid>
-                <Form.TextArea
+                <Controller
+                  name={`exp[${i}]desc`}
+                  control={control}
+                  render={() => {
+                  return <Form.TextArea
                   name="desc"
                   label="Description"
                   placeholder="Tell us more about your role in your organisation..."
-                  value={formData.exp[i].desc}
+                  value={watch(`exp[${i}].desc`)}
                   onChange={(e) => onChange(e, i)}
+                  {...fields[i].desc}
+                />}}
                 />
               </Container>
             </div>
@@ -211,7 +250,7 @@ const Experience = ({ formData, setFormData, errors, setErrors }) => {
   return (
     <>
       {renderWorkExperience()}
-      {errors.experience.length !== 0 ? ErrorMessage(errors.experience) : ""}
+     {/*  {errors.experience.length !== 0 ? ErrorMessage(errors.experience) : ""} */}
     </>
   );
 };

@@ -12,39 +12,38 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { Button, Grid, Form, Header, Popup } from "semantic-ui-react";
 import validateField from "../../utility/formValidation";
 import ErrorMessage from "./Message";
+import { Controller,useFieldArray } from "react-hook-form";
 
-const Languages = ({ formData, setFormData, errors, setErrors }) => {
+const Languages = ({ errors, watch, control, setValue  }) => {
+  const { fields:languages, append, update, remove } = useFieldArray({ name: 'languages', control });
+  useEffect(() => {
+  if (languages.length===0) {
+    append({language:[["",""]]});
+}
+}, []);
+console.log('languages',languages)
   const onLanguageChange = (event, i_lg, i_l) => {
     event.preventDefault();
     event.persist();
-
-    setFormData((prev) => {
-      const { languages } = formData;
-      validateField("languages", null, event.target.value, errors, setErrors);
-      languages[i_lg][i_l] = event.target.value;
-      return {
-        ...prev,
-        languages,
-      };
-    });
+    setValue(`languages[0].language[${i_lg}][${i_l}]`, event.target.value);
   };
   const renderLanguages = (e) => {
     let index = 0;
     return (
       <Form.Field required>
-        {formData.languages.map((lg, i_lg) => {
+        {languages.length!==0&&languages[0].language.map((lg, i_lg) => {
           index++;
           return (
-            <Form.Group widths="equal" key={i_lg}>
+            <Form.Group widths="equal" key={`lang_g${i_lg}`}>
               {lg.map((l, i_l) => {
                 return (
                   <Form.Input
                     required={i_lg === 0 && i_l === 0}
-                    key={i_l}
+                    key={`lang${i_l}`}
                     name={`skill${i_lg + i_l + index}`}
                     fluid
                     placeholder={
@@ -52,49 +51,38 @@ const Languages = ({ formData, setFormData, errors, setErrors }) => {
                         ? `#${i_lg + i_l + index} *`
                         : `#${i_lg + i_l + index}`
                     }
-                    value={formData.languages[i_lg][i_l]}
+                    value={watch(`languages[0].language[${i_lg}][${i_l}]`)}
                     onChange={(e) => onLanguageChange(e, i_lg, i_l)}
                   />
                 );
               })}
               {i_lg === 0 ? (
                 <Popup
-                  key={i_lg}
                   content="Add Language"
                   position="top right"
                   trigger={
                     <Button
                       onClick={(e) =>
-                        setFormData({
-                          ...formData,
-                          languages: [...formData.languages, ["", ""]],
-                        })
-                      }
+                        update(0,{language:[...languages[0].language,["",""]]})}
                       icon="plus"
                       secondary
                     />
                   }
                 />
-              ) : i_lg === formData.languages.length - 1 ? (
+              ) : i_lg === languages[0].language.length - 1 ? (
                 <Popup
-                  key={i_lg}
                   content="Remove Language"
                   position="top right"
                   trigger={
                     <Button
-                      onClick={(e) =>
-                        setFormData({
-                          ...formData,
-                          languages: [...formData.languages.slice(0, -1)],
-                        })
-                      }
+                      onClick={(e) =>update(0,{language:[...languages[0].language.slice(0,-1)]})}
                       icon="minus"
                       negative
                     />
                   }
                 />
               ) : (
-                <Button key={i_lg} color="white" />
+                <Button color="white" />
               )}
             </Form.Group>
           );
@@ -106,7 +94,6 @@ const Languages = ({ formData, setFormData, errors, setErrors }) => {
     <>
       <Header as="h3">Languages</Header>
       {renderLanguages()}
-      {errors.languages.length !== 0 ? ErrorMessage(errors.languages) : ""}
     </>
   );
 };

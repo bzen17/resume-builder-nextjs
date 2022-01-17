@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import {
   Button,
   Image,
@@ -25,55 +25,38 @@ import {
 } from "semantic-ui-react";
 import validateField from "../../utility/formValidation";
 import ErrorMessage from "./Message";
+import { Controller,useFieldArray } from "react-hook-form";
 
-const Certifications = ({ formData, setFormData, errors, setErrors }) => {
-  const [image, setImage] = useState(null);
-  const onCertChange = (event, i) => {
-    event.preventDefault();
-    event.persist();
+const Certifications = ({ errors, watch, control, setValue   }) => {
+  const { fields:certifications, append, update, remove } = useFieldArray({ name: 'projects', control });
+  useEffect(() => {
+    if (certifications.length===0) {
+      append({
+        name: "",
+        url: "",
+        image: "",
+      });
+  }
+}, []);
 
-    setFormData((prev) => {
-      let { certifications } = formData;
-      if (event.target.name === "image") {
-        if (event.target.files && event.target.files[0]) {
-          const file = event.target.files[0];
-          const img = {
-            objURL: URL.createObjectURL(file),
-            URL: file,
-          };
-          validateField(
-            "certifications",
-            event.target.name,
-            img,
-            errors,
-            setErrors
-          );
-          //setImage(i);
-          //setCreateObjectURL(URL.createObjectURL(i));
-          certifications[i] = {
-            ...certifications[i],
-            [event.target.name]: img,
-          };
-        }
-      } else {
-        validateField(
-          "certifications",
-          event.target.name,
-          event.target.value,
-          errors,
-          setErrors
-        );
-        certifications[i] = {
-          ...certifications[i],
-          [event.target.name]: event.target.value,
-        };
-      }
-      return {
-        ...prev,
-        certifications,
+const onCertChange = (event, i) => {
+  event.preventDefault();
+  event.persist();
+  if (event.target.name === "image") {
+    if (event.target.files && event.target.files[i]) {
+      const file = event.target.files[i];
+      const img = {
+        objURL: URL.createObjectURL(file),
+        URL: file,
       };
-    });
-  };
+      setValue(`certifications[${i}].${event.target.name}`, img);
+    }
+  } else {
+   
+    setValue(`certifications[${i}].${event.target.name}`, event.target.value);
+  }
+  
+};
 
   const uploadToServer = async (event) => {
     const body = new FormData();
@@ -86,7 +69,7 @@ const Certifications = ({ formData, setFormData, errors, setErrors }) => {
   const renderCertifications = (e, num) => {
     return (
       <>
-        {formData.certifications.map((e, i) => {
+        {certifications.map((e, i) => {
           return (
             <div key={i} id={`cert${i + 1}`}>
               {i !== 0 ? <hr style={{ marginBottom: "1rem" }} /> : ""}
@@ -96,26 +79,18 @@ const Certifications = ({ formData, setFormData, errors, setErrors }) => {
                     {i === 0 ? <Header as="h3">Certification</Header> : ""}
                   </Grid.Column>
                   <Grid.Column width={8} verticalAlign="top">
-                    {formData.certifications.length - 1 === i ? (
+                    {certifications.length - 1 === i ? (
                       <Popup
                         content="Add Certification"
                         position="left center"
                         trigger={
-                          <a href={`#cert${formData.certifications.length}`}>
+                          <a href={`#cert${certifications.length}`}>
                             <Button
-                              onClick={(e) =>
-                                setFormData({
-                                  ...formData,
-                                  certifications: [
-                                    ...formData.certifications,
-                                    {
-                                      name: "",
-                                      url: "",
-                                      image: "",
-                                    },
-                                  ],
-                                })
-                              }
+                              onClick={(e) =>append({
+                                name: "",
+                                url: "",
+                                image: "",
+                              })}
                               icon="plus"
                               floated="right"
                               primary
@@ -129,19 +104,7 @@ const Certifications = ({ formData, setFormData, errors, setErrors }) => {
                         position="left center"
                         trigger={
                           <Button
-                            onClick={(e) => {
-                              let certifications =
-                                formData.certifications.filter(
-                                  (cert, index) => {
-                                    return i !== index;
-                                  }
-                                );
-
-                              setFormData({
-                                ...formData,
-                                certifications,
-                              });
-                            }}
+                            onClick={(e) => remove(i)}
                             icon="minus"
                             floated="right"
                             negative
@@ -162,7 +125,7 @@ const Certifications = ({ formData, setFormData, errors, setErrors }) => {
                     label="Name"
                     placeholder="Name"
                     width={6}
-                    value={formData.certifications[i].name}
+                    value={watch(`certifications[${i}].name`)}
                     onChange={(e) => onCertChange(e, i)}
                   />
                   <Form.Input
@@ -172,7 +135,7 @@ const Certifications = ({ formData, setFormData, errors, setErrors }) => {
                     label="URL"
                     placeholder="URL"
                     width={10}
-                    value={formData.certifications[i].url}
+                    value={watch(`certifications[${i}].url`)}
                     onChange={(e) => onCertChange(e, i)}
                   />
                 </Form.Group>
@@ -187,10 +150,10 @@ const Certifications = ({ formData, setFormData, errors, setErrors }) => {
                     </Grid.Column>
                     <Grid.Column width={10} textAlign="center">
                       <Image
-                        src={formData.certifications[i].image.objURL}
+                        src={watch(`certifications[${i}].image.objURL`)}
                         as="a"
                         size="medium"
-                        href={formData.certifications[i].image.objURL}
+                        href={watch(`certifications[${i}].image.objURL`)}
                         target="_blank"
                       />
                     </Grid.Column>
@@ -206,9 +169,9 @@ const Certifications = ({ formData, setFormData, errors, setErrors }) => {
   return (
     <>
       {renderCertifications()}
-      {errors.certifications.length !== 0
+      {/* {errors.certifications.length !== 0
         ? ErrorMessage(errors.certifications)
-        : ""}
+        : ""} */}
     </>
   );
 };
