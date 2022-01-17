@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import React, { useState, useRef } from "react";
+import React, { useState, useRef,useEffect } from "react";
 import { Button, Grid, Form, Message, Icon } from "semantic-ui-react";
 import Bio from "./Bio";
 import Experience from "./Experience";
@@ -21,6 +21,10 @@ import Project from "./Project";
 import Skills from "./Skills";
 import Certifications from "./Certification";
 import Contact from "./Contact";
+import {validateForm} from "../../utility/formValidation";
+import { useForm,useFieldArray } from "react-hook-form";
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as yup from "yup";
 
 const options = [
   { key: "1", text: "PDF", value: "pdf" },
@@ -28,7 +32,79 @@ const options = [
   { key: "3", text: "Both", value: "both" },
 ];
 
+
 const TemplateForm = ({ activeItem }) => {
+  const schema = yup.object({
+    bio: yup.object().shape({
+      fn: yup.string().required('First Name is required'),
+      ln: yup.string().required('Last Name is required'),
+      role: yup.string().required('Designation is required'),
+      sumHeader: yup.string().required('Summary Header is required'),
+      about: yup.string().required('About is required'),
+    }),
+    exp: yup.array().of(
+      yup.object().shape({
+        org: yup.string().required("Organisation is required"),
+        title: yup.string().required("Designation is required"),
+        startMonth: yup.number().required("Start Month is required").positive(),
+        startYear: yup.number().required("Start Year is required"),
+        endMonth: yup.number().required("End Month is required"),
+        endYear: yup.number().required("End Year is required"),
+        desc: yup.string().required("Description is required"),
+      })
+    ),
+    expertise: yup.array().of(
+      yup.object().shape({
+          title: yup.string(),
+          desc: yup.string(),
+        })
+      ),
+    skills: yup.array().of(
+      yup.object().shape({
+      skill: yup.array().of(
+        yup.array().of(
+          yup.string(),yup.string()
+        )
+      )
+    })),
+    projects: yup.array().of(
+      yup.object().shape({
+        name: yup.string().required("Project Name is required"),
+        shortDesc: yup.string().required("Short Description is required"),
+        url: yup.string().required("Project URL is required"),
+        desc: yup.string().required("Description is required"),
+        image: yup.string().required("Image URL is required"),
+        techStack: yup.array().of(
+          yup.array().of(
+            yup.string(),yup.string()
+          )
+        )
+      })),
+      certifications: yup.array().of(
+        yup.object().shape({
+          name: yup.string().required("Certification Name is required"),
+          url: yup.string().required("Certification URL is required"),
+          image: yup.string().required("Image is required"),
+        })
+      ),
+      languages: yup.array().of(
+        yup.object().shape({
+        language: yup.array().of(
+          yup.array().of(
+            yup.string(),yup.string()
+          )
+        )
+      })),
+      contact: yup.object().shape({
+        email: yup.string().required("Email is required"),
+        phone: yup.string().required("Phone is required"),
+        address: yup.string().required("Address is required"),
+        website: yup.string(),
+        github: yup.string(),
+        linkedin: yup.string(),
+        twitter: yup.string(),
+      })
+  }).required();
   const initFormData = {
     bio: {
       fn: "",
@@ -54,7 +130,11 @@ const TemplateForm = ({ activeItem }) => {
         desc: "",
       },
     ],
-    skills: [["", ""]],
+    skills: [
+      {
+        skill:[["", ""]]
+      }
+    ],
     projects: [
       {
         name: "",
@@ -72,7 +152,11 @@ const TemplateForm = ({ activeItem }) => {
         image: "",
       },
     ],
-    languages: [["", ""]],
+    languages: [
+      {
+        language: [["", ""]],
+      }
+    ],
     contact: {
       email: "",
       phone: "",
@@ -92,91 +176,93 @@ const TemplateForm = ({ activeItem }) => {
     certifications: [],
     contact: [],
   };
-  const [formData, setFormData] = useState(initFormData);
-  const [errors, setErrors] = useState(initErrors);
+  const { register, handleSubmit, watch, setValue, control, formState: { errors },formState, reset } = useForm({
+    resolver: yupResolver(schema),
+    defaultValues: initFormData,
+  });
+  
+  const onSubmit = data => console.log('data',data);
+  useEffect(() => {
+    console.log('Errors', errors);
+  }, [errors]);
   const formRef = useRef(null);
   const renderForm = () => {
     if (activeItem === "bio") {
       return (
         <Bio
-          formData={formData}
-          setFormData={setFormData}
           errors={errors}
-          setErrors={setErrors}
+          watch={watch}
+          control={control}
+          setValue={setValue}
         />
       );
     } else if (activeItem === "contact") {
       return (
         <Contact
-          formData={formData}
-          setFormData={setFormData}
           errors={errors}
-          setErrors={setErrors}
+          watch={watch}
+          control={control}
+          setValue={setValue}
+          
         />
       );
     } else if (activeItem === "experience") {
       return (
         <Experience
-          formData={formData}
-          setFormData={setFormData}
           errors={errors}
-          setErrors={setErrors}
+          watch={watch}
+          control={control}
+          setValue={setValue}
         />
       );
     } else if (activeItem === "languages") {
       return (
         <Languages
-          formData={formData}
-          setFormData={setFormData}
           errors={errors}
-          setErrors={setErrors}
+          watch={watch}
+          control={control}
+          setValue={setValue}
         />
       );
     } else if (activeItem === "projects") {
       return (
         <Project
-          formData={formData}
-          setFormData={setFormData}
           errors={errors}
-          setErrors={setErrors}
+          watch={watch}
+          control={control}
+          setValue={setValue}
         />
       );
     } else if (activeItem === "certifications") {
       return (
         <Certifications
-          formData={formData}
-          setFormData={setFormData}
           errors={errors}
-          setErrors={setErrors}
+          watch={watch}
+          control={control}
+          setValue={setValue}
         />
       );
     } else if (activeItem === "skills") {
       return (
         <Skills
-          formData={formData}
-          setFormData={setFormData}
           errors={errors}
-          setErrors={setErrors}
+          watch={watch}
+          control={control}
+          setValue={setValue}
         />
       );
     }
   };
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Form Submitted: ", formData);
-  };
+  
   return (
     <>
-      <Form error onSubmit={handleSubmit} id="templateForm">
+      <Form error onSubmit={handleSubmit(onSubmit)} id="templateForm">
         {renderForm()}
 
         <Button.Group floated="right" style={{ marginTop: "1rem" }}>
           <Button
             style={{ marginRight: "0.3rem" }}
-            onClick={() => {
-              setFormData(initFormData);
-              setErrors(initErrors);
-            }}
+            onClick={() => reset()}
             negative
           >
             Cancel

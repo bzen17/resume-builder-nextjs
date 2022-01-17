@@ -458,5 +458,39 @@ const validateField = (key, fieldName, value, errors, setErrors) => {
   }
 };
 
-const validateForm = (formData, formName) => {};
+const addFormError = (error, setFormError) => {
+  return setFormError((prev) => {
+    return [...new Set([ ...prev, error ]) ]
+  });
+};
+
+const removeFormError = (error, setFormError) => {
+  return setFormError((prev) => {
+    return prev.filter((e) => e !== error);
+  });
+}
+
+export const validateForm = (formData, errors,formError,setFormError) => {
+  let formErr = [];
+  Object.entries(errors).forEach(([k,v]) => {
+    if (k==='bio') {
+      if (errors[k].length === 0) {
+        Object.entries(formData[k]).forEach(([k,v]) => {
+          formErr.filter((e) => e !== 'Bio has errors');
+          /* removeFormError('Bio has errors',setFormError)
+          console.log(k,v)
+          !v?addFormError('Bio is required',setFormError):removeFormError('Bio is required',setFormError); */
+          console.log(k,v)
+          !v?formErr.push('Bio is required'):formErr.filter((e) => e !== 'Bio is required');
+        })
+      } else {
+        //addFormError('Bio has errors',setFormError)
+        formErr.push('Bio has errors')
+      }
+    } else if (k==='experience'){
+      
+    }
+  })
+  return [...new Set(formErr)];
+};
 export default validateField;

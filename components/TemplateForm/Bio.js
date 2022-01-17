@@ -11,106 +11,97 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-
+import { Controller } from "react-hook-form";
 import React from "react";
 import { Button, Grid, Form, Header, Dropdown } from "semantic-ui-react";
 import validateField from "../../utility/formValidation";
 import ErrorMessage from "./Message";
 
-const Bio = ({ formData, setFormData, errors, setErrors }) => {
+const Bio = ({ errors, watch, control, setValue  }) => {
   const sumHeaderOptions = [
     { key: "1", text: "About Me", value: "About Me" },
     { key: "2", text: "Work Summary", value: "Work Summary" },
     { key: "3", text: "Professional Summary", value: "Professional Summary" },
   ];
-
-  const onBioChange = (event, value) => {
-    event.preventDefault();
-    event.persist();
-    console.log(errors);
-    setFormData((prev) => {
-      const { bio } = formData;
-      if (value) {
-        validateField("bio", "sumHeader", value, errors, setErrors);
-        bio = {
-          ...bio,
-          sumHeader: value,
-        };
-      } else {
-        validateField(
-          "bio",
-          event.target.name,
-          event.target.value,
-          errors,
-          setErrors
-        );
-        bio = {
-          ...bio,
-          [event.target.name]: event.target.value,
-        };
-      }
-      return {
-        ...prev,
-        bio,
-      };
-    });
-  };
+  
   return (
     <>
       <Header as="h3">Personal Information</Header>
       <Form.Group widths="equal">
-        <Form.Input
+        <Controller
+          name="bio.fn"
+          control={control}
+          rules={{ required: true }}
+          render={({ field }) => <Form.Input
           name="fn"
-          required
           fluid
+          required
           label="First name"
           placeholder="First name"
-          value={formData.bio.fn}
-          onChange={(e) => onBioChange(e)}
+          {...field}
         />
-        <Form.Input
+        }
+        />
+        <Controller
+          name="bio.ln"
+          control={control}
+          rules={{ required: true }}
+          render={({ field }) => <Form.Input
           name="ln"
-          required
           fluid
+          required
           label="Last name"
           placeholder="Last name"
-          value={formData.bio.ln}
-          onChange={(e) => onBioChange(e)}
+          {...field}
+        />}
         />
-        <Form.Input
+        <Controller
+          name="bio.role"
+          control={control}
+          rules={{ required: true }}
+          render={({ field }) => <Form.Input
           name="role"
-          required
           fluid
           label="Designation"
           placeholder="Designation"
-          value={formData.bio.role}
-          onChange={(e) => onBioChange(e)}
+          {...field}
+        />}
         />
       </Form.Group>
 
       <Form.Group>
-        <Form.Select
-          required
-          fluid
+      <Controller
+          name="bio.sumHeader"
+          control={control}
+          rules={{ required: true }}
+          render={({ field }) => <Form.Select
           name="sumHeader"
-          value={formData.bio.sumHeader}
-          onChange={(e, { value }) => onBioChange(e, value?.toString())}
+          fluid
+          required
           label="Summary Header"
           options={sumHeaderOptions}
           placeholder="Summary Header"
           width={4}
+          {...field}
+        />}
         />
-        <Form.TextArea
+
+        <Controller
+          name="bio.about"
+          control={control}
+          rules={{ required: true }}
+          render={({ field }) => <Form.TextArea
           name="about"
-          value={formData.bio.about}
-          onChange={(e) => onBioChange(e)}
           required
           label="About"
           placeholder="Tell us more about you..."
           width={12}
+          {...field}
+        />}
         />
+        
       </Form.Group>
-      {errors.bio.length !== 0 ? ErrorMessage(errors.bio) : ""}
+      {/* {errors.bio.length !== 0 ? ErrorMessage(errors.bio) : ""} */}
     </>
   );
 };

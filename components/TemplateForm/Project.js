@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Button,
   Grid,
@@ -25,71 +25,48 @@ import {
 } from "semantic-ui-react";
 import validateField from "../../utility/formValidation";
 import ErrorMessage from "./Message";
+import { Controller,useFieldArray } from "react-hook-form";
 
-const Project = ({ formData, setFormData, errors, setErrors }) => {
-  const myRefs = useRef([]);
-  const onProjectChange = (event, i) => {
-    event.preventDefault();
-    event.persist();
-    console.log(formData);
-    setFormData((prev) => {
-      const { projects } = formData;
-      if (event.target.name === "image") {
-        if (event.target.files && event.target.files[i]) {
-          const file = event.target.files[i];
-          const img = {
-            objURL: URL.createObjectURL(file),
-            URL: file,
-          };
-          validateField("projects", event.target.name, img, errors, setErrors);
-          projects[i] = {
-            ...projects[i],
-            [event.target.name]: img,
-          };
-        }
-      } else {
-        validateField(
-          "projects",
-          event.target.name,
-          event.target.value,
-          errors,
-          setErrors
-        );
-        projects[i] = {
-          ...projects[i],
-          [event.target.name]: event.target.value,
-        };
-      }
-      return {
-        ...prev,
-        projects,
-      };
+const Project = ({ errors, watch, control, setValue   }) => {
+  const { fields:projects, append, update, remove } = useFieldArray({ name: 'projects', control });
+ //const { fields:techStack, append:t_append, remove:t_remove } = useFieldArray({ name: 'techStack', control });
+  useEffect(() => {
+    if (projects.length===0) {
+      append({
+      name: "",
+      shortDesc: "",
+      url: "",
+      desc: "",
+      image: "",
+      techStack: [["",""]],
     });
-  };
+  }
+}, [projects]);
 
   const onTechStackChange = (event, i, i_tsg, i_ts) => {
+    console.log('change',event.target.name, event.target.value);
     event.preventDefault();
     event.persist();
-
-    setFormData((prev) => {
-      const { projects } = formData;
-      validateField(
-        "projects",
-        "techStack",
-        event.target.value,
-        errors,
-        setErrors
-      );
-      projects[i].techStack[i_tsg][i_ts] = event.target.value;
-      return {
-        ...prev,
-        projects,
-      };
-    });
+    setValue(`projects[${i}].${event.target.name}[${i_tsg}][${i_ts}]`, event.target.value);
   };
-  const scrollToRef = (i) => {
-    console.log(0, myRefs.current[i].offsetTop);
-    window.scrollTo(0, myRefs.current[i].offsetTop);
+  const onChange = (event, i) => {
+    console.log('change',event.target.name, event.target.value);
+    event.preventDefault();
+    event.persist();
+    if (event.target.name === "image") {
+      if (event.target.files && event.target.files[i]) {
+        const file = event.target.files[i];
+        const img = {
+          objURL: URL.createObjectURL(file),
+          URL: file,
+        };
+        setValue(`projects[${i}].${event.target.name}`, img);
+      }
+    } else {
+     
+      setValue(`projects[${i}].${event.target.name}`, event.target.value);
+    }
+    
   };
   const uploadToClient = (event) => {
     if (event.target.files && event.target.files[0]) {
@@ -104,20 +81,28 @@ const Project = ({ formData, setFormData, errors, setErrors }) => {
     return (
       <Form.Field required>
         <label>Tech Stack</label>
-        {formData.projects[i].techStack.map((tsg, i_tsg) => {
+        {projects.length!==0&&projects[i].techStack.map((tsg, i_tsg) => {
+          console.log('tsg',tsg,'techStack',projects[i].techStack);
           index++;
           return (
-            <Form.Group key={i_tsg} widths="equal">
+            <Form.Group key={'tsg'+i_tsg} widths="equal">
               {tsg.map((ts, i_ts) => {
                 return (
-                  <Form.Input
-                    key={i_ts}
-                    name={`#${i_tsg + i_ts + index}`}
+                  <Controller
+                    key={'ts'+i_ts}
+                    name={`projects[${i}]techStack`}
+                    control={control}
+                    rules={{ required: true }}
+                    render={() => {
+                    return <Form.Input
+                    name="techStack"
                     fluid
-                    placeholder={`#${i_tsg + i_ts + index}`}
-                    value={formData.projects[i].techStack[i_tsg][i_ts]}
+                    placeholder={`#${2*i_tsg + i_ts+1}`}
+                    value={watch(`projects[${i}].techStack[${i_tsg}][${i_ts}]`)}
                     onChange={(e) => onTechStackChange(e, i, i_tsg, i_ts)}
+                  />}}
                   />
+                  
                 );
               })}
 
@@ -127,33 +112,19 @@ const Project = ({ formData, setFormData, errors, setErrors }) => {
                   position="top right"
                   trigger={
                     <Button
-                      onClick={(e) => {
-                        const { projects } = formData;
-                        projects[i].techStack.push(["", ""]);
-                        setFormData({
-                          ...formData,
-                          projects,
-                        });
-                      }}
+                      onClick={(e) => update(i,{...projects[i],techStack:[...projects[i].techStack,["",""]]})}
                       icon="plus"
                       secondary
                     />
                   }
                 />
-              ) : i_tsg === formData.projects[i].techStack.length - 1 ? (
+              ) : i_tsg === projects[i].techStack.length - 1 ? (
                 <Popup
                   content="Remove Tech Stack"
                   position="top right"
                   trigger={
                     <Button
-                      onClick={(e) => {
-                        const { projects } = formData;
-                        projects[i].techStack.pop();
-                        setFormData({
-                          ...formData,
-                          projects,
-                        });
-                      }}
+                      onClick={(e) => update(i,{...projects[i],techStack:projects[i].techStack.slice(0,-1)})}
                       icon="minus"
                       negative
                     />
@@ -172,12 +143,11 @@ const Project = ({ formData, setFormData, errors, setErrors }) => {
   const renderProject = (e, num) => {
     return (
       <>
-        {formData.projects.map((project, i) => {
+        {projects.map((project, i) => {
           return (
             <div
-              key={i}
+              key={'proj'+i}
               id={`project${i + 1}`}
-              ref={(el) => (myRefs.current[i] = el)}
             >
               {i !== 0 ? <hr style={{ marginBottom: "1rem" }} /> : ""}
               <Grid>
@@ -186,31 +156,23 @@ const Project = ({ formData, setFormData, errors, setErrors }) => {
                     {i === 0 ? <Header as="h3">Project</Header> : ""}
                   </Grid.Column>
                   <Grid.Column width={8} verticalAlign="top">
-                    {formData.projects.length - 1 === i ? (
+                    {projects.length - 1 === i ? (
                       <Popup
                         content="Add Project"
                         position="left center"
                         trigger={
-                          <a href={`#project${formData.projects.length}`}>
+                          <a href={`#project${projects.length}`}>
                             <Button
-                              onClick={(e) => {
-                                console.log(formData.projects.length);
-                                setFormData({
-                                  ...formData,
-                                  projects: [
-                                    ...formData.projects,
-                                    {
-                                      name: "",
-                                      shortDesc: "",
-                                      url: "",
-                                      desc: "",
-                                      image: "",
-                                      techStack: [["", ""]],
-                                    },
-                                  ],
-                                });
-                                //scrollToRef(formData.projects.length-1);
-                              }}
+                              onClick={(e) => 
+                                append({
+                                  name: "",
+                                  shortDesc: "",
+                                  url: "",
+                                  desc: "",
+                                  image: "",
+                                  techStack: [["", ""]],
+                                })
+                              }
                               icon="plus"
                               floated="right"
                               primary
@@ -224,18 +186,7 @@ const Project = ({ formData, setFormData, errors, setErrors }) => {
                         position="left center"
                         trigger={
                           <Button
-                            onClick={(e) => {
-                              let projects = formData.projects.filter(
-                                (project, index) => {
-                                  return i !== index;
-                                }
-                              );
-
-                              setFormData({
-                                ...formData,
-                                projects,
-                              });
-                            }}
+                            onClick={(e) => remove(i)}
                             icon="minus"
                             floated="right"
                             negative
@@ -248,60 +199,96 @@ const Project = ({ formData, setFormData, errors, setErrors }) => {
               </Grid>
               <Container style={{ marginBottom: "1rem" }}>
                 <Form.Group>
-                  <Form.Input
-                    name="name"
+                  <Controller
+                    name={`projects[${i}]name`}
+                    control={control}
+                    rules={{ required: true }}
+                    render={() => {
+                    return <Form.Input
+                    name='name'
                     required
                     fluid
+                    width={6}
                     label="Name"
                     placeholder="Name"
-                    width={6}
-                    value={formData.projects[i].name}
-                    onChange={(e) => onProjectChange(e, i)}
+                    value={watch(`projects[${i}].name`)}
+                    onChange={(e) => onChange(e, i)}
+                    {...projects[i].name}
+                  />}}
                   />
-                  <Form.Input
-                    name="shortDesc"
+                  <Controller
+                    name={`projects[${i}]shortDesc`}
+                    control={control}
+                    rules={{ required: true }}
+                    render={() => {
+                    return <Form.Input
+                    name='shortDesc'
                     required
                     fluid
+                    width={10}
                     label="Short Description"
                     placeholder="Short Description"
-                    width={10}
-                    value={formData.projects[i].shortDesc}
-                    onChange={(e) => onProjectChange(e, i)}
+                    value={watch(`projects[${i}].shortDesc`)}
+                    onChange={(e) => onChange(e, i)}
+                    {...projects[i].shortDesc}
+                  />}}
                   />
                 </Form.Group>
-                <Form.Input
-                  name="url"
-                  required
-                  fluid
-                  label="URL"
-                  placeholder="URL"
-                  value={formData.projects[i].url}
-                  onChange={(e) => onProjectChange(e, i)}
-                />
+                <Controller
+                    name={`projects[${i}]url`}
+                    control={control}
+                    rules={{ required: true }}
+                    render={() => {
+                    return <Form.Input
+                    name='url'
+                    required
+                    fluid
+                    width={10}
+                    label="URL"
+                    placeholder="URL"
+                    value={watch(`projects[${i}].url`)}
+                    onChange={(e) => onChange(e, i)}
+                    {...projects[i].url}
+                  />}}
+                  />
                 {renderTechStack(project, i)}
-                <Form.TextArea
-                  name="desc"
-                  label="Description"
-                  placeholder="Tell us more about your project..."
-                  value={formData.projects[i].desc}
-                  onChange={(e) => onProjectChange(e, i)}
-                />
+                <Controller
+                    name={`projects[${i}]desc`}
+                    control={control}
+                    rules={{ required: true }}
+                    render={() => {
+                    return <Form.TextArea
+                    name='desc'
+                    label="Description"
+                    placeholder="Tell us more about your project..."
+                    value={watch(`projects[${i}].desc`)}
+                    onChange={(e) => onChange(e, i)}
+                    {...projects[i].desc}
+                  />}}
+                  />
                 <Grid>
                   <Grid.Row>
                     <Grid.Column width={6} verticalAlign="top">
-                      <Input
-                        type="file"
-                        name="image"
-                        id={`${i + 1}`}
-                        onChange={(e) => onProjectChange(e, i)}
-                      />
+                    <Controller
+                    name={`projects[${i}]image`}
+                    control={control}
+                    rules={{ required: true }}
+                    render={() => {
+                    return <Input
+                    type="file"
+                    name="image"
+                    onChange={(e) => onChange(e, i)}
+                    {...projects[i].image}
+                  />}}
+                  />
+                      
                     </Grid.Column>
                     <Grid.Column width={10} textAlign="center">
                       <Image
-                        src={formData.projects[i].image.objURL}
+                        src={watch(`projects[${i}].image.objURL`)}
                         as="a"
                         size="medium"
-                        href={formData.projects[i].image.objURL}
+                        href={watch(`projects[${i}].image.objURL`)}
                         target="_blank"
                       />
                     </Grid.Column>
@@ -317,7 +304,6 @@ const Project = ({ formData, setFormData, errors, setErrors }) => {
   return (
     <>
       {renderProject()}
-      {errors.projects.length !== 0 ? ErrorMessage(errors.projects) : ""}
     </>
   );
 };
