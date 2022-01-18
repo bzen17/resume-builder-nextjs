@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import React, { useState, useRef,useEffect } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { Button, Grid, Form, Message, Icon } from "semantic-ui-react";
 import Bio from "./Bio";
 import Experience from "./Experience";
@@ -21,9 +21,9 @@ import Project from "./Project";
 import Skills from "./Skills";
 import Certifications from "./Certification";
 import Contact from "./Contact";
-import {validateForm} from "../../utility/formValidation";
-import { useForm,useFieldArray } from "react-hook-form";
-import { yupResolver } from '@hookform/resolvers/yup';
+import { validateForm } from "../../utility/formValidation";
+import { useForm, useFieldArray } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 
 const options = [
@@ -32,54 +32,51 @@ const options = [
   { key: "3", text: "Both", value: "both" },
 ];
 
-
 const TemplateForm = ({ activeItem }) => {
-  const schema = yup.object({
-    bio: yup.object().shape({
-      fn: yup.string().required('First Name is required'),
-      ln: yup.string().required('Last Name is required'),
-      role: yup.string().required('Designation is required'),
-      sumHeader: yup.string().required('Summary Header is required'),
-      about: yup.string().required('About is required'),
-    }),
-    exp: yup.array().of(
-      yup.object().shape({
-        org: yup.string().required("Organisation is required"),
-        title: yup.string().required("Designation is required"),
-        startMonth: yup.number().required("Start Month is required").positive(),
-        startYear: yup.number().required("Start Year is required"),
-        endMonth: yup.number().required("End Month is required"),
-        endYear: yup.number().required("End Year is required"),
-        desc: yup.string().required("Description is required"),
-      })
-    ),
-    expertise: yup.array().of(
-      yup.object().shape({
+  const schema = yup
+    .object({
+      bio: yup.object().shape({
+        fn: yup.string().required("First Name is required"),
+        ln: yup.string().required("Last Name is required"),
+        role: yup.string().required("Designation is required"),
+        sumHeader: yup.string().required("Summary Header is required"),
+        about: yup.string().required("About is required"),
+      }),
+      exp: yup.array().of(
+        yup.object().shape({
+          org: yup.string().required("Organisation is required"),
+          title: yup.string().required("Designation is required"),
+          startMonth: yup
+            .number()
+            .required("Start Month is required")
+            .positive(),
+          startYear: yup.number().required("Start Year is required"),
+          endMonth: yup.number().required("End Month is required"),
+          endYear: yup.number().required("End Year is required"),
+          desc: yup.string().required("Description is required"),
+        })
+      ),
+      expertise: yup.array().of(
+        yup.object().shape({
           title: yup.string(),
           desc: yup.string(),
         })
       ),
-    skills: yup.array().of(
-      yup.object().shape({
-      skill: yup.array().of(
-        yup.array().of(
-          yup.string(),yup.string()
-        )
-      )
-    })),
-    projects: yup.array().of(
-      yup.object().shape({
-        name: yup.string().required("Project Name is required"),
-        shortDesc: yup.string().required("Short Description is required"),
-        url: yup.string().required("Project URL is required"),
-        desc: yup.string().required("Description is required"),
-        image: yup.string().required("Image URL is required"),
-        techStack: yup.array().of(
-          yup.array().of(
-            yup.string(),yup.string()
-          )
-        )
-      })),
+      skills: yup.array().of(
+        yup.object().shape({
+          skill: yup.array().of(yup.array().of(yup.string(), yup.string())),
+        })
+      ),
+      projects: yup.array().of(
+        yup.object().shape({
+          name: yup.string().required("Project Name is required"),
+          shortDesc: yup.string().required("Short Description is required"),
+          url: yup.string().required("Project URL is required"),
+          desc: yup.string().required("Description is required"),
+          image: yup.string().required("Image URL is required"),
+          techStack: yup.array().of(yup.array().of(yup.string(), yup.string())),
+        })
+      ),
       certifications: yup.array().of(
         yup.object().shape({
           name: yup.string().required("Certification Name is required"),
@@ -89,12 +86,9 @@ const TemplateForm = ({ activeItem }) => {
       ),
       languages: yup.array().of(
         yup.object().shape({
-        language: yup.array().of(
-          yup.array().of(
-            yup.string(),yup.string()
-          )
-        )
-      })),
+          language: yup.array().of(yup.array().of(yup.string(), yup.string())),
+        })
+      ),
       contact: yup.object().shape({
         email: yup.string().required("Email is required"),
         phone: yup.string().required("Phone is required"),
@@ -103,8 +97,9 @@ const TemplateForm = ({ activeItem }) => {
         github: yup.string(),
         linkedin: yup.string(),
         twitter: yup.string(),
-      })
-  }).required();
+      }),
+    })
+    .required();
   const initFormData = {
     bio: {
       fn: "",
@@ -132,8 +127,8 @@ const TemplateForm = ({ activeItem }) => {
     ],
     skills: [
       {
-        skill:[["", ""]]
-      }
+        skill: [["", ""]],
+      },
     ],
     projects: [
       {
@@ -155,7 +150,7 @@ const TemplateForm = ({ activeItem }) => {
     languages: [
       {
         language: [["", ""]],
-      }
+      },
     ],
     contact: {
       email: "",
@@ -176,20 +171,29 @@ const TemplateForm = ({ activeItem }) => {
     certifications: [],
     contact: [],
   };
-  const { register, handleSubmit, watch, setValue, control, formState: { errors },formState, reset } = useForm({
+  const {
+    handleSubmit,
+    watch,
+    setValue,
+    control,
+    formState: { errors },
+    setError,
+    reset,
+  } = useForm({
     resolver: yupResolver(schema),
+    mode: "onChange",
     defaultValues: initFormData,
   });
-  
-  const onSubmit = data => console.log('data',data);
-  useEffect(() => {
-    console.log('Errors', errors);
-  }, [errors]);
+
+  const onSubmit = (data) => console.log("data", data);
+  console.log("Errors", errors);
+  console.log("Data", watch());
   const formRef = useRef(null);
   const renderForm = () => {
     if (activeItem === "bio") {
       return (
         <Bio
+          schema={schema}
           errors={errors}
           watch={watch}
           control={control}
@@ -203,7 +207,6 @@ const TemplateForm = ({ activeItem }) => {
           watch={watch}
           control={control}
           setValue={setValue}
-          
         />
       );
     } else if (activeItem === "experience") {
@@ -253,7 +256,7 @@ const TemplateForm = ({ activeItem }) => {
       );
     }
   };
-  
+
   return (
     <>
       <Form error onSubmit={handleSubmit(onSubmit)} id="templateForm">

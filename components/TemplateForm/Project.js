@@ -25,48 +25,28 @@ import {
 } from "semantic-ui-react";
 import validateField from "../../utility/formValidation";
 import ErrorMessage from "./Message";
-import { Controller,useFieldArray } from "react-hook-form";
+import { Controller, useFieldArray } from "react-hook-form";
 
-const Project = ({ errors, watch, control, setValue   }) => {
-  const { fields:projects, append, update, remove } = useFieldArray({ name: 'projects', control });
- //const { fields:techStack, append:t_append, remove:t_remove } = useFieldArray({ name: 'techStack', control });
-  useEffect(() => {
-    if (projects.length===0) {
-      append({
-      name: "",
-      shortDesc: "",
-      url: "",
-      desc: "",
-      image: "",
-      techStack: [["",""]],
-    });
-  }
-}, [projects]);
-
-  const onTechStackChange = (event, i, i_tsg, i_ts) => {
-    console.log('change',event.target.name, event.target.value);
-    event.preventDefault();
-    event.persist();
-    setValue(`projects[${i}].${event.target.name}[${i_tsg}][${i_ts}]`, event.target.value);
-  };
-  const onChange = (event, i) => {
-    console.log('change',event.target.name, event.target.value);
+const Project = ({ errors, watch, control, setValue }) => {
+  const {
+    fields: projects,
+    append,
+    update,
+    remove,
+  } = useFieldArray({ name: "projects", control });
+  const onImgChange = (event, i) => {
     event.preventDefault();
     event.persist();
     if (event.target.name === "image") {
-      if (event.target.files && event.target.files[i]) {
-        const file = event.target.files[i];
+      if (event.target.files && event.target.files[0]) {
+        const file = event.target.files[0];
         const img = {
           objURL: URL.createObjectURL(file),
           URL: file,
         };
-        setValue(`projects[${i}].${event.target.name}`, img);
+        setValue(`projects.${i}.${event.target.name}`, img);
       }
-    } else {
-     
-      setValue(`projects[${i}].${event.target.name}`, event.target.value);
     }
-    
   };
   const uploadToClient = (event) => {
     if (event.target.files && event.target.files[0]) {
@@ -81,61 +61,71 @@ const Project = ({ errors, watch, control, setValue   }) => {
     return (
       <Form.Field required>
         <label>Tech Stack</label>
-        {projects.length!==0&&projects[i].techStack.map((tsg, i_tsg) => {
-          console.log('tsg',tsg,'techStack',projects[i].techStack);
-          index++;
-          return (
-            <Form.Group key={'tsg'+i_tsg} widths="equal">
-              {tsg.map((ts, i_ts) => {
-                return (
-                  <Controller
-                    key={'ts'+i_ts}
-                    name={`projects[${i}]techStack`}
-                    control={control}
-                    rules={{ required: true }}
-                    render={() => {
-                    return <Form.Input
-                    name="techStack"
-                    fluid
-                    placeholder={`#${2*i_tsg + i_ts+1}`}
-                    value={watch(`projects[${i}].techStack[${i_tsg}][${i_ts}]`)}
-                    onChange={(e) => onTechStackChange(e, i, i_tsg, i_ts)}
-                  />}}
-                  />
-                  
-                );
-              })}
+        {projects.length !== 0 &&
+          projects[i].techStack.map((tsg, i_tsg) => {
+            index++;
+            return (
+              <Form.Group key={"tsg" + i_tsg} widths="equal">
+                {tsg.map((ts, i_ts) => {
+                  return (
+                    <Controller
+                      key={"ts" + i_ts}
+                      name={`projects.${i}.techStack.${i_tsg}.${i_ts}`}
+                      control={control}
+                      render={({ field }) => {
+                        return (
+                          <Form.Input
+                            name="techStack"
+                            fluid
+                            placeholder={`#${2 * i_tsg + i_ts + 1}`}
+                            {...field}
+                          />
+                        );
+                      }}
+                    />
+                  );
+                })}
 
-              {i_tsg === 0 ? (
-                <Popup
-                  content="Add Tech Stack"
-                  position="top right"
-                  trigger={
-                    <Button
-                      onClick={(e) => update(i,{...projects[i],techStack:[...projects[i].techStack,["",""]]})}
-                      icon="plus"
-                      secondary
-                    />
-                  }
-                />
-              ) : i_tsg === projects[i].techStack.length - 1 ? (
-                <Popup
-                  content="Remove Tech Stack"
-                  position="top right"
-                  trigger={
-                    <Button
-                      onClick={(e) => update(i,{...projects[i],techStack:projects[i].techStack.slice(0,-1)})}
-                      icon="minus"
-                      negative
-                    />
-                  }
-                />
-              ) : (
-                <Button style={{ color: "#fff" }} />
-              )}
-            </Form.Group>
-          );
-        })}
+                {i_tsg === 0 ? (
+                  <Popup
+                    content="Add Tech Stack"
+                    position="top right"
+                    trigger={
+                      <Button
+                        onClick={(e) =>
+                          update(i, {
+                            ...projects[i],
+                            techStack: [...projects[i].techStack, ["", ""]],
+                          })
+                        }
+                        icon="plus"
+                        secondary
+                      />
+                    }
+                  />
+                ) : i_tsg === projects[i].techStack.length - 1 ? (
+                  <Popup
+                    content="Remove Tech Stack"
+                    position="top right"
+                    trigger={
+                      <Button
+                        onClick={(e) =>
+                          update(i, {
+                            ...projects[i],
+                            techStack: projects[i].techStack.slice(0, -1),
+                          })
+                        }
+                        icon="minus"
+                        negative
+                      />
+                    }
+                  />
+                ) : (
+                  <Button style={{ color: "#fff" }} />
+                )}
+              </Form.Group>
+            );
+          })}
       </Form.Field>
     );
   };
@@ -145,10 +135,7 @@ const Project = ({ errors, watch, control, setValue   }) => {
       <>
         {projects.map((project, i) => {
           return (
-            <div
-              key={'proj'+i}
-              id={`project${i + 1}`}
-            >
+            <div key={"proj" + i} id={`project${i + 1}`}>
               {i !== 0 ? <hr style={{ marginBottom: "1rem" }} /> : ""}
               <Grid>
                 <Grid.Row>
@@ -163,7 +150,7 @@ const Project = ({ errors, watch, control, setValue   }) => {
                         trigger={
                           <a href={`#project${projects.length}`}>
                             <Button
-                              onClick={(e) => 
+                              onClick={(e) =>
                                 append({
                                   name: "",
                                   shortDesc: "",
@@ -200,95 +187,87 @@ const Project = ({ errors, watch, control, setValue   }) => {
               <Container style={{ marginBottom: "1rem" }}>
                 <Form.Group>
                   <Controller
-                    name={`projects[${i}]name`}
+                    name={`projects.${i}.name`}
                     control={control}
-                    rules={{ required: true }}
-                    render={() => {
-                    return <Form.Input
-                    name='name'
-                    required
-                    fluid
-                    width={6}
-                    label="Name"
-                    placeholder="Name"
-                    value={watch(`projects[${i}].name`)}
-                    onChange={(e) => onChange(e, i)}
-                    {...projects[i].name}
-                  />}}
+                    render={({ field }) => {
+                      return (
+                        <Form.Input
+                          name="name"
+                          required
+                          fluid
+                          width={6}
+                          label="Name"
+                          placeholder="Name"
+                          {...field}
+                        />
+                      );
+                    }}
                   />
                   <Controller
-                    name={`projects[${i}]shortDesc`}
+                    name={`projects.${i}.shortDesc`}
                     control={control}
-                    rules={{ required: true }}
-                    render={() => {
-                    return <Form.Input
-                    name='shortDesc'
-                    required
-                    fluid
-                    width={10}
-                    label="Short Description"
-                    placeholder="Short Description"
-                    value={watch(`projects[${i}].shortDesc`)}
-                    onChange={(e) => onChange(e, i)}
-                    {...projects[i].shortDesc}
-                  />}}
+                    render={({ field }) => {
+                      return (
+                        <Form.Input
+                          name="shortDesc"
+                          required
+                          fluid
+                          width={10}
+                          label="Short Description"
+                          placeholder="Short Description"
+                          {...field}
+                        />
+                      );
+                    }}
                   />
                 </Form.Group>
                 <Controller
-                    name={`projects[${i}]url`}
-                    control={control}
-                    rules={{ required: true }}
-                    render={() => {
-                    return <Form.Input
-                    name='url'
-                    required
-                    fluid
-                    width={10}
-                    label="URL"
-                    placeholder="URL"
-                    value={watch(`projects[${i}].url`)}
-                    onChange={(e) => onChange(e, i)}
-                    {...projects[i].url}
-                  />}}
-                  />
+                  name={`projects.${i}.url`}
+                  control={control}
+                  render={({ field }) => {
+                    return (
+                      <Form.Input
+                        name="url"
+                        required
+                        fluid
+                        width={10}
+                        label="URL"
+                        placeholder="URL"
+                        {...field}
+                      />
+                    );
+                  }}
+                />
                 {renderTechStack(project, i)}
                 <Controller
-                    name={`projects[${i}]desc`}
-                    control={control}
-                    rules={{ required: true }}
-                    render={() => {
-                    return <Form.TextArea
-                    name='desc'
-                    label="Description"
-                    placeholder="Tell us more about your project..."
-                    value={watch(`projects[${i}].desc`)}
-                    onChange={(e) => onChange(e, i)}
-                    {...projects[i].desc}
-                  />}}
-                  />
+                  name={`projects.${i}.desc`}
+                  control={control}
+                  render={({ field }) => {
+                    return (
+                      <Form.TextArea
+                        name="desc"
+                        label="Description"
+                        placeholder="Tell us more about your project..."
+                        {...field}
+                      />
+                    );
+                  }}
+                />
                 <Grid>
                   <Grid.Row>
                     <Grid.Column width={6} verticalAlign="top">
-                    <Controller
-                    name={`projects[${i}]image`}
-                    control={control}
-                    rules={{ required: true }}
-                    render={() => {
-                    return <Input
-                    type="file"
-                    name="image"
-                    onChange={(e) => onChange(e, i)}
-                    {...projects[i].image}
-                  />}}
-                  />
-                      
+                      <Input
+                        type="file"
+                        name="image"
+                        onChange={(e) => onImgChange(e, i)}
+                      />
                     </Grid.Column>
                     <Grid.Column width={10} textAlign="center">
                       <Image
-                        src={watch(`projects[${i}].image.objURL`)}
+                        src={watch(`projects.${i}..image.objURL`)}
                         as="a"
                         size="medium"
-                        href={watch(`projects[${i}].image.objURL`)}
+                        href={watch(`projects.${i}..image.objURL`)}
                         target="_blank"
                       />
                     </Grid.Column>
@@ -301,11 +280,7 @@ const Project = ({ errors, watch, control, setValue   }) => {
       </>
     );
   };
-  return (
-    <>
-      {renderProject()}
-    </>
-  );
+  return <>{renderProject()}</>;
 };
 
 export default Project;
