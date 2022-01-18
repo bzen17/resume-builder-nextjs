@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Button,
   Image,
@@ -25,38 +25,28 @@ import {
 } from "semantic-ui-react";
 import validateField from "../../utility/formValidation";
 import ErrorMessage from "./Message";
-import { Controller,useFieldArray } from "react-hook-form";
+import { Controller, useFieldArray } from "react-hook-form";
 
-const Certifications = ({ errors, watch, control, setValue   }) => {
-  const { fields:certifications, append, update, remove } = useFieldArray({ name: 'projects', control });
-  useEffect(() => {
-    if (certifications.length===0) {
-      append({
-        name: "",
-        url: "",
-        image: "",
-      });
-  }
-}, []);
+const Certifications = ({ errors, watch, control, setValue }) => {
+  const {
+    fields: certifications,
+    append,
+    update,
+    remove,
+  } = useFieldArray({ name: "certifications", control });
 
-const onCertChange = (event, i) => {
-  event.preventDefault();
-  event.persist();
-  if (event.target.name === "image") {
-    if (event.target.files && event.target.files[i]) {
-      const file = event.target.files[i];
+  const onImgChange = (event, i) => {
+    event.preventDefault();
+    event.persist();
+    if (event.target.files && event.target.files[0]) {
+      const file = event.target.files[0];
       const img = {
         objURL: URL.createObjectURL(file),
         URL: file,
       };
-      setValue(`certifications[${i}].${event.target.name}`, img);
+      setValue(`certifications.${i}.${event.target.name}`, img);
     }
-  } else {
-   
-    setValue(`certifications[${i}].${event.target.name}`, event.target.value);
-  }
-  
-};
+  };
 
   const uploadToServer = async (event) => {
     const body = new FormData();
@@ -86,11 +76,13 @@ const onCertChange = (event, i) => {
                         trigger={
                           <a href={`#cert${certifications.length}`}>
                             <Button
-                              onClick={(e) =>append({
-                                name: "",
-                                url: "",
-                                image: "",
-                              })}
+                              onClick={(e) =>
+                                append({
+                                  name: "",
+                                  url: "",
+                                  image: "",
+                                })
+                              }
                               icon="plus"
                               floated="right"
                               primary
@@ -118,25 +110,39 @@ const onCertChange = (event, i) => {
 
               <Container id={`cert${i + 1}`} style={{ marginBottom: "1rem" }}>
                 <Form.Group>
-                  <Form.Input
-                    required
-                    fluid
-                    name="name"
-                    label="Name"
-                    placeholder="Name"
-                    width={6}
-                    value={watch(`certifications[${i}].name`)}
-                    onChange={(e) => onCertChange(e, i)}
+                  <Controller
+                    name={`certifications.${i}.name`}
+                    control={control}
+                    render={({ field }) => {
+                      return (
+                        <Form.Input
+                          required
+                          fluid
+                          name="name"
+                          label="Name"
+                          placeholder="Name"
+                          width={6}
+                          {...field}
+                        />
+                      );
+                    }}
                   />
-                  <Form.Input
-                    required
-                    fluid
-                    name="url"
-                    label="URL"
-                    placeholder="URL"
-                    width={10}
-                    value={watch(`certifications[${i}].url`)}
-                    onChange={(e) => onCertChange(e, i)}
+                  <Controller
+                    name={`certifications.${i}.url`}
+                    control={control}
+                    render={({ field }) => {
+                      return (
+                        <Form.Input
+                          required
+                          fluid
+                          name="url"
+                          label="URL"
+                          placeholder="URL"
+                          width={10}
+                          {...field}
+                        />
+                      );
+                    }}
                   />
                 </Form.Group>
                 <Grid>
@@ -145,15 +151,15 @@ const onCertChange = (event, i) => {
                       <Input
                         type="file"
                         name="image"
-                        onChange={(e) => onCertChange(e, i)}
+                        onChange={(e) => onImgChange(e, i)}
                       />
                     </Grid.Column>
                     <Grid.Column width={10} textAlign="center">
                       <Image
-                        src={watch(`certifications[${i}].image.objURL`)}
+                        src={watch(`certifications.${i}.image.objURL`)}
                         as="a"
                         size="medium"
-                        href={watch(`certifications[${i}].image.objURL`)}
+                        href={watch(`certifications.${i}.image.objURL`)}
                         target="_blank"
                       />
                     </Grid.Column>

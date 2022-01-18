@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Button,
   Grid,
@@ -23,36 +23,15 @@ import {
 } from "semantic-ui-react";
 import validateField from "../../utility/formValidation";
 import ErrorMessage from "./Message";
-import { Controller,useFieldArray } from "react-hook-form";
+import { Controller, useFieldArray } from "react-hook-form";
 
+const Experience = ({ errors, watch, control, setValue }) => {
+  const { fields, append, remove } = useFieldArray({ name: "exp", control });
 
-const Experience = ({ errors, watch, control, setValue  }) => {
-  const { fields, append, remove } = useFieldArray({ name: 'exp', control });
-  useEffect(() => {
-    if (fields.length===0) {
-    append({
-      org: "",
-      title: "",
-      startMonth: "",
-      startYear: "",
-      endMonth: "",
-      endYear: "",
-      desc: "",
-    });
-  }
-}, []);
-
-console.log('Fields', watch('exp'));
-  const onChange = (event, i) => {
-    event.preventDefault();
-    event.persist();
-    console.log('change',event.target.name, event.target.value);
-    setValue(`exp[${i}].${event.target.name}`, event.target.value);
-  };
   const renderWorkExperience = (e, num) => {
     return (
       <>
-        {fields.map((e, i) => {
+        {fields.map((exp, i) => {
           return (
             <div key={i} id={`exp${i + 1}`}>
               {i !== 0 ? <hr style={{ marginBottom: "1rem" }} /> : ""}
@@ -71,14 +50,14 @@ console.log('Fields', watch('exp'));
                             <Button
                               onClick={(e) =>
                                 append({
-                                org: "",
-                                title: "",
-                                startMonth: "",
-                                startYear: "",
-                                endMonth: "",
-                                endYear: "",
-                                desc: "",
-                              })
+                                  org: "",
+                                  title: "",
+                                  startMonth: "",
+                                  startYear: "",
+                                  endMonth: "",
+                                  endYear: "",
+                                  desc: "",
+                                })
                               }
                               icon="plus"
                               floated="right"
@@ -109,40 +88,35 @@ console.log('Fields', watch('exp'));
                 <Grid columns={2}>
                   <Grid.Row>
                     <Grid.Column>
-                    
                       <Form.Group widths="equal">
-                      <Controller
-                        name={`exp[${i}]org`}
-                        control={control}
-                        rules={{ required: true }}
-                        render={() => {
-                        return <Form.Input
-                        name='org'
-                        required
-                        fluid
-                        label="Organization"
-                        placeholder="Organization"
-                        value={watch(`exp[${i}].org`)}
-                        onChange={(e) => onChange(e, i)}
-                        {...fields[i].org}
-                      />}}
-                      />
                         <Controller
-                        name={`exp[${i}]title`}
-                        control={control}
-                        rules={{ required: true }}
-                        render={() => {
-                        return <Form.Input
-                        name='title'
-                        required
-                        fluid
-                        label="Designation"
-                        placeholder="Designation"
-                        value={watch(`exp[${i}].title`)}
-                        onChange={(e) => onChange(e, i)}
-                        {...fields[i].title}
-                      />}}
-                      />
+                          name={`exp.${i}.org`}
+                          control={control}
+                          render={({ field }) => (
+                            <Form.Input
+                              name="org"
+                              required
+                              fluid
+                              label="Organization"
+                              placeholder="Organization"
+                              {...field}
+                            />
+                          )}
+                        />
+                        <Controller
+                          name={`exp.${i}.title`}
+                          control={control}
+                          render={({ field }) => (
+                            <Form.Input
+                              name="title"
+                              required
+                              fluid
+                              label="Designation"
+                              placeholder="Designation"
+                              {...field}
+                            />
+                          )}
+                        />
                       </Form.Group>
                     </Grid.Column>
                     <Grid.Column>
@@ -152,36 +126,36 @@ console.log('Fields', watch('exp'));
                             <Form.Field required>
                               <label>Start Date</label>
                               <Form.Group widths="equal">
-                              <Controller
-                                name={`exp[${i}]startMonth`}
-                                control={control}
-                                rules={{ required: true }}
-                                render={() => {
-                                return <Form.Input
-                                name="startMonth"
-                                required
-                                fluid
-                                placeholder="Month"
-                                value={watch(`exp[${i}].startMonth`)}
-                                onChange={(e) => onChange(e, i)}
-                                {...fields[i].startMonth}
-                              />}}
-                              />
                                 <Controller
-                                name={`exp[${i}]startYear`}
-                                control={control}
-                                rules={{ required: true }}
-                                render={() => {
-                                return <Form.Input
-                                name="startYear"
-                                required
-                                fluid
-                                placeholder="Year"
-                                value={watch(`exp[${i}].startYear`)}
-                                onChange={(e) => onChange(e, i)}
-                                {...fields[i].startYear}
-                              />}}
-                              />
+                                  name={`exp.${i}.startMonth`}
+                                  control={control}
+                                  render={({ field }) => {
+                                    return (
+                                      <Form.Input
+                                        name="startMonth"
+                                        required
+                                        fluid
+                                        placeholder="Month"
+                                        {...field}
+                                      />
+                                    );
+                                  }}
+                                />
+                                <Controller
+                                  name={`exp.${i}.startYear`}
+                                  control={control}
+                                  render={({ field }) => {
+                                    return (
+                                      <Form.Input
+                                        name="startYear"
+                                        required
+                                        fluid
+                                        placeholder="Year"
+                                        {...field}
+                                      />
+                                    );
+                                  }}
+                                />
                               </Form.Group>
                             </Form.Field>
                           </Grid.Column>
@@ -189,36 +163,36 @@ console.log('Fields', watch('exp'));
                             <Form.Field required>
                               <label>End Date</label>
                               <Form.Group widths="equal">
-                              <Controller
-                                name={`exp[${i}]endMonth`}
-                                control={control}
-                                rules={{ required: true }}
-                                render={() => {
-                                return <Form.Input
-                                name="endMonth"
-                                required
-                                fluid
-                                placeholder="Month"
-                                value={watch(`exp[${i}].endMonth`)}
-                                onChange={(e) => onChange(e, i)}
-                                {...fields[i].endMonth}
-                              />}}
-                              />
                                 <Controller
-                                name={`exp[${i}]endYear`}
-                                control={control}
-                                rules={{ required: true }}
-                                render={() => {
-                                return <Form.Input
-                                name="endYear"
-                                required
-                                fluid
-                                placeholder="Year"
-                                value={watch(`exp[${i}].endYear`)}
-                                onChange={(e) => onChange(e, i)}
-                                {...fields[i].endYear}
-                              />}}
-                              />
+                                  name={`exp.${i}.endMonth`}
+                                  control={control}
+                                  render={({ field }) => {
+                                    return (
+                                      <Form.Input
+                                        name="endMonth"
+                                        required
+                                        fluid
+                                        placeholder="Month"
+                                        {...field}
+                                      />
+                                    );
+                                  }}
+                                />
+                                <Controller
+                                  name={`exp.${i}.endYear`}
+                                  control={control}
+                                  render={({ field }) => {
+                                    return (
+                                      <Form.Input
+                                        name="endYear"
+                                        required
+                                        fluid
+                                        placeholder="Year"
+                                        {...field}
+                                      />
+                                    );
+                                  }}
+                                />
                               </Form.Group>
                             </Form.Field>
                           </Grid.Column>
@@ -228,17 +202,18 @@ console.log('Fields', watch('exp'));
                   </Grid.Row>
                 </Grid>
                 <Controller
-                  name={`exp[${i}]desc`}
+                  name={`exp.${i}.desc`}
                   control={control}
-                  render={() => {
-                  return <Form.TextArea
-                  name="desc"
-                  label="Description"
-                  placeholder="Tell us more about your role in your organisation..."
-                  value={watch(`exp[${i}].desc`)}
-                  onChange={(e) => onChange(e, i)}
-                  {...fields[i].desc}
-                />}}
+                  render={({ field }) => {
+                    return (
+                      <Form.TextArea
+                        name="desc"
+                        label="Description"
+                        placeholder="Tell us more about your role in your organisation..."
+                        {...field}
+                      />
+                    );
+                  }}
                 />
               </Container>
             </div>
@@ -250,7 +225,7 @@ console.log('Fields', watch('exp'));
   return (
     <>
       {renderWorkExperience()}
-     {/*  {errors.experience.length !== 0 ? ErrorMessage(errors.experience) : ""} */}
+      {/*  {errors.experience.length !== 0 ? ErrorMessage(errors.experience) : ""} */}
     </>
   );
 };

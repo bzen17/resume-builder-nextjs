@@ -12,39 +12,25 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Button, Grid, Form, Popup, Header } from "semantic-ui-react";
 import validateField from "../../utility/formValidation";
 import ErrorMessage from "./Message";
-import { Controller,useFieldArray } from "react-hook-form";
+import { Controller, useFieldArray } from "react-hook-form";
 
 const Skills = ({ errors, watch, control, setValue }) => {
-  const { fields:expertise, append:e_append, update:e_update, remove:e_remove } = useFieldArray({ name: 'expertise', control });
-  const { fields:skills, append:s_append, update:s_update, remove:s_remove } = useFieldArray({ name: 'skills', control });
-  useEffect(() => {
-    if (expertise.length===0) {
-      e_append( {
-        title: "",
-        desc: "",
-      });
-  }
-  if (skills.length===0) {
-    s_append({skill:[["",""]]});
-}
-}, []);
-console.log('skills',skills)
-  const onExpChange = (event, i) => {
-    event.preventDefault();
-    event.persist();
-    console.log('change',event.target.name, event.target.value);
-    setValue(`expertise[${i}].${event.target.name}`, event.target.value);
-  };
-  const onSkillChange = (event, i_tsg, i_ts) => {
-    console.log('change',event.target.name, event.target.value);
-    event.preventDefault();
-    event.persist();
-    setValue(`skills[0].skill[${i_tsg}][${i_ts}]`, event.target.value);
-  };
+  const {
+    fields: expertise,
+    append: e_append,
+    update: e_update,
+    remove: e_remove,
+  } = useFieldArray({ name: "expertise", control });
+  const {
+    fields: skills,
+    append: s_append,
+    update: s_update,
+    remove: s_remove,
+  } = useFieldArray({ name: "skills", control });
   const renderExp = (e) => {
     let index = 0;
     return (
@@ -52,41 +38,45 @@ console.log('skills',skills)
         {expertise.map((e, i) => {
           index++;
           return (
-            <Form.Group key={'exp',i}>
+            <Form.Group key={("exp", i)}>
               <Controller
-                name={`expertise[${i}]title`}
+                name={`expertise.${i}.title`}
                 control={control}
-                rules={i===0?{ required: true }:{}}
-                render={() => {
-                return <Form.Input
-                name="title"
-                fluid
-                placeholder={
-                  i === 0
-                    ? "Title (Skill/Expertise) *"
-                    : "Title (Skill/Expertise)"
-                }
-                value={watch(`expertise[${i}].title`)}
-                width={6}
-                onChange={(e) => onExpChange(e, i)}
-              />}}
+                rules={i === 0 ? { required: true } : {}}
+                render={({ field }) => {
+                  return (
+                    <Form.Input
+                      name="title"
+                      fluid
+                      placeholder={
+                        i === 0
+                          ? "Title (Skill/Expertise) *"
+                          : "Title (Skill/Expertise)"
+                      }
+                      width={6}
+                      {...field}
+                    />
+                  );
+                }}
               />
               <Controller
-                name={`expertise[${i}]desc`}
+                name={`expertise.${i}.desc`}
                 control={control}
-                rules={i===0?{ required: true }:{}}
-                render={() => {
-                return <Form.TextArea
-                name="desc"
-                placeholder={
-                  i === 0
-                    ? "Describe your experience on your skill/expertise... *"
-                    : "Describe your experience on your skill/expertise..."
-                }
-                value={watch(`expertise[${i}]desc`)}
-                width={10}
-                onChange={(e) => onExpChange(e, i)}
-              />}}
+                rules={i === 0 ? { required: true } : {}}
+                render={({ field }) => {
+                  return (
+                    <Form.TextArea
+                      name="desc"
+                      placeholder={
+                        i === 0
+                          ? "Describe your experience on your skill/expertise... *"
+                          : "Describe your experience on your skill/expertise..."
+                      }
+                      width={10}
+                      {...field}
+                    />
+                  );
+                }}
               />
               {i === 0 ? (
                 <Popup
@@ -94,10 +84,11 @@ console.log('skills',skills)
                   position="top right"
                   trigger={
                     <Button
-                      onClick={(e) =>e_append( {
-                        title: "",
-                        desc: "",
-                      })
+                      onClick={(e) =>
+                        e_append({
+                          title: "",
+                          desc: "",
+                        })
                       }
                       icon="plus"
                       secondary
@@ -127,66 +118,73 @@ console.log('skills',skills)
     let index = 0;
     return (
       <Form.Field required>
-        {skills.length!==0&&skills[0].skill.map((sg, i_sg) => {
-          index++;
-          return (
-            <Form.Group widths="equal" key={'skill_g'+i_sg}>
-              {sg.map((s, i_s) => {
-                return (
-                  <Controller
-                  key={'skill'+i_s}
-                name={`skills[${i_sg}][${i_s}]`}
-                control={control}
-                rules={i_sg===0?{ required: true }:{}}
-                render={() => {
-                return <Form.Input
-                required={i_sg === 0}
-                key={i_s}
-                name={`skill${i_sg + i_s + index}`}
-                fluid
-                placeholder={
-                  i_sg === 0
-                    ? `#${2*i_sg + i_s + 1} *`
-                    : `#${2*i_sg + i_s + 1}`
-                }
-                value={watch(`skills[0].skill[${i_sg}][${i_s}]`)}
-                onChange={(e) => onSkillChange(e, i_sg, i_s)}
-              />}}
-              />
-                  
-                );
-              })}
+        {skills.length !== 0 &&
+          skills[0].skill.map((sg, i_sg) => {
+            index++;
+            return (
+              <Form.Group widths="equal" key={"skill_g" + i_sg}>
+                {sg.map((s, i_s) => {
+                  return (
+                    <Controller
+                      key={"skill" + i_s}
+                      name={`skills.0.skill.${i_sg}.${i_s}`}
+                      control={control}
+                      rules={i_sg === 0 ? { required: true } : {}}
+                      render={({ field }) => {
+                        return (
+                          <Form.Input
+                            required={i_sg === 0}
+                            name={`skill${i_sg + i_s + index}`}
+                            fluid
+                            placeholder={
+                              i_sg === 0
+                                ? `#${2 * i_sg + i_s + 1} *`
+                                : `#${2 * i_sg + i_s + 1}`
+                            }
+                            {...field}
+                          />
+                        );
+                      }}
+                    />
+                  );
+                })}
 
-              {i_sg === 0 ? (
-                <Popup
-                  content="Add Skills"
-                  position="top right"
-                  trigger={
-                    <Button
-                      onClick={(e) => s_update(0,{skill:[...skills[0].skill,["",""]]})}
-                      icon="plus"
-                      secondary
-                    />
-                  }
-                />
-              ) : i_sg === skills[0].skill.length - 1 ? (
-                <Popup
-                  content="Remove Skills"
-                  position="top right"
-                  trigger={
-                    <Button
-                      onClick={(e) =>s_update(0,{skill:[...skills[0].skill.slice(0,-1)]})}
-                      icon="minus"
-                      negative
-                    />
-                  }
-                />
-              ) : (
-                <Button color="white" />
-              )}
-            </Form.Group>
-          );
-        })}
+                {i_sg === 0 ? (
+                  <Popup
+                    content="Add Skills"
+                    position="top right"
+                    trigger={
+                      <Button
+                        onClick={(e) =>
+                          s_update(0, { skill: [...skills[0].skill, ["", ""]] })
+                        }
+                        icon="plus"
+                        secondary
+                      />
+                    }
+                  />
+                ) : i_sg === skills[0].skill.length - 1 ? (
+                  <Popup
+                    content="Remove Skills"
+                    position="top right"
+                    trigger={
+                      <Button
+                        onClick={(e) =>
+                          s_update(0, {
+                            skill: [...skills[0].skill.slice(0, -1)],
+                          })
+                        }
+                        icon="minus"
+                        negative
+                      />
+                    }
+                  />
+                ) : (
+                  <Button color="white" />
+                )}
+              </Form.Group>
+            );
+          })}
       </Form.Field>
     );
   };

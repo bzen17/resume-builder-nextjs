@@ -17,13 +17,13 @@ import { Button, Grid, Form, Header, Dropdown } from "semantic-ui-react";
 import validateField from "../../utility/formValidation";
 import ErrorMessage from "./Message";
 
-const Bio = ({ errors, watch, control, setValue  }) => {
+const Bio = ({ schema, errors, watch, control, setValue }) => {
   const sumHeaderOptions = [
     { key: "1", text: "About Me", value: "About Me" },
     { key: "2", text: "Work Summary", value: "Work Summary" },
     { key: "3", text: "Professional Summary", value: "Professional Summary" },
   ];
-  
+
   return (
     <>
       <Header as="h3">Personal Information</Header>
@@ -31,75 +31,78 @@ const Bio = ({ errors, watch, control, setValue  }) => {
         <Controller
           name="bio.fn"
           control={control}
-          rules={{ required: true }}
-          render={({ field }) => <Form.Input
-          name="fn"
-          fluid
-          required
-          label="First name"
-          placeholder="First name"
-          {...field}
-        />
-        }
+          render={({ field }) => (
+            <Form.Input
+              name="fn"
+              fluid
+              required
+              label="First name"
+              placeholder="First name"
+              {...field}
+            />
+          )}
         />
         <Controller
           name="bio.ln"
           control={control}
-          rules={{ required: true }}
-          render={({ field }) => <Form.Input
-          name="ln"
-          fluid
-          required
-          label="Last name"
-          placeholder="Last name"
-          {...field}
-        />}
+          render={({ field }) => (
+            <Form.Input
+              name="ln"
+              fluid
+              required
+              label="Last name"
+              placeholder="Last name"
+              {...field}
+            />
+          )}
         />
         <Controller
           name="bio.role"
           control={control}
-          rules={{ required: true }}
-          render={({ field }) => <Form.Input
-          name="role"
-          fluid
-          label="Designation"
-          placeholder="Designation"
-          {...field}
-        />}
+          render={({ field }) => (
+            <Form.Input
+              name="role"
+              fluid
+              label="Designation"
+              placeholder="Designation"
+              {...field}
+            />
+          )}
         />
       </Form.Group>
 
       <Form.Group>
-      <Controller
+        <Controller
           name="bio.sumHeader"
           control={control}
-          rules={{ required: true }}
-          render={({ field }) => <Form.Select
-          name="sumHeader"
-          fluid
-          required
-          label="Summary Header"
-          options={sumHeaderOptions}
-          placeholder="Summary Header"
-          width={4}
-          {...field}
-        />}
+          render={({ field }) => (
+            <Form.Select
+              name="sumHeader"
+              fluid
+              required
+              label="Summary Header"
+              options={sumHeaderOptions}
+              placeholder="Summary Header"
+              width={4}
+              {...field}
+            />
+          )}
         />
 
         <Controller
           name="bio.about"
           control={control}
-          rules={{ required: true }}
-          render={({ field }) => <Form.TextArea
-          name="about"
-          required
-          label="About"
-          placeholder="Tell us more about you..."
-          width={12}
-          {...field}
-        />}
+          render={({ field }) => (
+            <Form.TextArea
+              name="about"
+              required
+              label="About"
+              placeholder="Tell us more about you..."
+              width={12}
+              {...field}
+            />
+          )}
         />
-        
       </Form.Group>
       {/* {errors.bio.length !== 0 ? ErrorMessage(errors.bio) : ""} */}
     </>
