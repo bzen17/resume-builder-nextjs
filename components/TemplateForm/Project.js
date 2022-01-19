@@ -41,7 +41,7 @@ const Project = ({ errors, watch, control, setValue }) => {
       if (event.target.files && event.target.files[0]) {
         const file = event.target.files[0];
         const img = {
-          objURL: URL.createObjectURL(file),
+          objURL: (/\.(gif|jpe?g|png)$/g).test(file.name)?URL.createObjectURL(file):null,
           URL: file,
         };
         setValue(`projects.${i}.${event.target.name}`, img);
@@ -75,9 +75,15 @@ const Project = ({ errors, watch, control, setValue }) => {
                       render={({ field }) => {
                         return (
                           <Form.Input
+                            required={i_tsg===0}
+                            error={errors&&errors.projects&&errors.projects[i].techStack &&errors.projects[i].techStack[i_tsg][i_ts]&&errors.projects[i].techStack[i_tsg][i_ts].message}
                             name="techStack"
                             fluid
-                            placeholder={`#${2 * i_tsg + i_ts + 1}`}
+                            placeholder={
+                              i_tsg === 0
+                                ? `#${2 * i_tsg + i_ts + 1} *`
+                                : `#${2 * i_tsg + i_ts + 1}`
+                            }
                             {...field}
                           />
                         );
@@ -192,6 +198,7 @@ const Project = ({ errors, watch, control, setValue }) => {
                     render={({ field }) => {
                       return (
                         <Form.Input
+                        error={errors&&errors.projects&&errors.projects[i].name&&errors.projects[i].name.message}
                           name="name"
                           required
                           fluid
@@ -209,6 +216,7 @@ const Project = ({ errors, watch, control, setValue }) => {
                     render={({ field }) => {
                       return (
                         <Form.Input
+                        error={errors&&errors.projects&&errors.projects[i].shortDesc&&errors.projects[i].shortDesc.message}
                           name="shortDesc"
                           required
                           fluid
@@ -227,6 +235,7 @@ const Project = ({ errors, watch, control, setValue }) => {
                   render={({ field }) => {
                     return (
                       <Form.Input
+                      error={errors&&errors.projects&&errors.projects[i].url&&errors.projects[i].url.message}
                         name="url"
                         required
                         fluid
@@ -245,6 +254,7 @@ const Project = ({ errors, watch, control, setValue }) => {
                   render={({ field }) => {
                     return (
                       <Form.TextArea
+                      error={errors&&errors.projects &&errors.projects[i].desc&&errors.projects[i].desc.message}
                         name="desc"
                         label="Description"
                         placeholder="Tell us more about your project..."
@@ -257,6 +267,7 @@ const Project = ({ errors, watch, control, setValue }) => {
                   <Grid.Row>
                     <Grid.Column width={6} verticalAlign="top">
                       <Input
+                        error={errors&&errors.projects&&errors.projects[i].image &&errors.projects[i].image&&errors.projects[i].image.message}
                         type="file"
                         name="image"
                         onChange={(e) => onImgChange(e, i)}
