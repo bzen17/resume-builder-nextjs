@@ -39,9 +39,6 @@ const Bio = ({ schema, errors, watch, control, setValue }) => {
               name="fn"
               fluid
               required
-              error={
-                errors && errors.bio && errors.bio.fn && errors.bio.fn.message
-              }
               label="First name"
               placeholder="First name"
               {...field}
