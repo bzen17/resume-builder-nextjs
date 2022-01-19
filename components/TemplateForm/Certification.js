@@ -116,6 +116,7 @@ const Certifications = ({ errors, watch, control, setValue }) => {
                     render={({ field }) => {
                       return (
                         <Form.Input
+                          error={errors&&errors.certifications&&errors.certifications[i].name && errors.certifications[i].name.message}
                           required
                           fluid
                           name="name"
@@ -133,6 +134,7 @@ const Certifications = ({ errors, watch, control, setValue }) => {
                     render={({ field }) => {
                       return (
                         <Form.Input
+                        error={errors&&errors.certifications&&errors.certifications[i].url && errors.certifications[i].url.message}
                           required
                           fluid
                           name="url"
@@ -149,6 +151,7 @@ const Certifications = ({ errors, watch, control, setValue }) => {
                   <Grid.Row>
                     <Grid.Column width={6} verticalAlign="top">
                       <Input
+                        error={errors&&errors.certifications&&errors.certifications[i].image && errors.certifications[i].image.message}
                         type="file"
                         name="image"
                         onChange={(e) => onImgChange(e, i)}

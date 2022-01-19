@@ -28,7 +28,8 @@ const Contact = ({ errors, watch, control, setValue }) => {
             name="contact.email"
             control={control}
             render={({ field }) => (
-              <Input
+              <Form.Input
+              error={errors&&errors.contact&&errors.contact.email && errors.contact.email.message}
                 required
                 icon="mail"
                 iconPosition="left"
@@ -44,7 +45,8 @@ const Contact = ({ errors, watch, control, setValue }) => {
             name="contact.phone"
             control={control}
             render={({ field }) => (
-              <Input
+              <Form.Input
+              error={errors&&errors.contact&&errors.contact.phone && errors.contact.phone.message}
                 required
                 icon="phone"
                 iconPosition="left"
@@ -62,7 +64,8 @@ const Contact = ({ errors, watch, control, setValue }) => {
             name="contact.website"
             control={control}
             render={({ field }) => (
-              <Input
+              <Form.Input
+              error={errors&&errors.contact&&errors.contact.website && errors.contact.website.message}
                 icon="at"
                 iconPosition="left"
                 placeholder="Website"
@@ -74,14 +77,15 @@ const Contact = ({ errors, watch, control, setValue }) => {
         </Form.Field>
         <Form.Field>
           <Controller
-            name="contact.github"
+            name="contact.git"
             control={control}
             render={({ field }) => (
-              <Input
+              <Form.Input
+              error={errors&&errors.contact&&errors.contact.git && errors.contact.git.message}
                 icon="github"
                 iconPosition="left"
-                placeholder="Github"
-                name="github"
+                placeholder="Git"
+                name="git"
                 {...field}
               />
             )}
@@ -94,7 +98,8 @@ const Contact = ({ errors, watch, control, setValue }) => {
             name="contact.linkedin"
             control={control}
             render={({ field }) => (
-              <Input
+              <Form.Input
+              error={errors&&errors.contact&&errors.contact.linkedin && errors.contact.linkedin.message}
                 icon="linkedin"
                 iconPosition="left"
                 placeholder="LinkedIn"
@@ -109,7 +114,8 @@ const Contact = ({ errors, watch, control, setValue }) => {
             name="contact.twitter"
             control={control}
             render={({ field }) => (
-              <Input
+              <Form.Input
+              error={errors&&errors.contact&&errors.contact.twitter && errors.contact.twitter.message}
                 icon="twitter"
                 iconPosition="left"
                 placeholder="Twitter"
@@ -129,6 +135,7 @@ const Contact = ({ errors, watch, control, setValue }) => {
           control={control}
           render={({ field }) => (
             <Form.TextArea
+            error={errors&&errors.contact&&errors.contact.address && errors.contact.address.message}
               placeholder="Enter your permanent address..."
               name="address"
               {...field}

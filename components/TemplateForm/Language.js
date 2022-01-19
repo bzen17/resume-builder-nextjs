@@ -38,13 +38,13 @@ const Languages = ({ errors, watch, control, setValue }) => {
                 {lg.map((l, i_l) => {
                   return (
                     <Controller
-                      key={"lang" + i_s}
+                      key={"lang" + i_l}
                       name={`languages.0.language.${i_lg}.${i_l}`}
                       control={control}
-                      rules={i_sg === 0 ? { required: true } : {}}
                       render={({ field }) => {
                         return (
                           <Form.Input
+                          error={errors&&errors.languages&&errors.languages[0].language && errors.languages[0].language[i_lg][i_l]&&errors.languages[0].language[i_lg][i_l].message}
                             required={i_lg === 0 && i_l === 0}
                             name={`lang${i_lg + i_l + index}`}
                             fluid

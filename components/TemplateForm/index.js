@@ -24,7 +24,7 @@ import Contact from "./Contact";
 import { validateForm } from "../../utility/formValidation";
 import { useForm, useFieldArray } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import * as yup from "yup";
+import {schema,initFormData} from './schema'
 
 const options = [
   { key: "1", text: "PDF", value: "pdf" },
@@ -33,135 +33,7 @@ const options = [
 ];
 
 const TemplateForm = ({ activeItem }) => {
-  const schema = yup
-    .object({
-      bio: yup.object().shape({
-        fn: yup.string().required("First Name is required"),
-        ln: yup.string().required("Last Name is required"),
-        role: yup.string().required("Designation is required"),
-        sumHeader: yup.string().required("Summary Header is required"),
-        about: yup.string().required("About is required"),
-      }),
-      exp: yup.array().of(
-        yup.object().shape({
-          org: yup.string().required("Organisation is required"),
-          title: yup.string().required("Designation is required"),
-          startMonth: yup
-            .number()
-            .required("Start Month is required")
-            .positive(),
-          startYear: yup.number().required("Start Year is required"),
-          endMonth: yup.number().required("End Month is required"),
-          endYear: yup.number().required("End Year is required"),
-          desc: yup.string().required("Description is required"),
-        })
-      ),
-      expertise: yup.array().of(
-        yup.object().shape({
-          title: yup.string(),
-          desc: yup.string(),
-        })
-      ),
-      skills: yup.array().of(
-        yup.object().shape({
-          skill: yup.array().of(yup.array().of(yup.string(), yup.string())),
-        })
-      ),
-      projects: yup.array().of(
-        yup.object().shape({
-          name: yup.string().required("Project Name is required"),
-          shortDesc: yup.string().required("Short Description is required"),
-          url: yup.string().required("Project URL is required"),
-          desc: yup.string().required("Description is required"),
-          image: yup.string().required("Image URL is required"),
-          techStack: yup.array().of(yup.array().of(yup.string(), yup.string())),
-        })
-      ),
-      certifications: yup.array().of(
-        yup.object().shape({
-          name: yup.string().required("Certification Name is required"),
-          url: yup.string().required("Certification URL is required"),
-          image: yup.string().required("Image is required"),
-        })
-      ),
-      languages: yup.array().of(
-        yup.object().shape({
-          language: yup.array().of(yup.array().of(yup.string(), yup.string())),
-        })
-      ),
-      contact: yup.object().shape({
-        email: yup.string().required("Email is required"),
-        phone: yup.string().required("Phone is required"),
-        address: yup.string().required("Address is required"),
-        website: yup.string(),
-        github: yup.string(),
-        linkedin: yup.string(),
-        twitter: yup.string(),
-      }),
-    })
-    .required();
-  const initFormData = {
-    bio: {
-      fn: "",
-      ln: "",
-      sumHeader: "",
-      about: "",
-      role: "",
-    },
-    exp: [
-      {
-        org: "",
-        title: "",
-        startMonth: "",
-        startYear: "",
-        endMonth: "",
-        endYear: "",
-        desc: "",
-      },
-    ],
-    expertise: [
-      {
-        title: "",
-        desc: "",
-      },
-    ],
-    skills: [
-      {
-        skill: [["", ""]],
-      },
-    ],
-    projects: [
-      {
-        name: "",
-        shortDesc: "",
-        url: "",
-        desc: "",
-        image: "",
-        techStack: [["", ""]],
-      },
-    ],
-    certifications: [
-      {
-        name: "",
-        url: "",
-        image: "",
-      },
-    ],
-    languages: [
-      {
-        language: [["", ""]],
-      },
-    ],
-    contact: {
-      email: "",
-      phone: "",
-      website: "",
-      linkedin: "",
-      github: "",
-      twitter: "",
-      address: "",
-    },
-  };
+  
   const initErrors = {
     bio: [],
     experience: [],

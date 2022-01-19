@@ -33,9 +33,11 @@ const Bio = ({ schema, errors, watch, control, setValue }) => {
           control={control}
           render={({ field }) => (
             <Form.Input
+              error={errors&&errors.bio&&errors.bio.fn && errors.bio.fn.message}
               name="fn"
               fluid
               required
+              error={errors&&errors.bio&&errors.bio.fn && errors.bio.fn.message}
               label="First name"
               placeholder="First name"
               {...field}
@@ -47,6 +49,7 @@ const Bio = ({ schema, errors, watch, control, setValue }) => {
           control={control}
           render={({ field }) => (
             <Form.Input
+              error={errors&&errors.bio&&errors.bio.ln && errors.bio.ln.message}
               name="ln"
               fluid
               required
@@ -61,6 +64,7 @@ const Bio = ({ schema, errors, watch, control, setValue }) => {
           control={control}
           render={({ field }) => (
             <Form.Input
+              error={errors&&errors.bio&&errors.bio.role && errors.bio.role.message}
               name="role"
               fluid
               label="Designation"
@@ -72,11 +76,8 @@ const Bio = ({ schema, errors, watch, control, setValue }) => {
       </Form.Group>
 
       <Form.Group>
-        <Controller
-          name="bio.sumHeader"
-          control={control}
-          render={({ field }) => (
             <Form.Select
+              error={errors&&errors.bio&&errors.bio.sumHeader && errors.bio.sumHeader.message}
               name="sumHeader"
               fluid
               required
@@ -84,16 +85,16 @@ const Bio = ({ schema, errors, watch, control, setValue }) => {
               options={sumHeaderOptions}
               placeholder="Summary Header"
               width={4}
-              {...field}
+              onChange={(e, { value }) => setValue("bio.sumHeader", value)}
             />
-          )}
-        />
+
 
         <Controller
           name="bio.about"
           control={control}
           render={({ field }) => (
             <Form.TextArea
+              error={errors&&errors.bio&&errors.bio.about && errors.bio.about.message}
               name="about"
               required
               label="About"

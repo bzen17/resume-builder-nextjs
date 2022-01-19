@@ -46,6 +46,7 @@ const Skills = ({ errors, watch, control, setValue }) => {
                 render={({ field }) => {
                   return (
                     <Form.Input
+                    error={errors&&errors.expertise&&errors.expertise[i].title && errors.expertise[i].title.message}
                       name="title"
                       fluid
                       placeholder={
@@ -62,10 +63,10 @@ const Skills = ({ errors, watch, control, setValue }) => {
               <Controller
                 name={`expertise.${i}.desc`}
                 control={control}
-                rules={i === 0 ? { required: true } : {}}
                 render={({ field }) => {
                   return (
                     <Form.TextArea
+                    error={errors&&errors.expertise&&errors.expertise[i].desc && errors.expertise[i].desc.message}
                       name="desc"
                       placeholder={
                         i === 0
@@ -129,10 +130,10 @@ const Skills = ({ errors, watch, control, setValue }) => {
                       key={"skill" + i_s}
                       name={`skills.0.skill.${i_sg}.${i_s}`}
                       control={control}
-                      rules={i_sg === 0 ? { required: true } : {}}
                       render={({ field }) => {
                         return (
                           <Form.Input
+                            error={errors&&errors.skills&&errors.skills[0].skill && errors.skills[0].skill[i_sg][i_s].message}
                             required={i_sg === 0}
                             name={`skill${i_sg + i_s + index}`}
                             fluid
