@@ -44,7 +44,13 @@ const Languages = ({ errors, watch, control, setValue }) => {
                       render={({ field }) => {
                         return (
                           <Form.Input
-                          error={errors&&errors.languages&&errors.languages[0].language && errors.languages[0].language[i_lg][i_l]&&errors.languages[0].language[i_lg][i_l].message}
+                            error={
+                              errors &&
+                              errors.languages &&
+                              errors.languages[0].language &&
+                              errors.languages[0].language[i_lg][i_l] &&
+                              errors.languages[0].language[i_lg][i_l].message
+                            }
                             required={i_lg === 0 && i_l === 0}
                             name={`lang${i_lg + i_l + index}`}
                             fluid

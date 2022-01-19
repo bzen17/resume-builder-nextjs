@@ -24,7 +24,7 @@ import Contact from "./Contact";
 import { validateForm } from "../../utility/formValidation";
 import { useForm, useFieldArray } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import {schema,initFormData} from './schema'
+import { schema, initFormData } from "./schema";
 
 const options = [
   { key: "1", text: "PDF", value: "pdf" },
@@ -33,7 +33,6 @@ const options = [
 ];
 
 const TemplateForm = ({ activeItem }) => {
-  
   const initErrors = {
     bio: [],
     experience: [],

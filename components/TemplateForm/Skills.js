@@ -46,7 +46,12 @@ const Skills = ({ errors, watch, control, setValue }) => {
                 render={({ field }) => {
                   return (
                     <Form.Input
-                    error={errors&&errors.expertise&&errors.expertise[i].title && errors.expertise[i].title.message}
+                      error={
+                        errors &&
+                        errors.expertise &&
+                        errors.expertise[i].title &&
+                        errors.expertise[i].title.message
+                      }
                       name="title"
                       fluid
                       placeholder={
@@ -66,7 +71,12 @@ const Skills = ({ errors, watch, control, setValue }) => {
                 render={({ field }) => {
                   return (
                     <Form.TextArea
-                    error={errors&&errors.expertise&&errors.expertise[i].desc && errors.expertise[i].desc.message}
+                      error={
+                        errors &&
+                        errors.expertise &&
+                        errors.expertise[i].desc &&
+                        errors.expertise[i].desc.message
+                      }
                       name="desc"
                       placeholder={
                         i === 0
@@ -133,7 +143,12 @@ const Skills = ({ errors, watch, control, setValue }) => {
                       render={({ field }) => {
                         return (
                           <Form.Input
-                            error={errors&&errors.skills&&errors.skills[0].skill && errors.skills[0].skill[i_sg][i_s].message}
+                            error={
+                              errors &&
+                              errors.skills &&
+                              errors.skills[0].skill &&
+                              errors.skills[0].skill[i_sg][i_s].message
+                            }
                             required={i_sg === 0}
                             name={`skill${i_sg + i_s + index}`}
                             fluid
