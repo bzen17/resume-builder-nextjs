@@ -94,7 +94,12 @@ const Experience = ({ errors, watch, control, setValue }) => {
                           control={control}
                           render={({ field }) => (
                             <Form.Input
-                              error={errors&&errors.exp&&errors.exp[i].org && errors.exp[i].org.message}
+                              error={
+                                errors &&
+                                errors.exp &&
+                                errors.exp[i].org &&
+                                errors.exp[i].org.message
+                              }
                               name="org"
                               required
                               fluid
@@ -109,7 +114,12 @@ const Experience = ({ errors, watch, control, setValue }) => {
                           control={control}
                           render={({ field }) => (
                             <Form.Input
-                              error={errors&&errors.exp&&errors.exp[i].title && errors.exp[i].title.message}
+                              error={
+                                errors &&
+                                errors.exp &&
+                                errors.exp[i].title &&
+                                errors.exp[i].title.message
+                              }
                               name="title"
                               required
                               fluid
@@ -134,7 +144,12 @@ const Experience = ({ errors, watch, control, setValue }) => {
                                   render={({ field }) => {
                                     return (
                                       <Form.Input
-                                        error={errors&&errors.exp&&errors.exp[i].startMonth && errors.exp[i].startMonth.message}
+                                        error={
+                                          errors &&
+                                          errors.exp &&
+                                          errors.exp[i].startMonth &&
+                                          errors.exp[i].startMonth.message
+                                        }
                                         name="startMonth"
                                         required
                                         fluid
@@ -150,7 +165,12 @@ const Experience = ({ errors, watch, control, setValue }) => {
                                   render={({ field }) => {
                                     return (
                                       <Form.Input
-                                      error={errors&&errors.exp&&errors.exp[i].startYear && errors.exp[i].startYear.message}
+                                        error={
+                                          errors &&
+                                          errors.exp &&
+                                          errors.exp[i].startYear &&
+                                          errors.exp[i].startYear.message
+                                        }
                                         name="startYear"
                                         required
                                         fluid
@@ -173,7 +193,12 @@ const Experience = ({ errors, watch, control, setValue }) => {
                                   render={({ field }) => {
                                     return (
                                       <Form.Input
-                                      error={errors&&errors.exp&&errors.exp[i].endMonth && errors.exp[i].endMonth.message}
+                                        error={
+                                          errors &&
+                                          errors.exp &&
+                                          errors.exp[i].endMonth &&
+                                          errors.exp[i].endMonth.message
+                                        }
                                         name="endMonth"
                                         required
                                         fluid
@@ -189,7 +214,12 @@ const Experience = ({ errors, watch, control, setValue }) => {
                                   render={({ field }) => {
                                     return (
                                       <Form.Input
-                                      error={errors&&errors.exp&&errors.exp[i].endYear && errors.exp[i].endYear.message}
+                                        error={
+                                          errors &&
+                                          errors.exp &&
+                                          errors.exp[i].endYear &&
+                                          errors.exp[i].endYear.message
+                                        }
                                         name="endYear"
                                         required
                                         fluid
@@ -213,7 +243,12 @@ const Experience = ({ errors, watch, control, setValue }) => {
                   render={({ field }) => {
                     return (
                       <Form.TextArea
-                        error={errors&&errors.exp&&errors.exp[i].desc && errors.exp[i].desc.message}
+                        error={
+                          errors &&
+                          errors.exp &&
+                          errors.exp[i].desc &&
+                          errors.exp[i].desc.message
+                        }
                         name="desc"
                         label="Description"
                         placeholder="Tell us more about your role in your organisation..."
