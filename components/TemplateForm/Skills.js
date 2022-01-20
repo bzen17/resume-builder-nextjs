@@ -18,7 +18,14 @@ import validateField from "../../utility/formValidation";
 import ErrorMessage from "./Message";
 import { Controller, useFieldArray } from "react-hook-form";
 
-const Skills = ({ errors, watch, control, setValue }) => {
+const Skills = ({
+  errors,
+  setError,
+  clearErrors,
+  watch,
+  control,
+  setValue,
+}) => {
   const {
     fields: expertise,
     append: e_append,
@@ -50,7 +57,7 @@ const Skills = ({ errors, watch, control, setValue }) => {
                         errors &&
                         errors.expertise &&
                         errors.expertise[i].title &&
-                        errors.expertise[i].title.message
+                        !!errors.expertise[i].title.message
                       }
                       name="title"
                       fluid
@@ -75,7 +82,7 @@ const Skills = ({ errors, watch, control, setValue }) => {
                         errors &&
                         errors.expertise &&
                         errors.expertise[i].desc &&
-                        errors.expertise[i].desc.message
+                        !!errors.expertise[i].desc.message
                       }
                       name="desc"
                       placeholder={
@@ -95,12 +102,13 @@ const Skills = ({ errors, watch, control, setValue }) => {
                   position="top right"
                   trigger={
                     <Button
-                      onClick={(e) =>
+                      onClick={(e) => {
+                        e.preventDefault();
                         e_append({
                           title: "",
                           desc: "",
-                        })
-                      }
+                        });
+                      }}
                       icon="plus"
                       secondary
                     />
@@ -136,29 +144,53 @@ const Skills = ({ errors, watch, control, setValue }) => {
               <Form.Group widths="equal" key={"skill_g" + i_sg}>
                 {sg.map((s, i_s) => {
                   return (
-                    <Controller
-                      key={"skill" + i_s}
-                      name={`skills.0.skill.${i_sg}.${i_s}`}
-                      control={control}
-                      render={({ field }) => {
-                        return (
-                          <Form.Input
-                            error={
-                              errors &&
-                              errors.skills &&
-                              errors.skills[0].skill &&
-                              errors.skills[0].skill[i_sg][i_s].message
-                            }
-                            required={i_sg === 0}
-                            name={`skill${i_sg + i_s + index}`}
-                            fluid
-                            placeholder={
-                              i_sg === 0
-                                ? `#${2 * i_sg + i_s + 1} *`
-                                : `#${2 * i_sg + i_s + 1}`
-                            }
-                            {...field}
-                          />
+                    <Form.Input
+                      error={
+                        i_sg === 0 &&
+                        errors &&
+                        errors.skills &&
+                        errors.skills[0].skill &&
+                        errors.skills[0].skill[i_sg][i_s] &&
+                        !!errors.skills[0].skill[i_sg][i_s].message
+                      }
+                      name={`skill${i_sg + i_s + index}`}
+                      fluid
+                      placeholder={
+                        i_sg === 0
+                          ? `#${2 * i_sg + i_s + 1} *`
+                          : `#${2 * i_sg + i_s + 1}`
+                      }
+                      value={watch(`skills[0].skill[${i_sg}][${i_s}]`)}
+                      onChange={(e) => {
+                        if (i_sg === 0 && e.target.value === "") {
+                          setError(`skills.0.skill[0][${i_s}]`, {
+                            message: `Skill #${2 * i_sg + i_s + 1}: Required`,
+                          });
+                        } else if (
+                          i_sg > 0 &&
+                          (watch(`skills[0].skill[0][0]`) === "" ||
+                            watch(`skills[0].skill[0][1]`) === "")
+                        ) {
+                          console.log(
+                            "Error watch",
+                            !watch(`skills[0].skill[0][0]`)
+                          );
+                          if (!watch(`skills[0].skill[0][0]`)) {
+                            setError(`skills.0.skill.0.0`, {
+                              message: `Skill #1: Required`,
+                            });
+                          }
+                          if (!watch(`skills[0].skill[0][1]`)) {
+                            setError(`skills.0.skill.0.1`, {
+                              message: `Skill #2: Required`,
+                            });
+                          }
+                        } else {
+                          clearErrors(`skills`);
+                        }
+                        setValue(
+                          `skills.0.skill[${i_sg}][${i_s}]`,
+                          e.target.value
                         );
                       }}
                     />
@@ -171,9 +203,12 @@ const Skills = ({ errors, watch, control, setValue }) => {
                     position="top right"
                     trigger={
                       <Button
-                        onClick={(e) =>
-                          s_update(0, { skill: [...skills[0].skill, ["", ""]] })
-                        }
+                        onClick={(e) => {
+                          e.preventDefault();
+                          s_update(0, {
+                            skill: [...skills[0].skill, ["", ""]],
+                          });
+                        }}
                         icon="plus"
                         secondary
                       />

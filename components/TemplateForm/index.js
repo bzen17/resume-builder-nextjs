@@ -25,6 +25,7 @@ import { validateForm } from "../../utility/formValidation";
 import { useForm, useFieldArray } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { schema, initFormData } from "./schema";
+import { formError } from "./errors";
 
 const options = [
   { key: "1", text: "PDF", value: "pdf" },
@@ -49,12 +50,14 @@ const TemplateForm = ({ activeItem }) => {
     control,
     formState: { errors },
     setError,
+    clearErrors,
     reset,
   } = useForm({
     resolver: yupResolver(schema),
     mode: "onChange",
     defaultValues: initFormData,
   });
+  const [formErrors, setFormErrors] = useState(initErrors);
 
   const onSubmit = (data) => console.log("data", data);
   console.log("Errors", errors);
@@ -64,8 +67,9 @@ const TemplateForm = ({ activeItem }) => {
     if (activeItem === "bio") {
       return (
         <Bio
-          schema={schema}
           errors={errors}
+          formErrors={formErrors}
+          setFormErrors={setFormErrors}
           watch={watch}
           control={control}
           setValue={setValue}
@@ -93,6 +97,7 @@ const TemplateForm = ({ activeItem }) => {
       return (
         <Languages
           errors={errors}
+          setError={setError}
           watch={watch}
           control={control}
           setValue={setValue}
@@ -102,6 +107,7 @@ const TemplateForm = ({ activeItem }) => {
       return (
         <Project
           errors={errors}
+          setError={setError}
           watch={watch}
           control={control}
           setValue={setValue}
@@ -120,6 +126,8 @@ const TemplateForm = ({ activeItem }) => {
       return (
         <Skills
           errors={errors}
+          setError={setError}
+          clearErrors={clearErrors}
           watch={watch}
           control={control}
           setValue={setValue}

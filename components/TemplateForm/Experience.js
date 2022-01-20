@@ -35,54 +35,55 @@ const Experience = ({ errors, watch, control, setValue }) => {
           return (
             <div key={i} id={`exp${i + 1}`}>
               {i !== 0 ? <hr style={{ marginBottom: "1rem" }} /> : ""}
-              <Grid>
-                <Grid.Row>
-                  <Grid.Column width={8}>
-                    {i === 0 ? <Header as="h3">Work Experience</Header> : ""}
-                  </Grid.Column>
-                  <Grid.Column width={8} verticalAlign="top">
-                    {fields.length - 1 === i ? (
-                      <Popup
-                        content="Add Work Experience"
-                        position="left center"
-                        trigger={
-                          <a href={`#exp${fields.length}`}>
-                            <Button
-                              onClick={(e) =>
-                                append({
-                                  org: "",
-                                  title: "",
-                                  startMonth: "",
-                                  startYear: "",
-                                  endMonth: "",
-                                  endYear: "",
-                                  desc: "",
-                                })
-                              }
-                              icon="plus"
-                              floated="right"
-                              primary
-                            />
-                          </a>
-                        }
+
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  marginBottom: "1rem",
+                }}
+              >
+                {i === 0 ? <Header as="h3">Work Experience</Header> : ""}
+                {fields.length - 1 === i ? (
+                  <Popup
+                    content="Add Work Experience"
+                    position="left center"
+                    trigger={
+                      <a href={`#exp${fields.length}`}>
+                        <Button
+                          onClick={(e) =>
+                            append({
+                              org: "",
+                              title: "",
+                              startMonth: "",
+                              startYear: "",
+                              endMonth: "",
+                              endYear: "",
+                              desc: "",
+                            })
+                          }
+                          icon="plus"
+                          //floated="right"
+                          primary
+                        />
+                      </a>
+                    }
+                  />
+                ) : (
+                  <Popup
+                    content="Remove Work Experience"
+                    position="left center"
+                    trigger={
+                      <Button
+                        onClick={(e) => remove(i)}
+                        icon="minus"
+                        floated="right"
+                        negative
                       />
-                    ) : (
-                      <Popup
-                        content="Remove Work Experience"
-                        position="left center"
-                        trigger={
-                          <Button
-                            onClick={(e) => remove(i)}
-                            icon="minus"
-                            floated="right"
-                            negative
-                          />
-                        }
-                      />
-                    )}
-                  </Grid.Column>
-                </Grid.Row>
-              </Grid>
+                    }
+                  />
+                )}
+              </div>
 
               <Container style={{ marginBottom: "1rem" }}>
                 <Grid columns={2}>
@@ -98,7 +99,7 @@ const Experience = ({ errors, watch, control, setValue }) => {
                                 errors &&
                                 errors.exp &&
                                 errors.exp[i].org &&
-                                errors.exp[i].org.message
+                                !!errors.exp[i].org.message
                               }
                               name="org"
                               required
@@ -118,7 +119,7 @@ const Experience = ({ errors, watch, control, setValue }) => {
                                 errors &&
                                 errors.exp &&
                                 errors.exp[i].title &&
-                                errors.exp[i].title.message
+                                !!errors.exp[i].title.message
                               }
                               name="title"
                               required
@@ -135,7 +136,18 @@ const Experience = ({ errors, watch, control, setValue }) => {
                       <Grid columns={2} divided>
                         <Grid.Row>
                           <Grid.Column>
-                            <Form.Field required>
+                            <Form.Field
+                              required
+                              required
+                              error={
+                                errors &&
+                                errors.exp &&
+                                errors.exp[i].startMonth &&
+                                errors.exp[i].startYear &&
+                                !!errors.exp[i].startMonth.message |
+                                  !!errors.exp[i].startYear.message
+                              }
+                            >
                               <label>Start Date</label>
                               <Form.Group widths="equal">
                                 <Controller
@@ -148,7 +160,7 @@ const Experience = ({ errors, watch, control, setValue }) => {
                                           errors &&
                                           errors.exp &&
                                           errors.exp[i].startMonth &&
-                                          errors.exp[i].startMonth.message
+                                          !!errors.exp[i].startMonth.message
                                         }
                                         name="startMonth"
                                         required
@@ -169,7 +181,7 @@ const Experience = ({ errors, watch, control, setValue }) => {
                                           errors &&
                                           errors.exp &&
                                           errors.exp[i].startYear &&
-                                          errors.exp[i].startYear.message
+                                          !!errors.exp[i].startYear.message
                                         }
                                         name="startYear"
                                         required
@@ -184,7 +196,17 @@ const Experience = ({ errors, watch, control, setValue }) => {
                             </Form.Field>
                           </Grid.Column>
                           <Grid.Column>
-                            <Form.Field required>
+                            <Form.Field
+                              required
+                              error={
+                                errors &&
+                                errors.exp &&
+                                errors.exp[i].endMonth &&
+                                errors.exp[i].endYear &&
+                                !!errors.exp[i].endYear.message |
+                                  !!errors.exp[i].endMonth.message
+                              }
+                            >
                               <label>End Date</label>
                               <Form.Group widths="equal">
                                 <Controller
@@ -197,7 +219,7 @@ const Experience = ({ errors, watch, control, setValue }) => {
                                           errors &&
                                           errors.exp &&
                                           errors.exp[i].endMonth &&
-                                          errors.exp[i].endMonth.message
+                                          !!errors.exp[i].endMonth.message
                                         }
                                         name="endMonth"
                                         required
@@ -218,7 +240,7 @@ const Experience = ({ errors, watch, control, setValue }) => {
                                           errors &&
                                           errors.exp &&
                                           errors.exp[i].endYear &&
-                                          errors.exp[i].endYear.message
+                                          !!errors.exp[i].endYear.message
                                         }
                                         name="endYear"
                                         required
@@ -247,7 +269,7 @@ const Experience = ({ errors, watch, control, setValue }) => {
                           errors &&
                           errors.exp &&
                           errors.exp[i].desc &&
-                          errors.exp[i].desc.message
+                          !!errors.exp[i].desc.message
                         }
                         name="desc"
                         label="Description"
