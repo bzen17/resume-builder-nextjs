@@ -33,7 +33,7 @@ const Contact = ({ errors, watch, control, setValue }) => {
                   errors &&
                   errors.contact &&
                   errors.contact.email &&
-                  errors.contact.email.message
+                  !!errors.contact.email.message
                 }
                 required
                 icon="mail"
@@ -55,7 +55,7 @@ const Contact = ({ errors, watch, control, setValue }) => {
                   errors &&
                   errors.contact &&
                   errors.contact.phone &&
-                  errors.contact.phone.message
+                  !!errors.contact.phone.message
                 }
                 required
                 icon="phone"
@@ -79,7 +79,7 @@ const Contact = ({ errors, watch, control, setValue }) => {
                   errors &&
                   errors.contact &&
                   errors.contact.website &&
-                  errors.contact.website.message
+                  !!errors.contact.website.message
                 }
                 icon="at"
                 iconPosition="left"
@@ -100,7 +100,7 @@ const Contact = ({ errors, watch, control, setValue }) => {
                   errors &&
                   errors.contact &&
                   errors.contact.git &&
-                  errors.contact.git.message
+                  !!errors.contact.git.message
                 }
                 icon="github"
                 iconPosition="left"
@@ -123,7 +123,7 @@ const Contact = ({ errors, watch, control, setValue }) => {
                   errors &&
                   errors.contact &&
                   errors.contact.linkedin &&
-                  errors.contact.linkedin.message
+                  !!errors.contact.linkedin.message
                 }
                 icon="linkedin"
                 iconPosition="left"
@@ -144,7 +144,7 @@ const Contact = ({ errors, watch, control, setValue }) => {
                   errors &&
                   errors.contact &&
                   errors.contact.twitter &&
-                  errors.contact.twitter.message
+                  !!errors.contact.twitter.message
                 }
                 icon="twitter"
                 iconPosition="left"
@@ -169,7 +169,7 @@ const Contact = ({ errors, watch, control, setValue }) => {
                 errors &&
                 errors.contact &&
                 errors.contact.address &&
-                errors.contact.address.message
+                !!errors.contact.address.message
               }
               placeholder="Enter your permanent address..."
               name="address"

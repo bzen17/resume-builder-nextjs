@@ -47,22 +47,25 @@ export const schema = yup
           .max(100, "Cannot be more than 100 characters"),
         startMonth: yup
           .number()
+          .typeError("Must be a number between 1 and 12")
           .required("Required")
           .moreThan(0, "Must be a greater than 0")
           .lessThan(13, "Cannot be greater than 12"),
         startYear: yup
           .number()
+          .typeError("Must be a number greater than 1900")
           .required("Required")
           .moreThan(1900, "Cannot be lesser than 1900"),
         endMonth: yup
           .number()
+          .typeError("Must be a number between 1 and 12")
           .required("Required")
           .moreThan(0, "Must be a greater than 0")
           .lessThan(13, "Cannot be greater than 12"),
         endYear: yup
           .number()
+          .typeError(`Must be greater than Start Year`)
           .required("Required")
-          .positive()
           .min(yup.ref("startYear"), "Cannot be lesser than Start Year"),
         desc: yup
           .string()
@@ -121,7 +124,15 @@ export const schema = yup
                 yup.string().max(100, "Cannot be more than 100 characters"),
                 yup.string().max(100, "Cannot be more than 100 characters")
               )
-          ),
+          )
+          .test({
+            name: "firstRequired",
+            message: "Required",
+            test: (val) => {
+              console.log("Test", val[0][0], val[0][1], val.length); //!(val[0][0]===''&&val[0][1]===''&&val.length>1)
+              return true;
+            },
+          }),
       })
     ),
     certifications: yup.array().of(

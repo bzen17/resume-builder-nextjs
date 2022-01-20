@@ -27,7 +27,7 @@ import validateField from "../../utility/formValidation";
 import ErrorMessage from "./Message";
 import { Controller, useFieldArray } from "react-hook-form";
 
-const Project = ({ errors, watch, control, setValue }) => {
+const Project = ({ errors, setError, watch, control, setValue }) => {
   const {
     fields: projects,
     append,
@@ -70,30 +70,59 @@ const Project = ({ errors, watch, control, setValue }) => {
               <Form.Group key={"tsg" + i_tsg} widths="equal">
                 {tsg.map((ts, i_ts) => {
                   return (
-                    <Controller
-                      key={"ts" + i_ts}
-                      name={`projects.${i}.techStack.${i_tsg}.${i_ts}`}
-                      control={control}
-                      render={({ field }) => {
-                        return (
-                          <Form.Input
-                            required={i_tsg === 0}
-                            error={
-                              errors &&
-                              errors.projects &&
-                              errors.projects[i].techStack &&
-                              errors.projects[i].techStack[i_tsg][i_ts] &&
-                              errors.projects[i].techStack[i_tsg][i_ts].message
+                    <Form.Input
+                      error={
+                        i_tsg === 0 &&
+                        errors &&
+                        errors.projects &&
+                        errors.projects[i].techStack &&
+                        errors.projects[i].techStack[i_tsg][i_ts] &&
+                        !!errors.projects[i].techStack[i_tsg][i_ts].message
+                      }
+                      name="techStack"
+                      fluid
+                      placeholder={
+                        i_tsg === 0
+                          ? `#${2 * i_tsg + i_ts + 1} *`
+                          : `#${2 * i_tsg + i_ts + 1}`
+                      }
+                      value={watch(
+                        `projects[${i}].techStack[${i_tsg}][${i_ts}]`
+                      )}
+                      onChange={(e) => {
+                        if (i_tsg === 0 && e.target.value === "") {
+                          setError(
+                            `projects.${i}.techStack[${i_tsg}][${i_ts}]`,
+                            {
+                              message: `Tech Stack #${
+                                2 * i_tsg + i_ts + 1
+                              }: Required`,
                             }
-                            name="techStack"
-                            fluid
-                            placeholder={
-                              i_tsg === 0
-                                ? `#${2 * i_tsg + i_ts + 1} *`
-                                : `#${2 * i_tsg + i_ts + 1}`
-                            }
-                            {...field}
-                          />
+                          );
+                        } else if (
+                          i_tsg > 0 &&
+                          (watch(`projects[0].techStack[0][0]`) === "" ||
+                            watch(`projects[0].techStack[0][1]`) === "")
+                        ) {
+                          if (!watch(`projects[0].techStack[0][0]`)) {
+                            setError(`projects.0.techStack.0.0`, {
+                              message: `Tech Stack #1: Required`,
+                            });
+                          }
+                          if (!watch(`projects[0].techStack[0][1]`)) {
+                            setError(`projects.0.techStack.0.1`, {
+                              message: `Tech Stack #2: Required`,
+                            });
+                          }
+                        } else {
+                          setError(
+                            `projects.${i}.techStack[${i_tsg}][${i_ts}]`,
+                            ""
+                          );
+                        }
+                        setValue(
+                          `projects.${i}.techStack[${i_tsg}][${i_ts}]`,
+                          e.target.value
                         );
                       }}
                     />
@@ -106,12 +135,13 @@ const Project = ({ errors, watch, control, setValue }) => {
                     position="top right"
                     trigger={
                       <Button
-                        onClick={(e) =>
+                        onClick={(e) => {
+                          e.preventDefault();
                           update(i, {
                             ...projects[i],
                             techStack: [...projects[i].techStack, ["", ""]],
-                          })
-                        }
+                          });
+                        }}
                         icon="plus"
                         secondary
                       />
@@ -151,53 +181,53 @@ const Project = ({ errors, watch, control, setValue }) => {
           return (
             <div key={"proj" + i} id={`project${i + 1}`}>
               {i !== 0 ? <hr style={{ marginBottom: "1rem" }} /> : ""}
-              <Grid>
-                <Grid.Row>
-                  <Grid.Column width={8}>
-                    {i === 0 ? <Header as="h3">Project</Header> : ""}
-                  </Grid.Column>
-                  <Grid.Column width={8} verticalAlign="top">
-                    {projects.length - 1 === i ? (
-                      <Popup
-                        content="Add Project"
-                        position="left center"
-                        trigger={
-                          <a href={`#project${projects.length}`}>
-                            <Button
-                              onClick={(e) =>
-                                append({
-                                  name: "",
-                                  shortDesc: "",
-                                  url: "",
-                                  desc: "",
-                                  image: "",
-                                  techStack: [["", ""]],
-                                })
-                              }
-                              icon="plus"
-                              floated="right"
-                              primary
-                            />
-                          </a>
-                        }
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  marginBottom: "1rem",
+                }}
+              >
+                {i === 0 ? <Header as="h3">Projects</Header> : ""}
+                {projects.length - 1 === i ? (
+                  <Popup
+                    content="Add Project"
+                    position="left center"
+                    trigger={
+                      <a href={`#project${projects.length}`}>
+                        <Button
+                          onClick={(e) =>
+                            append({
+                              name: "",
+                              shortDesc: "",
+                              url: "",
+                              desc: "",
+                              image: "",
+                              techStack: [["", ""]],
+                            })
+                          }
+                          icon="plus"
+                          floated="right"
+                          primary
+                        />
+                      </a>
+                    }
+                  />
+                ) : (
+                  <Popup
+                    content="Remove Project"
+                    position="left center"
+                    trigger={
+                      <Button
+                        onClick={(e) => remove(i)}
+                        icon="minus"
+                        floated="right"
+                        negative
                       />
-                    ) : (
-                      <Popup
-                        content="Remove Project"
-                        position="left center"
-                        trigger={
-                          <Button
-                            onClick={(e) => remove(i)}
-                            icon="minus"
-                            floated="right"
-                            negative
-                          />
-                        }
-                      />
-                    )}
-                  </Grid.Column>
-                </Grid.Row>
-              </Grid>
+                    }
+                  />
+                )}
+              </div>
               <Container style={{ marginBottom: "1rem" }}>
                 <Form.Group>
                   <Controller
@@ -210,7 +240,7 @@ const Project = ({ errors, watch, control, setValue }) => {
                             errors &&
                             errors.projects &&
                             errors.projects[i].name &&
-                            errors.projects[i].name.message
+                            !!errors.projects[i].name.message
                           }
                           name="name"
                           required
@@ -233,7 +263,7 @@ const Project = ({ errors, watch, control, setValue }) => {
                             errors &&
                             errors.projects &&
                             errors.projects[i].shortDesc &&
-                            errors.projects[i].shortDesc.message
+                            !!errors.projects[i].shortDesc.message
                           }
                           name="shortDesc"
                           required
@@ -257,7 +287,7 @@ const Project = ({ errors, watch, control, setValue }) => {
                           errors &&
                           errors.projects &&
                           errors.projects[i].url &&
-                          errors.projects[i].url.message
+                          !!errors.projects[i].url.message
                         }
                         name="url"
                         required
@@ -281,7 +311,7 @@ const Project = ({ errors, watch, control, setValue }) => {
                           errors &&
                           errors.projects &&
                           errors.projects[i].desc &&
-                          errors.projects[i].desc.message
+                          !!errors.projects[i].desc.message
                         }
                         name="desc"
                         label="Description"
@@ -300,7 +330,7 @@ const Project = ({ errors, watch, control, setValue }) => {
                           errors.projects &&
                           errors.projects[i].image &&
                           errors.projects[i].image &&
-                          errors.projects[i].image.message
+                          !!errors.projects[i].image.message
                         }
                         type="file"
                         name="image"

@@ -63,50 +63,51 @@ const Certifications = ({ errors, watch, control, setValue }) => {
           return (
             <div key={i} id={`cert${i + 1}`}>
               {i !== 0 ? <hr style={{ marginBottom: "1rem" }} /> : ""}
-              <Grid>
-                <Grid.Row>
-                  <Grid.Column width={8}>
-                    {i === 0 ? <Header as="h3">Certification</Header> : ""}
-                  </Grid.Column>
-                  <Grid.Column width={8} verticalAlign="top">
-                    {certifications.length - 1 === i ? (
-                      <Popup
-                        content="Add Certification"
-                        position="left center"
-                        trigger={
-                          <a href={`#cert${certifications.length}`}>
-                            <Button
-                              onClick={(e) =>
-                                append({
-                                  name: "",
-                                  url: "",
-                                  image: "",
-                                })
-                              }
-                              icon="plus"
-                              floated="right"
-                              primary
-                            />
-                          </a>
-                        }
+              <div
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  marginBottom: "1rem",
+                }}
+              >
+                {i === 0 ? <Header as="h3">Certification</Header> : ""}
+
+                {certifications.length - 1 === i ? (
+                  <Popup
+                    content="Add Certification"
+                    position="left center"
+                    trigger={
+                      <a href={`#cert${certifications.length}`}>
+                        <Button
+                          onClick={(e) =>
+                            append({
+                              name: "",
+                              url: "",
+                              image: "",
+                            })
+                          }
+                          icon="plus"
+                          floated="right"
+                          primary
+                        />
+                      </a>
+                    }
+                  />
+                ) : (
+                  <Popup
+                    content="Remove Certification"
+                    position="left center"
+                    trigger={
+                      <Button
+                        onClick={(e) => remove(i)}
+                        icon="minus"
+                        floated="right"
+                        negative
                       />
-                    ) : (
-                      <Popup
-                        content="Remove Certification"
-                        position="left center"
-                        trigger={
-                          <Button
-                            onClick={(e) => remove(i)}
-                            icon="minus"
-                            floated="right"
-                            negative
-                          />
-                        }
-                      />
-                    )}
-                  </Grid.Column>
-                </Grid.Row>
-              </Grid>
+                    }
+                  />
+                )}
+              </div>
 
               <Container id={`cert${i + 1}`} style={{ marginBottom: "1rem" }}>
                 <Form.Group>
@@ -120,7 +121,7 @@ const Certifications = ({ errors, watch, control, setValue }) => {
                             errors &&
                             errors.certifications &&
                             errors.certifications[i].name &&
-                            errors.certifications[i].name.message
+                            !!errors.certifications[i].name.message
                           }
                           required
                           fluid
@@ -143,7 +144,7 @@ const Certifications = ({ errors, watch, control, setValue }) => {
                             errors &&
                             errors.certifications &&
                             errors.certifications[i].url &&
-                            errors.certifications[i].url.message
+                            !!errors.certifications[i].url.message
                           }
                           required
                           fluid
@@ -165,7 +166,7 @@ const Certifications = ({ errors, watch, control, setValue }) => {
                           errors &&
                           errors.certifications &&
                           errors.certifications[i].image &&
-                          errors.certifications[i].image.message
+                          !!errors.certifications[i].image.message
                         }
                         type="file"
                         name="image"

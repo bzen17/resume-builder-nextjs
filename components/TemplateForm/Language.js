@@ -18,7 +18,7 @@ import validateField from "../../utility/formValidation";
 import ErrorMessage from "./Message";
 import { Controller, useFieldArray } from "react-hook-form";
 
-const Languages = ({ errors, watch, control, setValue }) => {
+const Languages = ({ errors, setError, watch, control, setValue }) => {
   const {
     fields: languages,
     append,
@@ -37,30 +37,45 @@ const Languages = ({ errors, watch, control, setValue }) => {
               <Form.Group widths="equal" key={`lang_g${i_lg}`}>
                 {lg.map((l, i_l) => {
                   return (
-                    <Controller
-                      key={"lang" + i_l}
-                      name={`languages.0.language.${i_lg}.${i_l}`}
-                      control={control}
-                      render={({ field }) => {
-                        return (
-                          <Form.Input
-                            error={
-                              errors &&
-                              errors.languages &&
-                              errors.languages[0].language &&
-                              errors.languages[0].language[i_lg][i_l] &&
-                              errors.languages[0].language[i_lg][i_l].message
-                            }
-                            required={i_lg === 0 && i_l === 0}
-                            name={`lang${i_lg + i_l + index}`}
-                            fluid
-                            placeholder={
-                              i_lg === 0 && i_l === 0
-                                ? `#${i_lg + i_l + index} *`
-                                : `#${i_lg + i_l + index}`
-                            }
-                            {...field}
-                          />
+                    <Form.Input
+                      error={
+                        i_lg === 0 &&
+                        errors &&
+                        errors.languages &&
+                        errors.languages[0].language &&
+                        errors.languages[0].language[i_lg][i_l] &&
+                        !!errors.languages[0].language[i_lg][i_l].message
+                      }
+                      name={`lang${i_lg + i_l + index}`}
+                      fluid
+                      placeholder={
+                        i_lg === 0 && i_l === 0
+                          ? `#${i_lg + i_l + index} *`
+                          : `#${i_lg + i_l + index}`
+                      }
+                      value={watch(`languages[0].language[${i_lg}][${i_l}]`)}
+                      onChange={(e) => {
+                        if (i_lg === 0 && i_l === 0 && e.target.value === "") {
+                          setError(`languages.0.language[${i_lg}][${i_l}]`, {
+                            message: `Language #${
+                              2 * i_lg + i_l + 1
+                            }: Required`,
+                          });
+                        } else if (
+                          i_lg > 0 &&
+                          watch(`languages[0].language[0][0]`) === ""
+                        ) {
+                          if (!watch(`languages[0].language[0][0]`)) {
+                            setError(`languages.0.language.0.0`, {
+                              message: `Language #1: Required`,
+                            });
+                          }
+                        } else {
+                          setError(`languages.0.language[${i_lg}][${i_l}]`, "");
+                        }
+                        setValue(
+                          `languages.0.language[${i_lg}][${i_l}]`,
+                          e.target.value
                         );
                       }}
                     />
@@ -72,11 +87,12 @@ const Languages = ({ errors, watch, control, setValue }) => {
                     position="top right"
                     trigger={
                       <Button
-                        onClick={(e) =>
+                        onClick={(e) => {
+                          e.preventDefault();
                           update(0, {
                             language: [...languages[0].language, ["", ""]],
-                          })
-                        }
+                          });
+                        }}
                         icon="plus"
                         secondary
                       />

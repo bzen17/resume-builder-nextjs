@@ -17,7 +17,7 @@ export default function Home() {
       <Grid>
         <SideBar activeItem={activeItem} setActiveItem={setActiveItem} />
         <Grid.Column stretched width={12}>
-          <Segment>
+          <Segment raised>
             <TemplateForm activeItem={activeItem} />
           </Segment>
         </Grid.Column>

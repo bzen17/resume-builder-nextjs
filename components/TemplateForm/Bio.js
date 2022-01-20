@@ -12,18 +12,32 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 import { Controller } from "react-hook-form";
-import React from "react";
+import React, { useEffect } from "react";
 import { Button, Grid, Form, Header, Dropdown } from "semantic-ui-react";
 import validateField from "../../utility/formValidation";
 import ErrorMessage from "./Message";
+import { formError } from "./errors";
 
-const Bio = ({ schema, errors, watch, control, setValue }) => {
+const Bio = ({
+  errors,
+  formErrors,
+  setFormErrors,
+  watch,
+  control,
+  setValue,
+}) => {
   const sumHeaderOptions = [
     { key: "1", text: "About Me", value: "About Me" },
     { key: "2", text: "Work Summary", value: "Work Summary" },
     { key: "3", text: "Professional Summary", value: "Professional Summary" },
   ];
-
+  useEffect(() => {
+    if (errors && errors.bio) {
+      formError(errors, formErrors, setFormErrors);
+      console.log("Rendering", errors);
+    }
+  }),
+    [];
   return (
     <>
       <Header as="h3">Personal Information</Header>
@@ -34,7 +48,7 @@ const Bio = ({ schema, errors, watch, control, setValue }) => {
           render={({ field }) => (
             <Form.Input
               error={
-                errors && errors.bio && errors.bio.fn && errors.bio.fn.message
+                errors && errors.bio && errors.bio.fn && !!errors.bio.fn.message
               }
               name="fn"
               fluid
@@ -51,7 +65,7 @@ const Bio = ({ schema, errors, watch, control, setValue }) => {
           render={({ field }) => (
             <Form.Input
               error={
-                errors && errors.bio && errors.bio.ln && errors.bio.ln.message
+                errors && errors.bio && errors.bio.ln && !!errors.bio.ln.message
               }
               name="ln"
               fluid
@@ -71,7 +85,7 @@ const Bio = ({ schema, errors, watch, control, setValue }) => {
                 errors &&
                 errors.bio &&
                 errors.bio.role &&
-                errors.bio.role.message
+                !!errors.bio.role.message
               }
               name="role"
               fluid
@@ -89,7 +103,7 @@ const Bio = ({ schema, errors, watch, control, setValue }) => {
             errors &&
             errors.bio &&
             errors.bio.sumHeader &&
-            errors.bio.sumHeader.message
+            !!errors.bio.sumHeader.message
           }
           name="sumHeader"
           fluid
@@ -110,7 +124,7 @@ const Bio = ({ schema, errors, watch, control, setValue }) => {
                 errors &&
                 errors.bio &&
                 errors.bio.about &&
-                errors.bio.about.message
+                !!errors.bio.about.message
               }
               name="about"
               required
