@@ -1,31 +1,8 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { CacheProvider } from '@emotion/react';
-import { ThemeProvider, CssBaseline } from '@mui/material';
+import "semantic-ui-css/semantic.min.css";
+import "../styles/globals.css";
 
-import createEmotionCache from '../utility/createEmotionCache';
-import lightTheme from '../styles/theme/lightTheme';
-import '../styles/globals.css';
-
-const clientSideEmotionCache = createEmotionCache();
-
-const MyApp = (props) => {
-  const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
-
-  return (
-    <CacheProvider value={emotionCache}>
-      <ThemeProvider theme={lightTheme}>
-        <CssBaseline />
-        <Component {...pageProps} />
-      </ThemeProvider>
-    </CacheProvider>
-  );
-};
+function MyApp({ Component, pageProps }) {
+  return <Component {...pageProps} />;
+}
 
 export default MyApp;
-
-MyApp.propTypes = {
-  Component: PropTypes.elementType.isRequired,
-  emotionCache: PropTypes.object,
-  pageProps: PropTypes.object.isRequired,
-};
