@@ -24,13 +24,14 @@ import {
 import validateField from "../../utility/formValidation";
 import ErrorMessage from "./Message";
 import { Controller, useFieldArray } from "react-hook-form";
+import {requiredFields} from "./schema";
 
-const Experience = ({ errors, watch, control, setValue }) => {
+const Experience = ({ errors, watch, control, setValue, setTotal}) => {
   const { fields, append, remove } = useFieldArray({
     name: "experience",
     control,
   });
-
+  console.log('requiredField',requiredFields)
   const renderWorkExperience = (e, num) => {
     return (
       <>
@@ -58,7 +59,8 @@ const Experience = ({ errors, watch, control, setValue }) => {
                     trigger={
                       <a href={`#experience${fields.length}`}>
                         <Button
-                          onClick={(e) =>
+                          onClick={(e) =>{
+                            setTotal(prevState=>{return prevState+requiredFields.experience.length})
                             append({
                               org: "",
                               title: "",
@@ -68,6 +70,7 @@ const Experience = ({ errors, watch, control, setValue }) => {
                               endYear: "",
                               desc: "",
                             })
+                          }
                           }
                           icon="plus"
                           //floated="right"
@@ -82,7 +85,9 @@ const Experience = ({ errors, watch, control, setValue }) => {
                     position="left center"
                     trigger={
                       <Button
-                        onClick={(e) => remove(i)}
+                        onClick={(e) => {
+                          setTotal(prevState=>{return prevState-requiredFields.experience.length})
+                          remove(i)}}
                         icon="minus"
                         floated="right"
                         negative
@@ -290,6 +295,7 @@ const Experience = ({ errors, watch, control, setValue }) => {
                           errors.experience[i].desc &&
                           !!errors.experience[i].desc.message
                         }
+                        required
                         name="desc"
                         label="Description"
                         placeholder="Tell us more about your role in your organisation..."

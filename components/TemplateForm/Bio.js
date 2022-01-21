@@ -29,9 +29,9 @@ const Bio = ({
   setLanguageOptions,
 }) => {
   const sumHeaderOptions = [
-    { key: "1", text: "About Me", value: "About Me" },
-    { key: "2", text: "Work Summary", value: "Work Summary" },
-    { key: "3", text: "Professional Summary", value: "Professional Summary" },
+    { key: "About Me", text: "About Me", value: "About Me" },
+    { key: "Work Summary", text: "Work Summary", value: "Work Summary" },
+    { key: "Professional Summary", text: "Professional Summary", value: "Professional Summary" },
   ];
   const handleAddition = (e, { value }) => {
     setLanguageOptions((prevState) => [
@@ -134,6 +134,7 @@ const Bio = ({
           placeholder="Summary Header"
           width={4}
           onChange={(e, { value }) => setValue("bio.sumHeader", value)}
+          value={watch("bio.sumHeader")}
         />
 
         <Controller

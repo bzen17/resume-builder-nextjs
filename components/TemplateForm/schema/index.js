@@ -34,7 +34,7 @@ export const schema = yup
         .of(
           yup.string().max(100, "Language:  Cannot be more than 100 characters")
         )
-        .required("Languag:  Required"),
+        .required("Language:  Required"),
       sumHeader: yup.string().required("Summary Header:  Required"),
       about: yup
         .string()
@@ -110,9 +110,7 @@ export const schema = yup
           .max(150, "Short Description:  Cannot be more than 150 characters"),
         url: yup.string().required("URL:  Required").url("URL:  Invalid URL"),
         desc: yup
-          .string()
-          .required("Description:  Required")
-          .max(300, "Description:  Cannot be more than 300 characters"),
+          .string(),
         image: yup
           .object()
           .shape({
@@ -191,6 +189,7 @@ export const initFormData = {
       endMonth: "",
       endYear: "",
       desc: "",
+      languages: [],
     },
   ],
   expertise: [
@@ -217,11 +216,6 @@ export const initFormData = {
       image: "",
     },
   ],
-  languages: [
-    {
-      language: [["", ""]],
-    },
-  ],
   contact: {
     email: "",
     phone: "",
@@ -232,3 +226,13 @@ export const initFormData = {
     address: "",
   },
 };
+
+export const requiredFields = {
+  bio: ["fn", "ln", "sumHeader", "about", "role", "languages"],
+  experience: ["org", "title", "startMonth", "startYear", "endMonth", "endYear","desc"],
+  expertise: ["title", "desc"],
+  skills: [],
+  projects: ["name", "shortDesc", "url", "image", "techStack"],
+  certifications: ["name", "url", "image"],
+  contact: ["email", "phone", "address"],
+}

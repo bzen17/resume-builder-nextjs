@@ -26,15 +26,16 @@ import {
 import validateField from "../../utility/formValidation";
 import ErrorMessage from "./Message";
 import { Controller, useFieldArray } from "react-hook-form";
+import {requiredFields} from "./schema";
 
-const Certifications = ({ errors, watch, control, setValue }) => {
+const Certifications = ({ errors, watch, control, setValue, setTotal}) => {
   const {
     fields: certifications,
     append,
     update,
     remove,
   } = useFieldArray({ name: "certifications", control });
-
+  console.log('requiredField',requiredFields)
   const onImgChange = (event, i) => {
     event.preventDefault();
     event.persist();
@@ -79,12 +80,14 @@ const Certifications = ({ errors, watch, control, setValue }) => {
                     trigger={
                       <a href={`#cert${certifications.length}`}>
                         <Button
-                          onClick={(e) =>
+                          onClick={(e) =>{
+                            setTotal(prevState=>{return prevState+requiredFields.certifications.length})
                             append({
                               name: "",
                               url: "",
                               image: "",
                             })
+                          }
                           }
                           icon="plus"
                           floated="right"
@@ -99,7 +102,9 @@ const Certifications = ({ errors, watch, control, setValue }) => {
                     position="left center"
                     trigger={
                       <Button
-                        onClick={(e) => remove(i)}
+                        onClick={(e) => {
+                          setTotal(prevState=>{return prevState-requiredFields.certifications.length})
+                          remove(i)}}
                         icon="minus"
                         floated="right"
                         negative
