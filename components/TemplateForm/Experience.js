@@ -26,7 +26,10 @@ import ErrorMessage from "./Message";
 import { Controller, useFieldArray } from "react-hook-form";
 
 const Experience = ({ errors, watch, control, setValue }) => {
-  const { fields, append, remove } = useFieldArray({ name: "experience", control });
+  const { fields, append, remove } = useFieldArray({
+    name: "experience",
+    control,
+  });
 
   const renderWorkExperience = (e, num) => {
     return (
@@ -168,7 +171,8 @@ const Experience = ({ errors, watch, control, setValue }) => {
                                           errors.experience &&
                                           errors.experience[i] &&
                                           errors.experience[i].startMonth &&
-                                          !!errors.experience[i].startMonth.message
+                                          !!errors.experience[i].startMonth
+                                            .message
                                         }
                                         name="startMonth"
                                         required
@@ -190,7 +194,8 @@ const Experience = ({ errors, watch, control, setValue }) => {
                                           errors.experience &&
                                           errors.experience[i] &&
                                           errors.experience[i].startYear &&
-                                          !!errors.experience[i].startYear.message
+                                          !!errors.experience[i].startYear
+                                            .message
                                         }
                                         name="startYear"
                                         required
@@ -230,7 +235,8 @@ const Experience = ({ errors, watch, control, setValue }) => {
                                           errors.experience &&
                                           errors.experience[i] &&
                                           errors.experience[i].endMonth &&
-                                          !!errors.experience[i].endMonth.message
+                                          !!errors.experience[i].endMonth
+                                            .message
                                         }
                                         name="endMonth"
                                         required

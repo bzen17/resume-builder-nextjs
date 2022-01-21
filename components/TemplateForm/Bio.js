@@ -25,7 +25,8 @@ const Bio = ({
   watch,
   control,
   setValue,
-  languageOptions, setLanguageOptions
+  languageOptions,
+  setLanguageOptions,
 }) => {
   const sumHeaderOptions = [
     { key: "1", text: "About Me", value: "About Me" },
@@ -53,9 +54,7 @@ const Bio = ({
           allowAdditions
           value={watch(`bio.languages`)}
           onAddItem={handleAddition}
-          onChange={(e, { value }) =>
-            setValue(`bio.languages`, value)
-          }
+          onChange={(e, { value }) => setValue(`bio.languages`, value)}
         />
       </Form.Field>
     );
@@ -118,7 +117,7 @@ const Bio = ({
           )}
         />
       </Form.Group>
-        {renderLanguageField()}
+      {renderLanguageField()}
       <Form.Group>
         <Form.Select
           error={
