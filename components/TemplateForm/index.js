@@ -78,10 +78,10 @@ const TemplateForm = ({
   const [languageOptions, setLanguageOptions] = useState(langOptions);
   const [skillOptions, setSkillOptions] = useState(skillsOptions);
   const [formErrors, setFormErrors] = useState(initErrors);
-  useEffect(() => {
+  /* useEffect(() => {
     console.log("Errors", errors);
   }, [errors]);
-  console.log("Data", watch());
+  console.log("Data", watch()); */
   const onSubmit = (data) => console.log("data", data);
   const formRef = useRef(null);
   const renderForm = () => {

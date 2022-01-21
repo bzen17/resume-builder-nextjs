@@ -109,8 +109,7 @@ export const schema = yup
           .required("Short Description:  Required")
           .max(150, "Short Description:  Cannot be more than 150 characters"),
         url: yup.string().required("URL:  Required").url("URL:  Invalid URL"),
-        desc: yup
-          .string(),
+        desc: yup.string(),
         image: yup
           .object()
           .shape({
@@ -229,10 +228,18 @@ export const initFormData = {
 
 export const requiredFields = {
   bio: ["fn", "ln", "sumHeader", "about", "role", "languages"],
-  experience: ["org", "title", "startMonth", "startYear", "endMonth", "endYear","desc"],
+  experience: [
+    "org",
+    "title",
+    "startMonth",
+    "startYear",
+    "endMonth",
+    "endYear",
+    "desc",
+  ],
   expertise: ["title", "desc"],
   skills: [],
   projects: ["name", "shortDesc", "url", "image", "techStack"],
   certifications: ["name", "url", "image"],
   contact: ["email", "phone", "address"],
-}
+};

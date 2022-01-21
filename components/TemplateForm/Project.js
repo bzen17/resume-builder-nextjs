@@ -27,7 +27,7 @@ import {
 import validateField from "../../utility/formValidation";
 import ErrorMessage from "./Message";
 import { Controller, useFieldArray } from "react-hook-form";
-import {requiredFields} from "./schema";
+import { requiredFields } from "./schema";
 
 const Project = ({
   errors,
@@ -37,7 +37,7 @@ const Project = ({
   setValue,
   techStackOptions,
   setTechStackOptions,
-  setTotal
+  setTotal,
 }) => {
   const {
     fields: projects,
@@ -45,7 +45,7 @@ const Project = ({
     update,
     remove,
   } = useFieldArray({ name: "projects", control });
-  console.log('requiredField',requiredFields)
+  console.log("requiredField", requiredFields);
   const onImgChange = (event, i) => {
     event.preventDefault();
     event.persist();
@@ -121,8 +121,10 @@ const Project = ({
                     trigger={
                       <a href={`#project${projects.length}`}>
                         <Button
-                          onClick={(e) =>{
-                            setTotal(prevState=>{return prevState+requiredFields.projects.length})
+                          onClick={(e) => {
+                            setTotal((prevState) => {
+                              return prevState + requiredFields.projects.length;
+                            });
                             append({
                               name: "",
                               shortDesc: "",
@@ -130,9 +132,8 @@ const Project = ({
                               desc: "",
                               image: "",
                               techStack: [["", ""]],
-                            })
-                          }
-                          }
+                            });
+                          }}
                           icon="plus"
                           floated="right"
                           primary
@@ -147,8 +148,11 @@ const Project = ({
                     trigger={
                       <Button
                         onClick={(e) => {
-                          setTotal(prevState=>{return prevState-requiredFields.projects.length})
-                          remove(i)}}
+                          setTotal((prevState) => {
+                            return prevState - requiredFields.projects.length;
+                          });
+                          remove(i);
+                        }}
                         icon="minus"
                         floated="right"
                         negative
@@ -168,7 +172,7 @@ const Project = ({
                           error={
                             errors &&
                             errors.projects &&
-                            errors.projects[i]&&
+                            errors.projects[i] &&
                             errors.projects[i].name &&
                             !!errors.projects[i].name.message
                           }
@@ -192,7 +196,7 @@ const Project = ({
                           error={
                             errors &&
                             errors.projects &&
-                            errors.projects[i]&&
+                            errors.projects[i] &&
                             errors.projects[i].shortDesc &&
                             !!errors.projects[i].shortDesc.message
                           }
@@ -217,7 +221,7 @@ const Project = ({
                         error={
                           errors &&
                           errors.projects &&
-                          errors.projects[i]&&
+                          errors.projects[i] &&
                           errors.projects[i].url &&
                           !!errors.projects[i].url.message
                         }
@@ -242,7 +246,7 @@ const Project = ({
                         error={
                           errors &&
                           errors.projects &&
-                          errors.projects[i]&&
+                          errors.projects[i] &&
                           errors.projects[i].desc &&
                           !!errors.projects[i].desc.message
                         }
@@ -261,7 +265,7 @@ const Project = ({
                         error={
                           errors &&
                           errors.projects &&
-                          errors.projects[i]&&
+                          errors.projects[i] &&
                           errors.projects[i].image &&
                           !!errors.projects[i].image.message
                         }
