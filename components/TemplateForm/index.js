@@ -16,7 +16,6 @@ import React, { useState, useRef, useEffect } from "react";
 import { Button, Grid, Form, Message, Icon } from "semantic-ui-react";
 import Bio from "./Bio";
 import Experience from "./Experience";
-import Languages from "./Language";
 import Project from "./Project";
 import Skills from "./Skills";
 import Certifications from "./Certification";
@@ -33,7 +32,17 @@ const options = [
   { key: "3", text: "Both", value: "both" },
 ];
 
-const TemplateForm = ({ activeItem }) => {
+const TemplateForm = ({
+  activeItem,
+  handleSubmit,
+  watch,
+  setValue,
+  control,
+  errors,
+  setError,
+  clearErrors,
+  reset,
+}) => {
   const initErrors = {
     bio: [],
     experience: [],
@@ -43,25 +52,36 @@ const TemplateForm = ({ activeItem }) => {
     certifications: [],
     contact: [],
   };
-  const {
-    handleSubmit,
-    watch,
-    setValue,
-    control,
-    formState: { errors },
-    setError,
-    clearErrors,
-    reset,
-  } = useForm({
-    resolver: yupResolver(schema),
-    mode: "onChange",
-    defaultValues: initFormData,
-  });
+  const techOptions = [
+    { key: "HTML", text: "HTML", value: "HTML" },
+    { key: "CSS", text: "CSS", value: "CSS" },
+    { key: "JavaScript", text: "JavaScript", value: "JavaScript" },
+    { key: "Linux", text: "Linux", value: "Linux" },
+    { key: "Node.js", text: "Node.js", value: "Node.js" },
+  ];
+  const langOptions = [
+    { key: "English", text: "English", value: "English" },
+    { key: "French", text: "French", value: "French" },
+    { key: "Spanish", text: "Spanish", value: "Spanish" },
+    { key: "German", text: "German", value: "German" },
+    { key: "Chinese", text: "Chinese", value: "Chinese" },
+  ];
+  const skillsOptions = [
+    { key: "HTML", text: "HTML", value: "HTML" },
+    { key: "CSS", text: "CSS", value: "CSS" },
+    { key: "JavaScript", text: "JavaScript", value: "JavaScript" },
+    { key: "Linux", text: "Linux", value: "Linux" },
+    { key: "Node.js", text: "Node.js", value: "Node.js" },
+  ];
+  const [techStackOptions, setTechStackOptions] = useState(techOptions);
+  const [languageOptions, setLanguageOptions] = useState(langOptions);
+  const [skillOptions, setSkillOptions] = useState(skillsOptions);
   const [formErrors, setFormErrors] = useState(initErrors);
-
-  const onSubmit = (data) => console.log("data", data);
-  console.log("Errors", errors);
+  useEffect(() => {
+    console.log("Errors", errors);
+  }, [errors]);
   console.log("Data", watch());
+  const onSubmit = (data) => console.log("data", data);
   const formRef = useRef(null);
   const renderForm = () => {
     if (activeItem === "bio") {
@@ -73,6 +93,8 @@ const TemplateForm = ({ activeItem }) => {
           watch={watch}
           control={control}
           setValue={setValue}
+          languageOptions={languageOptions}
+          setLanguageOptions={setLanguageOptions}
         />
       );
     } else if (activeItem === "contact") {
@@ -93,16 +115,6 @@ const TemplateForm = ({ activeItem }) => {
           setValue={setValue}
         />
       );
-    } else if (activeItem === "languages") {
-      return (
-        <Languages
-          errors={errors}
-          setError={setError}
-          watch={watch}
-          control={control}
-          setValue={setValue}
-        />
-      );
     } else if (activeItem === "projects") {
       return (
         <Project
@@ -111,6 +123,8 @@ const TemplateForm = ({ activeItem }) => {
           watch={watch}
           control={control}
           setValue={setValue}
+          techStackOptions={techStackOptions}
+          setTechStackOptions={setTechStackOptions}
         />
       );
     } else if (activeItem === "certifications") {
@@ -131,6 +145,8 @@ const TemplateForm = ({ activeItem }) => {
           watch={watch}
           control={control}
           setValue={setValue}
+          skillOptions={skillOptions}
+          setSkillOptions={setSkillOptions}
         />
       );
     }

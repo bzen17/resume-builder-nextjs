@@ -70,7 +70,7 @@ const Certifications = ({ errors, watch, control, setValue }) => {
                   marginBottom: "1rem",
                 }}
               >
-                {i === 0 ? <Header as="h3">Certification</Header> : ""}
+                {i === 0 ? <Header as="h3">Certification</Header> : <div></div>}
 
                 {certifications.length - 1 === i ? (
                   <Popup
