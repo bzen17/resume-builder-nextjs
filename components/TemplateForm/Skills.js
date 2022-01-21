@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import React, { useState, useEffect } from "react";
-import { Button, Grid, Form, Popup, Header,Dropdown } from "semantic-ui-react";
+import { Button, Grid, Form, Popup, Header, Dropdown } from "semantic-ui-react";
 import validateField from "../../utility/formValidation";
 import ErrorMessage from "./Message";
 import { Controller, useFieldArray } from "react-hook-form";
@@ -58,7 +58,7 @@ const Skills = ({
                       error={
                         errors &&
                         errors.expertise &&
-                        errors.expertise[i]&&
+                        errors.expertise[i] &&
                         errors.expertise[i].title &&
                         !!errors.expertise[i].title.message
                       }
@@ -84,7 +84,7 @@ const Skills = ({
                       error={
                         errors &&
                         errors.expertise &&
-                        errors.expertise[i]&&
+                        errors.expertise[i] &&
                         errors.expertise[i].desc &&
                         !!errors.expertise[i].desc.message
                       }
@@ -141,21 +141,19 @@ const Skills = ({
     let index = 0;
     return (
       <Form.Field required>
-         <Dropdown
-            options={skillOptions}
-            placeholder="Choose/Add Skills *"
-            search
-            selection
-            fluid
-            multiple
-            required
-            allowAdditions
-            value={watch(`skills`)}
-            onAddItem={handleAddition}
-            onChange={(e, { value }) =>
-              setValue(`skills`, value)
-            }
-          />
+        <Dropdown
+          options={skillOptions}
+          placeholder="Choose/Add Skills *"
+          search
+          selection
+          fluid
+          multiple
+          required
+          allowAdditions
+          value={watch(`skills`)}
+          onAddItem={handleAddition}
+          onChange={(e, { value }) => setValue(`skills`, value)}
+        />
       </Form.Field>
     );
   };

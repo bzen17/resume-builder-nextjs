@@ -30,9 +30,11 @@ const SideBar = ({ activeItem, setActiveItem, errors, formState }) => {
   };
   const [errCount, setErrCount] = useState(initErrorCount);
   useEffect(() => {
-    for (const [k, v] of Object.entries(errors)){
-      if((k==='bio'||k==='contact')&&Object.values(v).length>0){
-        setErrCount(prevState=>{return {...prevState,[k]:Object.values(v).length}})
+    for (const [k, v] of Object.entries(errors)) {
+      if ((k === "bio" || k === "contact") && Object.values(v).length > 0) {
+        setErrCount((prevState) => {
+          return { ...prevState, [k]: Object.values(v).length };
+        });
       } else {
         let count = 0;
         Object.values(v).map((err, index) => {
@@ -45,10 +47,10 @@ const SideBar = ({ activeItem, setActiveItem, errors, formState }) => {
     }
   }, [formState]);
   const renderSideBarErrorLabel = (tabName) => {
-      if((tabName==='bio'||tabName==='contact')){
-        return (
-          <>
-            {errors && errors[tabName] ? (
+    if (tabName === "bio" || tabName === "contact") {
+      return (
+        <>
+          {errors && errors[tabName] ? (
             <Popup
               position="bottom left"
               trigger={<Label color="orange">{errCount[tabName]}</Label>}
@@ -58,61 +60,66 @@ const SideBar = ({ activeItem, setActiveItem, errors, formState }) => {
             >
               <List relaxed divided size="small">
                 {Object.values(errors[tabName]).map((error, index) => {
-                  return <List.Item key={index}><Icon name="close" color="red" />{error.message}</List.Item>;
+                  return (
+                    <List.Item key={index}>
+                      <Icon name="close" color="red" />
+                      {error.message}
+                    </List.Item>
+                  );
                 })}
               </List>
             </Popup>
           ) : null}
-          </>
-        )
-      } else {
-        return (
-          <>
+        </>
+      );
+    } else {
+      return (
+        <>
           {errors && errors[tabName] ? (
-          <Popup
-            position="bottom left"
-            trigger={<Label color="orange">{errCount[tabName]}</Label>}
-            relaxed
-            flowing
-            hoverable
-          >
-            <List relaxed divided size="small">
-              {Object.values(errors[tabName]).map((err, index) => {
-                return (
-                  <div key={index}>
-                    <List.Item>
-                      <List.Content>
-                        <List.Header>
-                          <srong>
-                            <b>Experience #{index + 1}</b>
-                          </srong>
-                        </List.Header>
-                        <List.List>
-                          {err !== undefined
-                            ? Object.values(err).map((error, i) => {
-                                return (
-                                  <>
-                                    <List.Item key={i}>
-                                      <Icon name="close" color="red" />{" "}
-                                      {error.message}
-                                    </List.Item>
-                                  </>
-                                );
-                              })
-                            : ""}
-                        </List.List>
-                      </List.Content>
-                    </List.Item>
-                  </div>
-                );
-              })}
-            </List>
-          </Popup>
-        ) : null}
-          </>
-        )
-      }
-  }
+            <Popup
+              position="bottom left"
+              trigger={<Label color="orange">{errCount[tabName]}</Label>}
+              relaxed
+              flowing
+              hoverable
+            >
+              <List relaxed divided size="small">
+                {Object.values(errors[tabName]).map((err, index) => {
+                  return (
+                    <div key={index}>
+                      <List.Item>
+                        <List.Content>
+                          <List.Header>
+                            <srong>
+                              <b>Experience #{index + 1}</b>
+                            </srong>
+                          </List.Header>
+                          <List.List>
+                            {err !== undefined
+                              ? Object.values(err).map((error, i) => {
+                                  return (
+                                    <>
+                                      <List.Item key={i}>
+                                        <Icon name="close" color="red" />{" "}
+                                        {error.message}
+                                      </List.Item>
+                                    </>
+                                  );
+                                })
+                              : ""}
+                          </List.List>
+                        </List.Content>
+                      </List.Item>
+                    </div>
+                  );
+                })}
+              </List>
+            </Popup>
+          ) : null}
+        </>
+      );
+    }
+  };
   return (
     <Grid.Column width={4}>
       <Menu fluid vertical tabular pointing>
@@ -140,7 +147,7 @@ const SideBar = ({ activeItem, setActiveItem, errors, formState }) => {
           active={activeItem === "skills"}
           onClick={handleItemClick}
         >
-         {renderSideBarErrorLabel("expertise")}
+          {renderSideBarErrorLabel("expertise")}
           Skills
         </Menu.Item>
         <Menu.Item
@@ -167,7 +174,7 @@ const SideBar = ({ activeItem, setActiveItem, errors, formState }) => {
           active={activeItem === "contact"}
           onClick={handleItemClick}
         >
-         {renderSideBarErrorLabel("contact")}
+          {renderSideBarErrorLabel("contact")}
           Contact
         </Menu.Item>
       </Menu>

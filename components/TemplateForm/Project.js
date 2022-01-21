@@ -79,19 +79,19 @@ const Project = ({
       <Form.Field required>
         <label>Tech Stack</label>
         <Dropdown
-                options={techStackOptions}
-                placeholder="Choose/Add Tech Stack"
-                search
-                selection
-                fluid
-                multiple
-                allowAdditions
-                value={watch(`projects.${i}.techStack`)}
-                onAddItem={handleAddition}
-                onChange={(e, { value }) =>
-                  setValue(`projects.${i}.techStack`, value)
-                }
-              />
+          options={techStackOptions}
+          placeholder="Choose/Add Tech Stack"
+          search
+          selection
+          fluid
+          multiple
+          allowAdditions
+          value={watch(`projects.${i}.techStack`)}
+          onAddItem={handleAddition}
+          onChange={(e, { value }) =>
+            setValue(`projects.${i}.techStack`, value)
+          }
+        />
       </Form.Field>
     );
   };
