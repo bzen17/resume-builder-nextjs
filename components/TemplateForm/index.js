@@ -42,6 +42,7 @@ const TemplateForm = ({
   setError,
   clearErrors,
   reset,
+  setTotal,
 }) => {
   const initErrors = {
     bio: [],
@@ -113,6 +114,7 @@ const TemplateForm = ({
           watch={watch}
           control={control}
           setValue={setValue}
+          setTotal={setTotal}
         />
       );
     } else if (activeItem === "projects") {
@@ -125,6 +127,7 @@ const TemplateForm = ({
           setValue={setValue}
           techStackOptions={techStackOptions}
           setTechStackOptions={setTechStackOptions}
+          setTotal={setTotal}
         />
       );
     } else if (activeItem === "certifications") {
@@ -134,6 +137,7 @@ const TemplateForm = ({
           watch={watch}
           control={control}
           setValue={setValue}
+          setTotal={setTotal}
         />
       );
     } else if (activeItem === "skills") {
@@ -147,6 +151,7 @@ const TemplateForm = ({
           setValue={setValue}
           skillOptions={skillOptions}
           setSkillOptions={setSkillOptions}
+          setTotal={setTotal}
         />
       );
     }

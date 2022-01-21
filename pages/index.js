@@ -8,6 +8,7 @@ import SideBar from "../components/SideBar";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { schema, initFormData } from "../components/TemplateForm/schema";
 import { useForm, useFieldArray } from "react-hook-form";
+import ProgressBar from "../components/ProgressBar";
 
 export default function Home() {
   const [activeItem, setActiveItem] = useState("bio");
@@ -27,15 +28,15 @@ export default function Home() {
     mode: "onChange",
     defaultValues: initFormData,
   });
-  const [progress, setProgress] = useState(20);
-
+  
+  const [total, setTotal] = useState(27);
   useEffect(() => {
     console.log("Errors1", errors);
   }, [formState]);
 
   return (
     <Layout>
-      <Progress progress="percent" value={3} total={10} indicating />
+      <ProgressBar watch={watch} errors={errors} total={total}/>
       <Grid>
         <SideBar
           activeItem={activeItem}
@@ -55,6 +56,7 @@ export default function Home() {
               setError={setError}
               clearErrors={clearErrors}
               reset={reset}
+              setTotal={setTotal}
             />
           </Segment>
         </Grid.Column>
