@@ -28,7 +28,7 @@ export default function Home() {
     mode: "onChange",
     defaultValues: initFormData,
   });
-  
+
   const [total, setTotal] = useState(27);
   useEffect(() => {
     console.log("Errors1", errors);
@@ -36,7 +36,7 @@ export default function Home() {
 
   return (
     <Layout>
-      <ProgressBar watch={watch} errors={errors} total={total}/>
+      <ProgressBar watch={watch} errors={errors} total={total} />
       <Grid>
         <SideBar
           activeItem={activeItem}

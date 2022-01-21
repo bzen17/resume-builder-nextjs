@@ -31,7 +31,11 @@ const Bio = ({
   const sumHeaderOptions = [
     { key: "About Me", text: "About Me", value: "About Me" },
     { key: "Work Summary", text: "Work Summary", value: "Work Summary" },
-    { key: "Professional Summary", text: "Professional Summary", value: "Professional Summary" },
+    {
+      key: "Professional Summary",
+      text: "Professional Summary",
+      value: "Professional Summary",
+    },
   ];
   const handleAddition = (e, { value }) => {
     setLanguageOptions((prevState) => [
@@ -40,7 +44,6 @@ const Bio = ({
     ]);
   };
   const renderLanguageField = (e) => {
-    let index = 0;
     return (
       <Form.Field required>
         <label>Language</label>

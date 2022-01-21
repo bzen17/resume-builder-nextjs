@@ -24,14 +24,14 @@ import {
 import validateField from "../../utility/formValidation";
 import ErrorMessage from "./Message";
 import { Controller, useFieldArray } from "react-hook-form";
-import {requiredFields} from "./schema";
+import { requiredFields } from "./schema";
 
-const Experience = ({ errors, watch, control, setValue, setTotal}) => {
+const Experience = ({ errors, watch, control, setValue, setTotal }) => {
   const { fields, append, remove } = useFieldArray({
     name: "experience",
     control,
   });
-  console.log('requiredField',requiredFields)
+  console.log("requiredField", requiredFields);
   const renderWorkExperience = (e, num) => {
     return (
       <>
@@ -59,8 +59,12 @@ const Experience = ({ errors, watch, control, setValue, setTotal}) => {
                     trigger={
                       <a href={`#experience${fields.length}`}>
                         <Button
-                          onClick={(e) =>{
-                            setTotal(prevState=>{return prevState+requiredFields.experience.length})
+                          onClick={(e) => {
+                            setTotal((prevState) => {
+                              return (
+                                prevState + requiredFields.experience.length
+                              );
+                            });
                             append({
                               org: "",
                               title: "",
@@ -69,9 +73,8 @@ const Experience = ({ errors, watch, control, setValue, setTotal}) => {
                               endMonth: "",
                               endYear: "",
                               desc: "",
-                            })
-                          }
-                          }
+                            });
+                          }}
                           icon="plus"
                           //floated="right"
                           primary
@@ -86,8 +89,11 @@ const Experience = ({ errors, watch, control, setValue, setTotal}) => {
                     trigger={
                       <Button
                         onClick={(e) => {
-                          setTotal(prevState=>{return prevState-requiredFields.experience.length})
-                          remove(i)}}
+                          setTotal((prevState) => {
+                            return prevState - requiredFields.experience.length;
+                          });
+                          remove(i);
+                        }}
                         icon="minus"
                         floated="right"
                         negative

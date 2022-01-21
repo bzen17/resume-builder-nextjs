@@ -17,7 +17,7 @@ import { Button, Grid, Form, Popup, Header, Dropdown } from "semantic-ui-react";
 import validateField from "../../utility/formValidation";
 import ErrorMessage from "./Message";
 import { Controller, useFieldArray } from "react-hook-form";
-import {requiredFields} from "./schema";
+import { requiredFields } from "./schema";
 
 const Skills = ({
   errors,
@@ -28,7 +28,7 @@ const Skills = ({
   setValue,
   skillOptions,
   setSkillOptions,
-  setTotal
+  setTotal,
 }) => {
   const {
     fields: expertise,
@@ -110,7 +110,9 @@ const Skills = ({
                     <Button
                       onClick={(e) => {
                         e.preventDefault();
-                        setTotal(prevState=>{return prevState+requiredFields.expertise.length})
+                        setTotal((prevState) => {
+                          return prevState + requiredFields.expertise.length;
+                        });
                         e_append({
                           title: "",
                           desc: "",
@@ -128,8 +130,11 @@ const Skills = ({
                   trigger={
                     <Button
                       onClick={(e) => {
-                        setTotal(prevState=>{return prevState-requiredFields.expertise.length})
-                        e_remove(i)}}
+                        setTotal((prevState) => {
+                          return prevState - requiredFields.expertise.length;
+                        });
+                        e_remove(i);
+                      }}
                       icon="minus"
                       negative
                     />
