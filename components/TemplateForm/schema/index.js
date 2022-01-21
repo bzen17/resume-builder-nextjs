@@ -16,235 +16,197 @@ import * as yup from "yup";
 
 export const schema = yup
   .object({
-    bio: yup.object().shape({
-      fn: yup
+    bio:  yup.object().shape({
+      fn:  yup
         .string()
-        .required("Required")
-        .max(50, "Cannot be more than 50 characters"),
-      ln: yup
+        .required("First Name:  Required")
+        .max(50, "First Name:  Cannot be more than 50 characters"),
+      ln:  yup
         .string()
-        .required("Required")
-        .max(50, "Cannot be more than 50 characters"),
-      role: yup
+        .required("Last Name:  Required")
+        .max(50, "Last Name:  Cannot be more than 50 characters"),
+      role:  yup
         .string()
-        .required("Required")
-        .max(100, "Cannot be more than 100 characters"),
-      sumHeader: yup.string().required("Required"),
-      about: yup
+        .required("Designation:  Required")
+        .max(100, "Designation:  Cannot be more than 100 characters"),
+      languages:  yup
+        .array()
+        .of(yup.string().max(100, "Language:  Cannot be more than 100 characters"))
+        .required('Languag:  Required'),
+      sumHeader:  yup.string().required("Summary Header:  Required"),
+      about:  yup
         .string()
-        .required("Required")
-        .max(300, "Cannot be more than 300 characters"),
+        .required("About:  Required")
+        .max(300, "About:  Cannot be more than 300 characters"),
     }),
-    exp: yup.array().of(
+    experience:  yup.array().of(
       yup.object().shape({
-        org: yup
+        org:  yup
           .string()
-          .required("Required")
-          .max(100, "Cannot be more than 100 characters"),
-        title: yup
+          .required("Organisation:  Required")
+          .max(100, "Organisation:  Cannot be more than 100 characters"),
+        title:  yup
           .string()
-          .required("Required")
-          .max(100, "Cannot be more than 100 characters"),
-        startMonth: yup
+          .required("Designation:  Required")
+          .max(100, "Designation:  Cannot be more than 100 characters"),
+        startMonth:  yup
           .number()
-          .typeError("Must be a number between 1 and 12")
-          .required("Required")
-          .moreThan(0, "Must be a greater than 0")
-          .lessThan(13, "Cannot be greater than 12"),
-        startYear: yup
+          .typeError("Start Month:  Must be a number between 1 and 12")
+          .required("Start Month:  Required")
+          .moreThan(0, "Start Month:  Must be a number between 1 and 12")
+          .lessThan(13, "Start Month:  Must be a number between 1 and 12"),
+        startYear:  yup
           .number()
-          .typeError("Must be a number greater than 1900")
-          .required("Required")
-          .moreThan(1900, "Cannot be lesser than 1900"),
-        endMonth: yup
+          .typeError("Start Year:  Must be a number greater than 1900")
+          .required("Start Year:  Required")
+          .moreThan(1900, "Start Year:  Cannot be lesser than 1900"),
+        endMonth:  yup
           .number()
-          .typeError("Must be a number between 1 and 12")
-          .required("Required")
-          .moreThan(0, "Must be a greater than 0")
-          .lessThan(13, "Cannot be greater than 12"),
-        endYear: yup
+          .typeError("End Month:  Must be a number between 1 and 12")
+          .required("End Month:  Required")
+          .moreThan(0, "End Month:  Must be a number between 1 and 12")
+          .lessThan(13, "End Month:  Must be a number between 1 and 12"),
+        endYear:  yup
           .number()
-          .typeError(`Must be greater than Start Year`)
-          .required("Required")
-          .min(yup.ref("startYear"), "Cannot be lesser than Start Year"),
-        desc: yup
+          .typeError(`End Year:  Must be greater than Start Year`)
+          .required("End Year:  Required")
+          .min(yup.ref("startYear"), "End Year:  Cannot be lesser than Start Year"),
+        desc:  yup
           .string()
-          .required("Required")
-          .max(300, "Cannot be more than 300 characters"),
+          .required("Description:  Required")
+          .max(300, "Description:  Cannot be more than 300 characters"),
       })
     ),
-    expertise: yup.array().of(
+    expertise:  yup.array().of(
       yup.object().shape({
-        title: yup.string().max(100, "Cannot be more than 100 characters"),
-        desc: yup.string().max(300, "Cannot be more than 300 characters"),
+        title:  yup.string().max(100, "Title:  Cannot be more than 100 characters").required("Title:  Required"),
+        desc:  yup.string().max(300, "Description:  Cannot be more than 300 characters").required("Description:  Required"),
       })
     ),
-    skills: yup.array().of(
+    skills:  yup
+      .array()
+      .of(yup.string().max(100, "Skill:  Cannot be more than 100 characters"))
+      .required(),
+    projects:  yup.array().of(
       yup.object().shape({
-        skill: yup
-          .array()
-          .of(
-            yup
-              .array()
-              .of(
-                yup.string().max(100, "Cannot be more than 100 characters"),
-                yup.string().max(100, "Cannot be more than 100 characters")
-              )
-          ),
-      })
-    ),
-    projects: yup.array().of(
-      yup.object().shape({
-        name: yup
+        name:  yup
           .string()
-          .required("Required")
-          .max(100, "Cannot be more than 100 characters"),
-        shortDesc: yup
+          .required("Name:  Required")
+          .max(100, "Name:  Cannot be more than 100 characters"),
+        shortDesc:  yup
           .string()
-          .required("Required")
-          .max(150, "Cannot be more than 150 characters"),
-        url: yup.string().required("Required").url("Invalid URL"),
-        desc: yup
+          .required("Short Description:  Required")
+          .max(150, "Short Description:  Cannot be more than 150 characters"),
+        url:  yup.string().required("URL:  Required").url("URL:  Invalid URL"),
+        desc:  yup
           .string()
-          .required("Required")
-          .max(300, "Cannot be more than 300 characters"),
-        image: yup
+          .required("Description:  Required")
+          .max(300, "Description:  Cannot be more than 300 characters"),
+        image:  yup
           .object()
           .shape({
-            URL: yup.object(),
-            objURL: yup.string().matches(/^blob:https?:\/\//),
+            URL:  yup.object(),
+            objURL:  yup.string().matches(/^blob:https?:\/\//,'Image:  Invalid Image'),
           })
-          .required("Required"),
-        techStack: yup
+          .required("Image:  Required"),
+        techStack:  yup
           .array()
-          .of(
-            yup
-              .array()
-              .of(
-                yup.string().max(100, "Cannot be more than 100 characters"),
-                yup.string().max(100, "Cannot be more than 100 characters")
-              )
-          )
-          .test({
-            name: "firstRequired",
-            message: "Required",
-            test: (val) => {
-              console.log("Test", val[0][0], val[0][1], val.length); //!(val[0][0]===''&&val[0][1]===''&&val.length>1)
-              return true;
-            },
-          }),
+          .of(yup.string().max(100, "Tech Stack:  Cannot be more than 100 characters"))
+          .required(),
       })
     ),
-    certifications: yup.array().of(
+    certifications:  yup.array().of(
       yup.object().shape({
-        name: yup
+        name:  yup
           .string()
-          .required("Required")
-          .max(150, "Cannot be more than 150 characters"),
-        url: yup.string().required("Required").url("Invalid URL"),
-        image: yup
+          .required("Name:  Required")
+          .max(150, "Name:  Cannot be more than 150 characters"),
+        url:  yup.string().required("URL:  Required").url("URL:  Invalid URL"),
+        image:  yup
           .object()
           .shape({
-            URL: yup.object(),
-            objURL: yup.string().matches(/^blob:https?:\/\//),
+            URL:  yup.object(),
+            objURL:  yup.string().matches(/^blob:https?:\/\//,'Image:  Invalid Image'),
           })
-          .required("Required"),
+          .required("Image:  Required"),
       })
     ),
-    languages: yup.array().of(
-      yup.object().shape({
-        language: yup
-          .array()
-          .of(
-            yup
-              .array()
-              .of(
-                yup.string().max(50, "Cannot be more than 50 characters"),
-                yup.string().max(50, "Cannot be more than 50 characters")
-              )
-          ),
-      })
-    ),
-    contact: yup.object().shape({
-      email: yup.string().required("Required").email("Invalid Email"),
-      phone: yup
+    contact:  yup.object().shape({
+      email:  yup.string().required("Email:  Required").email("Email:  Invalid Email"),
+      phone:  yup
         .string()
-        .required("Required")
+        .required("Phone:  Required")
         .matches(
           /^(\+91)?[-]?([0-9]{10})$/,
-          "Phone number is invalid (Format: +91-9999999999)"
+          "Phone number is invalid (Format:  +91-9999999999)"
         ),
-      address: yup
+      address:  yup
         .string()
-        .required("Required")
-        .max(200, "Cannot be more than 200 characters"),
-      website: yup.string().url("Invalid URL"),
-      git: yup.string().url("Invalid URL"),
-      linkedin: yup.string().url("Invalid URL"),
-      twitter: yup.string().url("Invalid URL"),
+        .required("Address:  Required")
+        .max(200, "Address:  Cannot be more than 200 characters"),
+      website:  yup.string().url("Website:  Invalid URL"),
+      git:  yup.string().url("Git:  Invalid URL"),
+      linkedin:  yup.string().url("LinkedIn:  Invalid URL"),
+      twitter:  yup.string().url("Twitter:  Invalid URL"),
     }),
   })
   .required("Required");
 
 export const initFormData = {
-  bio: {
-    fn: "",
-    ln: "",
-    sumHeader: "",
-    about: "",
-    role: "",
+  bio:  {
+    fn:  "",
+    ln:  "",
+    sumHeader:  "",
+    about:  "",
+    role:  "",
   },
-  exp: [
+  experience:  [
     {
-      org: "",
-      title: "",
-      startMonth: "",
-      startYear: "",
-      endMonth: "",
-      endYear: "",
-      desc: "",
+      org:  "",
+      title:  "",
+      startMonth:  "",
+      startYear:  "",
+      endMonth:  "",
+      endYear:  "",
+      desc:  "",
     },
   ],
-  expertise: [
+  expertise:  [
     {
-      title: "",
-      desc: "",
+      title:  "",
+      desc:  "",
     },
   ],
-  skills: [
+  skills:  [],
+  projects:  [
     {
-      skill: [["", ""]],
+      name:  "",
+      shortDesc:  "",
+      url:  "",
+      desc:  "",
+      image:  "",
+      techStack:  [],
     },
   ],
-  projects: [
+  certifications:  [
     {
-      name: "",
-      shortDesc: "",
-      url: "",
-      desc: "",
-      image: "",
-      techStack: [["", ""]],
+      name:  "",
+      url:  "",
+      image:  "",
     },
   ],
-  certifications: [
+  languages:  [
     {
-      name: "",
-      url: "",
-      image: "",
+      language:  [["", ""]],
     },
   ],
-  languages: [
-    {
-      language: [["", ""]],
-    },
-  ],
-  contact: {
-    email: "",
-    phone: "",
-    website: "",
-    linkedin: "",
-    git: "",
-    twitter: "",
-    address: "",
+  contact:  {
+    email:  "",
+    phone:  "",
+    website:  "",
+    linkedin:  "",
+    git:  "",
+    twitter:  "",
+    address:  "",
   },
 };

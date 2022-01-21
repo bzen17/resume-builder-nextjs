@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import React, { useState, useEffect } from "react";
-import { Button, Grid, Form, Popup, Header } from "semantic-ui-react";
+import { Button, Grid, Form, Popup, Header,Dropdown } from "semantic-ui-react";
 import validateField from "../../utility/formValidation";
 import ErrorMessage from "./Message";
 import { Controller, useFieldArray } from "react-hook-form";
@@ -25,6 +25,8 @@ const Skills = ({
   watch,
   control,
   setValue,
+  skillOptions,
+  setSkillOptions,
 }) => {
   const {
     fields: expertise,
@@ -32,12 +34,12 @@ const Skills = ({
     update: e_update,
     remove: e_remove,
   } = useFieldArray({ name: "expertise", control });
-  const {
-    fields: skills,
-    append: s_append,
-    update: s_update,
-    remove: s_remove,
-  } = useFieldArray({ name: "skills", control });
+  const handleAddition = (e, { value }) => {
+    setSkillOptions((prevState) => [
+      { key: value, text: value, value },
+      ...prevState,
+    ]);
+  };
   const renderExp = (e) => {
     let index = 0;
     return (
@@ -56,6 +58,7 @@ const Skills = ({
                       error={
                         errors &&
                         errors.expertise &&
+                        errors.expertise[i]&&
                         errors.expertise[i].title &&
                         !!errors.expertise[i].title.message
                       }
@@ -81,6 +84,7 @@ const Skills = ({
                       error={
                         errors &&
                         errors.expertise &&
+                        errors.expertise[i]&&
                         errors.expertise[i].desc &&
                         !!errors.expertise[i].desc.message
                       }
@@ -137,105 +141,21 @@ const Skills = ({
     let index = 0;
     return (
       <Form.Field required>
-        {skills.length !== 0 &&
-          skills[0].skill.map((sg, i_sg) => {
-            index++;
-            return (
-              <Form.Group widths="equal" key={"skill_g" + i_sg}>
-                {sg.map((s, i_s) => {
-                  return (
-                    <Form.Input
-                      error={
-                        i_sg === 0 &&
-                        errors &&
-                        errors.skills &&
-                        errors.skills[0].skill &&
-                        errors.skills[0].skill[i_sg][i_s] &&
-                        !!errors.skills[0].skill[i_sg][i_s].message
-                      }
-                      name={`skill${i_sg + i_s + index}`}
-                      fluid
-                      placeholder={
-                        i_sg === 0
-                          ? `#${2 * i_sg + i_s + 1} *`
-                          : `#${2 * i_sg + i_s + 1}`
-                      }
-                      value={watch(`skills[0].skill[${i_sg}][${i_s}]`)}
-                      onChange={(e) => {
-                        if (i_sg === 0 && e.target.value === "") {
-                          setError(`skills.0.skill[0][${i_s}]`, {
-                            message: `Skill #${2 * i_sg + i_s + 1}: Required`,
-                          });
-                        } else if (
-                          i_sg > 0 &&
-                          (watch(`skills[0].skill[0][0]`) === "" ||
-                            watch(`skills[0].skill[0][1]`) === "")
-                        ) {
-                          console.log(
-                            "Error watch",
-                            !watch(`skills[0].skill[0][0]`)
-                          );
-                          if (!watch(`skills[0].skill[0][0]`)) {
-                            setError(`skills.0.skill.0.0`, {
-                              message: `Skill #1: Required`,
-                            });
-                          }
-                          if (!watch(`skills[0].skill[0][1]`)) {
-                            setError(`skills.0.skill.0.1`, {
-                              message: `Skill #2: Required`,
-                            });
-                          }
-                        } else {
-                          clearErrors(`skills`);
-                        }
-                        setValue(
-                          `skills.0.skill[${i_sg}][${i_s}]`,
-                          e.target.value
-                        );
-                      }}
-                    />
-                  );
-                })}
-
-                {i_sg === 0 ? (
-                  <Popup
-                    content="Add Skills"
-                    position="top right"
-                    trigger={
-                      <Button
-                        onClick={(e) => {
-                          e.preventDefault();
-                          s_update(0, {
-                            skill: [...skills[0].skill, ["", ""]],
-                          });
-                        }}
-                        icon="plus"
-                        secondary
-                      />
-                    }
-                  />
-                ) : i_sg === skills[0].skill.length - 1 ? (
-                  <Popup
-                    content="Remove Skills"
-                    position="top right"
-                    trigger={
-                      <Button
-                        onClick={(e) =>
-                          s_update(0, {
-                            skill: [...skills[0].skill.slice(0, -1)],
-                          })
-                        }
-                        icon="minus"
-                        negative
-                      />
-                    }
-                  />
-                ) : (
-                  <Button color="white" />
-                )}
-              </Form.Group>
-            );
-          })}
+         <Dropdown
+            options={skillOptions}
+            placeholder="Choose/Add Skills *"
+            search
+            selection
+            fluid
+            multiple
+            required
+            allowAdditions
+            value={watch(`skills`)}
+            onAddItem={handleAddition}
+            onChange={(e, { value }) =>
+              setValue(`skills`, value)
+            }
+          />
       </Form.Field>
     );
   };

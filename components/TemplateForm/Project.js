@@ -22,12 +22,21 @@ import {
   Container,
   Input,
   Image,
+  Dropdown,
 } from "semantic-ui-react";
 import validateField from "../../utility/formValidation";
 import ErrorMessage from "./Message";
 import { Controller, useFieldArray } from "react-hook-form";
 
-const Project = ({ errors, setError, watch, control, setValue }) => {
+const Project = ({
+  errors,
+  setError,
+  watch,
+  control,
+  setValue,
+  techStackOptions,
+  setTechStackOptions,
+}) => {
   const {
     fields: projects,
     append,
@@ -50,6 +59,12 @@ const Project = ({ errors, setError, watch, control, setValue }) => {
       }
     }
   };
+  const handleAddition = (e, { value }) => {
+    setTechStackOptions((prevState) => [
+      { key: value, text: value, value },
+      ...prevState,
+    ]);
+  };
   const uploadToClient = (event) => {
     if (event.target.files && event.target.files[0]) {
       const i = event.target.files[0];
@@ -63,113 +78,20 @@ const Project = ({ errors, setError, watch, control, setValue }) => {
     return (
       <Form.Field required>
         <label>Tech Stack</label>
-        {projects.length !== 0 &&
-          projects[i].techStack.map((tsg, i_tsg) => {
-            index++;
-            return (
-              <Form.Group key={"tsg" + i_tsg} widths="equal">
-                {tsg.map((ts, i_ts) => {
-                  return (
-                    <Form.Input
-                      error={
-                        i_tsg === 0 &&
-                        errors &&
-                        errors.projects &&
-                        errors.projects[i].techStack &&
-                        errors.projects[i].techStack[i_tsg][i_ts] &&
-                        !!errors.projects[i].techStack[i_tsg][i_ts].message
-                      }
-                      name="techStack"
-                      fluid
-                      placeholder={
-                        i_tsg === 0
-                          ? `#${2 * i_tsg + i_ts + 1} *`
-                          : `#${2 * i_tsg + i_ts + 1}`
-                      }
-                      value={watch(
-                        `projects[${i}].techStack[${i_tsg}][${i_ts}]`
-                      )}
-                      onChange={(e) => {
-                        if (i_tsg === 0 && e.target.value === "") {
-                          setError(
-                            `projects.${i}.techStack[${i_tsg}][${i_ts}]`,
-                            {
-                              message: `Tech Stack #${
-                                2 * i_tsg + i_ts + 1
-                              }: Required`,
-                            }
-                          );
-                        } else if (
-                          i_tsg > 0 &&
-                          (watch(`projects[0].techStack[0][0]`) === "" ||
-                            watch(`projects[0].techStack[0][1]`) === "")
-                        ) {
-                          if (!watch(`projects[0].techStack[0][0]`)) {
-                            setError(`projects.0.techStack.0.0`, {
-                              message: `Tech Stack #1: Required`,
-                            });
-                          }
-                          if (!watch(`projects[0].techStack[0][1]`)) {
-                            setError(`projects.0.techStack.0.1`, {
-                              message: `Tech Stack #2: Required`,
-                            });
-                          }
-                        } else {
-                          setError(
-                            `projects.${i}.techStack[${i_tsg}][${i_ts}]`,
-                            ""
-                          );
-                        }
-                        setValue(
-                          `projects.${i}.techStack[${i_tsg}][${i_ts}]`,
-                          e.target.value
-                        );
-                      }}
-                    />
-                  );
-                })}
-
-                {i_tsg === 0 ? (
-                  <Popup
-                    content="Add Tech Stack"
-                    position="top right"
-                    trigger={
-                      <Button
-                        onClick={(e) => {
-                          e.preventDefault();
-                          update(i, {
-                            ...projects[i],
-                            techStack: [...projects[i].techStack, ["", ""]],
-                          });
-                        }}
-                        icon="plus"
-                        secondary
-                      />
-                    }
-                  />
-                ) : i_tsg === projects[i].techStack.length - 1 ? (
-                  <Popup
-                    content="Remove Tech Stack"
-                    position="top right"
-                    trigger={
-                      <Button
-                        onClick={(e) =>
-                          update(i, {
-                            ...projects[i],
-                            techStack: projects[i].techStack.slice(0, -1),
-                          })
-                        }
-                        icon="minus"
-                        negative
-                      />
-                    }
-                  />
-                ) : (
-                  <Button style={{ color: "#fff" }} />
-                )}
-              </Form.Group>
-            );
-          })}
+        <Dropdown
+                options={techStackOptions}
+                placeholder="Choose/Add Tech Stack"
+                search
+                selection
+                fluid
+                multiple
+                allowAdditions
+                value={watch(`projects.${i}.techStack`)}
+                onAddItem={handleAddition}
+                onChange={(e, { value }) =>
+                  setValue(`projects.${i}.techStack`, value)
+                }
+              />
       </Form.Field>
     );
   };
@@ -188,7 +110,7 @@ const Project = ({ errors, setError, watch, control, setValue }) => {
                   marginBottom: "1rem",
                 }}
               >
-                {i === 0 ? <Header as="h3">Projects</Header> : ""}
+                {i === 0 ? <Header as="h3">Projects</Header> : <div></div>}
                 {projects.length - 1 === i ? (
                   <Popup
                     content="Add Project"

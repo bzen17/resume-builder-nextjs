@@ -25,19 +25,41 @@ const Bio = ({
   watch,
   control,
   setValue,
+  languageOptions, setLanguageOptions
 }) => {
   const sumHeaderOptions = [
     { key: "1", text: "About Me", value: "About Me" },
     { key: "2", text: "Work Summary", value: "Work Summary" },
     { key: "3", text: "Professional Summary", value: "Professional Summary" },
   ];
-  useEffect(() => {
-    if (errors && errors.bio) {
-      formError(errors, formErrors, setFormErrors);
-      console.log("Rendering", errors);
-    }
-  }),
-    [];
+  const handleAddition = (e, { value }) => {
+    setLanguageOptions((prevState) => [
+      { key: value, text: value, value },
+      ...prevState,
+    ]);
+  };
+  const renderLanguageField = (e) => {
+    let index = 0;
+    return (
+      <Form.Field required>
+        <label>Language</label>
+        <Dropdown
+          options={languageOptions}
+          placeholder="Choose/Add Languages"
+          search
+          selection
+          fluid
+          multiple
+          allowAdditions
+          value={watch(`bio.languages`)}
+          onAddItem={handleAddition}
+          onChange={(e, { value }) =>
+            setValue(`bio.languages`, value)
+          }
+        />
+      </Form.Field>
+    );
+  };
   return (
     <>
       <Header as="h3">Personal Information</Header>
@@ -96,7 +118,7 @@ const Bio = ({
           )}
         />
       </Form.Group>
-
+        {renderLanguageField()}
       <Form.Group>
         <Form.Select
           error={

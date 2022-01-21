@@ -26,14 +26,14 @@ import ErrorMessage from "./Message";
 import { Controller, useFieldArray } from "react-hook-form";
 
 const Experience = ({ errors, watch, control, setValue }) => {
-  const { fields, append, remove } = useFieldArray({ name: "exp", control });
+  const { fields, append, remove } = useFieldArray({ name: "experience", control });
 
   const renderWorkExperience = (e, num) => {
     return (
       <>
-        {fields.map((exp, i) => {
+        {fields.map((experience, i) => {
           return (
-            <div key={i} id={`exp${i + 1}`}>
+            <div key={i} id={`experience${i + 1}`}>
               {i !== 0 ? <hr style={{ marginBottom: "1rem" }} /> : ""}
 
               <div
@@ -43,13 +43,17 @@ const Experience = ({ errors, watch, control, setValue }) => {
                   marginBottom: "1rem",
                 }}
               >
-                {i === 0 ? <Header as="h3">Work Experience</Header> : ""}
+                {i === 0 ? (
+                  <Header as="h3">Work Experience</Header>
+                ) : (
+                  <div></div>
+                )}
                 {fields.length - 1 === i ? (
                   <Popup
                     content="Add Work Experience"
                     position="left center"
                     trigger={
-                      <a href={`#exp${fields.length}`}>
+                      <a href={`#experience${fields.length}`}>
                         <Button
                           onClick={(e) =>
                             append({
@@ -91,15 +95,16 @@ const Experience = ({ errors, watch, control, setValue }) => {
                     <Grid.Column>
                       <Form.Group widths="equal">
                         <Controller
-                          name={`exp.${i}.org`}
+                          name={`experience.${i}.org`}
                           control={control}
                           render={({ field }) => (
                             <Form.Input
                               error={
                                 errors &&
-                                errors.exp &&
-                                errors.exp[i].org &&
-                                !!errors.exp[i].org.message
+                                errors.experience &&
+                                errors.experience[i] &&
+                                errors.experience[i].org &&
+                                !!errors.experience[i].org.message
                               }
                               name="org"
                               required
@@ -111,15 +116,16 @@ const Experience = ({ errors, watch, control, setValue }) => {
                           )}
                         />
                         <Controller
-                          name={`exp.${i}.title`}
+                          name={`experience.${i}.title`}
                           control={control}
                           render={({ field }) => (
                             <Form.Input
                               error={
                                 errors &&
-                                errors.exp &&
-                                errors.exp[i].title &&
-                                !!errors.exp[i].title.message
+                                errors.experience &&
+                                errors.experience[i] &&
+                                errors.experience[i].title &&
+                                !!errors.experience[i].title.message
                               }
                               name="title"
                               required
@@ -141,26 +147,28 @@ const Experience = ({ errors, watch, control, setValue }) => {
                               required
                               error={
                                 errors &&
-                                errors.exp &&
-                                errors.exp[i].startMonth &&
-                                errors.exp[i].startYear &&
-                                !!errors.exp[i].startMonth.message |
-                                  !!errors.exp[i].startYear.message
+                                errors.experience &&
+                                errors.experience[i] &&
+                                errors.experience[i].startMonth &&
+                                errors.experience[i].startYear &&
+                                !!errors.experience[i].startMonth.message |
+                                  !!errors.experience[i].startYear.message
                               }
                             >
                               <label>Start Date</label>
                               <Form.Group widths="equal">
                                 <Controller
-                                  name={`exp.${i}.startMonth`}
+                                  name={`experience.${i}.startMonth`}
                                   control={control}
                                   render={({ field }) => {
                                     return (
                                       <Form.Input
                                         error={
                                           errors &&
-                                          errors.exp &&
-                                          errors.exp[i].startMonth &&
-                                          !!errors.exp[i].startMonth.message
+                                          errors.experience &&
+                                          errors.experience[i] &&
+                                          errors.experience[i].startMonth &&
+                                          !!errors.experience[i].startMonth.message
                                         }
                                         name="startMonth"
                                         required
@@ -172,16 +180,17 @@ const Experience = ({ errors, watch, control, setValue }) => {
                                   }}
                                 />
                                 <Controller
-                                  name={`exp.${i}.startYear`}
+                                  name={`experience.${i}.startYear`}
                                   control={control}
                                   render={({ field }) => {
                                     return (
                                       <Form.Input
                                         error={
                                           errors &&
-                                          errors.exp &&
-                                          errors.exp[i].startYear &&
-                                          !!errors.exp[i].startYear.message
+                                          errors.experience &&
+                                          errors.experience[i] &&
+                                          errors.experience[i].startYear &&
+                                          !!errors.experience[i].startYear.message
                                         }
                                         name="startYear"
                                         required
@@ -200,26 +209,28 @@ const Experience = ({ errors, watch, control, setValue }) => {
                               required
                               error={
                                 errors &&
-                                errors.exp &&
-                                errors.exp[i].endMonth &&
-                                errors.exp[i].endYear &&
-                                !!errors.exp[i].endYear.message |
-                                  !!errors.exp[i].endMonth.message
+                                errors.experience &&
+                                errors.experience[i] &&
+                                errors.experience[i].endMonth &&
+                                errors.experience[i].endYear &&
+                                !!errors.experience[i].endYear.message |
+                                  !!errors.experience[i].endMonth.message
                               }
                             >
                               <label>End Date</label>
                               <Form.Group widths="equal">
                                 <Controller
-                                  name={`exp.${i}.endMonth`}
+                                  name={`experience.${i}.endMonth`}
                                   control={control}
                                   render={({ field }) => {
                                     return (
                                       <Form.Input
                                         error={
                                           errors &&
-                                          errors.exp &&
-                                          errors.exp[i].endMonth &&
-                                          !!errors.exp[i].endMonth.message
+                                          errors.experience &&
+                                          errors.experience[i] &&
+                                          errors.experience[i].endMonth &&
+                                          !!errors.experience[i].endMonth.message
                                         }
                                         name="endMonth"
                                         required
@@ -231,16 +242,17 @@ const Experience = ({ errors, watch, control, setValue }) => {
                                   }}
                                 />
                                 <Controller
-                                  name={`exp.${i}.endYear`}
+                                  name={`experience.${i}.endYear`}
                                   control={control}
                                   render={({ field }) => {
                                     return (
                                       <Form.Input
                                         error={
                                           errors &&
-                                          errors.exp &&
-                                          errors.exp[i].endYear &&
-                                          !!errors.exp[i].endYear.message
+                                          errors.experience &&
+                                          errors.experience[i] &&
+                                          errors.experience[i].endYear &&
+                                          !!errors.experience[i].endYear.message
                                         }
                                         name="endYear"
                                         required
@@ -260,16 +272,17 @@ const Experience = ({ errors, watch, control, setValue }) => {
                   </Grid.Row>
                 </Grid>
                 <Controller
-                  name={`exp.${i}.desc`}
+                  name={`experience.${i}.desc`}
                   control={control}
                   render={({ field }) => {
                     return (
                       <Form.TextArea
                         error={
                           errors &&
-                          errors.exp &&
-                          errors.exp[i].desc &&
-                          !!errors.exp[i].desc.message
+                          errors.experience &&
+                          errors.experience[i] &&
+                          errors.experience[i].desc &&
+                          !!errors.experience[i].desc.message
                         }
                         name="desc"
                         label="Description"

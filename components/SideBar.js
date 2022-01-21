@@ -12,13 +12,107 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import React, { useState } from "react";
-import { Grid, Menu, Label } from "semantic-ui-react";
+import React, { useState, useEffect } from "react";
+import { Grid, Menu, Label, Popup, List, Icon } from "semantic-ui-react";
 
-const SideBar = ({ activeItem, setActiveItem }) => {
+const SideBar = ({ activeItem, setActiveItem, errors, formState }) => {
   const handleItemClick = (e, { name }) => {
     setActiveItem(name);
   };
+  const initErrorCount = {
+    bio: 0,
+    experience: 0,
+    expertise: 0,
+    skills: 0,
+    projects: 0,
+    certifications: 0,
+    contact: 0,
+  };
+  const [errCount, setErrCount] = useState(initErrorCount);
+  useEffect(() => {
+    for (const [k, v] of Object.entries(errors)){
+      if((k==='bio'||k==='contact')&&Object.values(v).length>0){
+        setErrCount(prevState=>{return {...prevState,[k]:Object.values(v).length}})
+      } else {
+        let count = 0;
+        Object.values(v).map((err, index) => {
+          if (err !== undefined) {
+            count += Object.keys(err).length;
+            setErrCount({ ...errCount, [k]: count });
+          }
+        });
+      }
+    }
+  }, [formState]);
+  const renderSideBarErrorLabel = (tabName) => {
+      if((tabName==='bio'||tabName==='contact')){
+        return (
+          <>
+            {errors && errors[tabName] ? (
+            <Popup
+              position="bottom left"
+              trigger={<Label color="orange">{errCount[tabName]}</Label>}
+              relaxed
+              flowing
+              hoverable
+            >
+              <List relaxed divided size="small">
+                {Object.values(errors[tabName]).map((error, index) => {
+                  return <List.Item key={index}><Icon name="close" color="red" />{error.message}</List.Item>;
+                })}
+              </List>
+            </Popup>
+          ) : null}
+          </>
+        )
+      } else {
+        return (
+          <>
+          {errors && errors[tabName] ? (
+          <Popup
+            position="bottom left"
+            trigger={<Label color="orange">{errCount[tabName]}</Label>}
+            relaxed
+            flowing
+            hoverable
+          >
+            <List relaxed divided size="small">
+              {Object.values(errors[tabName]).map((err, index) => {
+                return (
+                  <div key={index}>
+                    <List.Item>
+                      <List.Content>
+                        <List.Header>
+                          <srong>
+                            <b>Experience #{index + 1}</b>
+                          </srong>
+                        </List.Header>
+                        <List.List>
+                          {err !== undefined
+                            ? Object.values(err).map((error, i) => {
+                                return (
+                                  <>
+                                    <List.Item key={i}>
+                                      <Icon name="close" color="red" />{" "}
+                                      {error.message}
+                                    </List.Item>
+                                  </>
+                                );
+                              })
+                            : ""}
+                        </List.List>
+                      </List.Content>
+                    </List.Item>
+                  </div>
+                );
+              })}
+            </List>
+          </Popup>
+        ) : null}
+          </>
+        )
+      }
+  }
   return (
     <Grid.Column width={4}>
       <Menu fluid vertical tabular pointing>
@@ -28,7 +122,7 @@ const SideBar = ({ activeItem, setActiveItem }) => {
           active={activeItem === "bio"}
           onClick={handleItemClick}
         >
-          <Label color="orange">1</Label>
+          {renderSideBarErrorLabel("bio")}
           Bio
         </Menu.Item>
         <Menu.Item
@@ -37,7 +131,7 @@ const SideBar = ({ activeItem, setActiveItem }) => {
           active={activeItem === "experience"}
           onClick={handleItemClick}
         >
-          <Label color="orange">1</Label>
+          {renderSideBarErrorLabel("experience")}
           Experience
         </Menu.Item>
         <Menu.Item
@@ -46,7 +140,7 @@ const SideBar = ({ activeItem, setActiveItem }) => {
           active={activeItem === "skills"}
           onClick={handleItemClick}
         >
-          <Label color="orange">1</Label>
+         {renderSideBarErrorLabel("expertise")}
           Skills
         </Menu.Item>
         <Menu.Item
@@ -55,7 +149,7 @@ const SideBar = ({ activeItem, setActiveItem }) => {
           active={activeItem === "projects"}
           onClick={handleItemClick}
         >
-          <Label color="orange">1</Label>
+          {renderSideBarErrorLabel("projects")}
           Projects
         </Menu.Item>
         <Menu.Item
@@ -64,17 +158,8 @@ const SideBar = ({ activeItem, setActiveItem }) => {
           active={activeItem === "certifications"}
           onClick={handleItemClick}
         >
-          <Label color="orange">1</Label>
+          {renderSideBarErrorLabel("certifications")}
           Certifications
-        </Menu.Item>
-        <Menu.Item
-          key="language"
-          name="languages"
-          active={activeItem === "languages"}
-          onClick={handleItemClick}
-        >
-          <Label color="orange">1</Label>
-          Languages
         </Menu.Item>
         <Menu.Item
           key="contact"
@@ -82,7 +167,7 @@ const SideBar = ({ activeItem, setActiveItem }) => {
           active={activeItem === "contact"}
           onClick={handleItemClick}
         >
-          <Label color="orange">1</Label>
+         {renderSideBarErrorLabel("contact")}
           Contact
         </Menu.Item>
       </Menu>
