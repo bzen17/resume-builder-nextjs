@@ -40,12 +40,12 @@ const SideBar = ({ activeItem, setActiveItem, errors, formState }) => {
         Object.values(v).map((err, index) => {
           if (err !== undefined) {
             count += Object.keys(err).length;
-            setErrCount({ ...errCount, [k]: count });
+            setErrCount(prevState=>{return { ...prevState, [k]: count }});
           }
         });
       }
     }
-  }, [formState]);
+  }, [formState,errors]);
   const renderSideBarErrorLabel = (tabName) => {
     if (tabName === "bio" || tabName === "contact") {
       return (

@@ -158,7 +158,6 @@ const Experience = ({ errors, watch, control, setValue, setTotal }) => {
                           <Grid.Column>
                             <Form.Field
                               required
-                              required
                               error={
                                 errors &&
                                 errors.experience &&

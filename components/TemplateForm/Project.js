@@ -277,6 +277,7 @@ const Project = ({
                     <Grid.Column width={10} textAlign="center">
                       <Image
                         src={watch(`projects.${i}..image.objURL`)}
+                        alt={`project${i + 1}`}
                         as="a"
                         size="medium"
                         href={watch(`projects.${i}..image.objURL`)}
