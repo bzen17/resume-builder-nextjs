@@ -32,7 +32,7 @@ export default function Home() {
   const [total, setTotal] = useState(27);
   useEffect(() => {
     console.log("Errors1", errors);
-  }, [formState]);
+  }, [formState,errors]);
 
   return (
     <Layout>
