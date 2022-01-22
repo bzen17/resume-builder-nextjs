@@ -36,7 +36,7 @@ const saveFile = async (file) => {
   return;
 };
 
-export default (req, res) => {
+const fileRequest = (req, res) => {
   req.method === "POST"
     ? post(req, res)
     : req.method === "PUT"
@@ -47,3 +47,4 @@ export default (req, res) => {
     ? console.log("GET")
     : res.status(404).send("");
 };
+export default fileRequest;

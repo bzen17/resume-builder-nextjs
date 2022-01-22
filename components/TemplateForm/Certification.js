@@ -189,6 +189,7 @@ const Certifications = ({ errors, watch, control, setValue, setTotal }) => {
                     <Grid.Column width={10} textAlign="center">
                       <Image
                         src={watch(`certifications.${i}.image.objURL`)}
+                        alt={`project${i + 1}`}
                         as="a"
                         size="medium"
                         href={watch(`certifications.${i}.image.objURL`)}
