@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/alt-text */
 // Copyright 2022 Ayan Banerjee
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -277,7 +278,6 @@ const Project = ({
                     <Grid.Column width={10} textAlign="center">
                       <Image
                         src={watch(`projects.${i}..image.objURL`)}
-                        alt={`project${i + 1}`}
                         as="a"
                         size="medium"
                         href={watch(`projects.${i}..image.objURL`)}

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 // Copyright 2022 Ayan Banerjee
 // 
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -66,7 +67,7 @@ const ProgressBar = ({watch,errors,total})=>{
             })
         }
         setValue(count);
-    },[watch,errors])
+    },[watch()])
     return (
         <Progress progress="percent" value={value} total={total} precision={0} indicating />
     )
