@@ -13,7 +13,6 @@
 // limitations under the License.
 
 import Cors from "cors";
-import initMiddleware from "../utility/init-mw";
 const pdf = require("html-pdf");
 const pdfTemplate = require("../../utility/docTemplate");
 
