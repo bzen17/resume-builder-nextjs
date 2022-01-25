@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 // Copyright 2022 Ayan Banerjee
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
