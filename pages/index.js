@@ -9,6 +9,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { schema, initFormData } from "../components/TemplateForm/schema";
 import { useForm, useFieldArray } from "react-hook-form";
 import ProgressBar from "../components/ProgressBar";
+import "semantic-ui-css/semantic.min.css";
 
 export default function Home() {
   const [activeItem, setActiveItem] = useState("bio");
@@ -36,15 +37,19 @@ export default function Home() {
 
   return (
     <Layout>
-      <ProgressBar watch={watch} errors={errors} total={total} />
-      <Grid>
-        <SideBar
+      <Grid centered>
+      <Grid.Row>
+      <Grid.Column width={4} style={{marginTop:'6rem'}}>
+      <SideBar
           activeItem={activeItem}
           setActiveItem={setActiveItem}
           errors={errors}
           formState={formState}
         />
+        </Grid.Column>
         <Grid.Column stretched width={12}>
+        
+        <ProgressBar watch={watch} errors={errors} total={total} />
           <Segment raised>
             <TemplateForm
               activeItem={activeItem}
@@ -60,6 +65,7 @@ export default function Home() {
             />
           </Segment>
         </Grid.Column>
+        </Grid.Row>
       </Grid>
     </Layout>
   );

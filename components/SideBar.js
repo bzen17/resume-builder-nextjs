@@ -121,7 +121,7 @@ const SideBar = ({ activeItem, setActiveItem, errors, formState }) => {
     }
   };
   return (
-    <Grid.Column width={4}>
+    
       <Menu fluid vertical tabular pointing>
         <Menu.Item
           key="bio"
@@ -178,7 +178,7 @@ const SideBar = ({ activeItem, setActiveItem, errors, formState }) => {
           Contact
         </Menu.Item>
       </Menu>
-    </Grid.Column>
+    
   );
 };
 

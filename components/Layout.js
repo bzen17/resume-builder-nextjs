@@ -40,7 +40,7 @@ export default function Layout({ children }) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <Header />
-      <Container style={{ padding: "0 5rem" }}>{children}</Container>
+      <Container style={{ padding: "0 5rem",height:'100vh' }}>{children}</Container>
     </Container>
   );
 }

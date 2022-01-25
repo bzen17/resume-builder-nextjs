@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/alt-text */
 // Copyright 2022 Ayan Banerjee
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -131,7 +132,7 @@ const Project = ({
                               url: "",
                               desc: "",
                               image: "",
-                              techStack: [["", ""]],
+                              techStack: [],
                             });
                           }}
                           icon="plus"
@@ -261,7 +262,7 @@ const Project = ({
                 <Grid>
                   <Grid.Row>
                     <Grid.Column width={6} verticalAlign="top">
-                      <Input
+                      <Form.Input
                         error={
                           errors &&
                           errors.projects &&
@@ -271,16 +272,17 @@ const Project = ({
                         }
                         type="file"
                         name="image"
+                        label="Project Image"
+                        required
                         onChange={(e) => onImgChange(e, i)}
                       />
                     </Grid.Column>
                     <Grid.Column width={10} textAlign="center">
                       <Image
-                        src={watch(`projects.${i}..image.objURL`)}
-                        alt={`project${i + 1}`}
+                        src={watch(`projects.${i}.image.objURL`)}
                         as="a"
                         size="medium"
-                        href={watch(`projects.${i}..image.objURL`)}
+                        href={watch(`projects.${i}.image.objURL`)}
                         target="_blank"
                       />
                     </Grid.Column>

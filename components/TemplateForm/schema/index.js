@@ -39,7 +39,17 @@ export const schema = yup
       about: yup
         .string()
         .required("About:  Required")
-        .max(300, "About:  Cannot be more than 300 characters"),
+        .max(1000, "About:  Cannot be more than 1000 characters"),
+      image: yup
+        .object()
+        .shape({
+          URL: yup.mixed(),
+          objURL: yup
+            .string()
+            .matches(/^blob:https?:\/\//, "Image:  Invalid Image"),
+        })
+        .nullable(true)
+        .required("Image:  Required"),
     }),
     experience: yup.array().of(
       yup.object().shape({
@@ -113,11 +123,12 @@ export const schema = yup
         image: yup
           .object()
           .shape({
-            URL: yup.object(),
+            URL: yup.mixed(),
             objURL: yup
               .string()
               .matches(/^blob:https?:\/\//, "Image:  Invalid Image"),
           })
+          .nullable(true)
           .required("Image:  Required"),
         techStack: yup
           .array()
@@ -139,11 +150,12 @@ export const schema = yup
         image: yup
           .object()
           .shape({
-            URL: yup.object(),
+            URL: yup.mixed(),
             objURL: yup
               .string()
               .matches(/^blob:https?:\/\//, "Image:  Invalid Image"),
           })
+          .nullable(true)
           .required("Image:  Required"),
       })
     ),
@@ -178,6 +190,7 @@ export const initFormData = {
     sumHeader: "",
     about: "",
     role: "",
+    image: ""
   },
   experience: [
     {

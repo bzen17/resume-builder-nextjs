@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/alt-text */
 // Copyright 2022 Ayan Banerjee
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -174,7 +175,7 @@ const Certifications = ({ errors, watch, control, setValue, setTotal }) => {
                 <Grid>
                   <Grid.Row>
                     <Grid.Column width={6} verticalAlign="top">
-                      <Input
+                      <Form.Input
                         error={
                           errors &&
                           errors.certifications &&
@@ -183,13 +184,14 @@ const Certifications = ({ errors, watch, control, setValue, setTotal }) => {
                         }
                         type="file"
                         name="image"
+                        label="Certificate Image"
+                        required
                         onChange={(e) => onImgChange(e, i)}
                       />
                     </Grid.Column>
                     <Grid.Column width={10} textAlign="center">
                       <Image
                         src={watch(`certifications.${i}.image.objURL`)}
-                        alt={`project${i + 1}`}
                         as="a"
                         size="medium"
                         href={watch(`certifications.${i}.image.objURL`)}
