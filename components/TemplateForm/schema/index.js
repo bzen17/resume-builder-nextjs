@@ -190,7 +190,7 @@ export const initFormData = {
     sumHeader: "",
     about: "",
     role: "",
-    image: ""
+    image: "",
   },
   experience: [
     {

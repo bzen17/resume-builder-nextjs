@@ -1,33 +1,35 @@
 // Copyright 2022 Ayan Banerjee
-// 
+//
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
 // You may obtain a copy of the License at
-// 
+//
 //     http://www.apache.org/licenses/LICENSE-2.0
-// 
+//
 // Unless required by applicable law or agreed to in writing, software
 // distributed under the License is distributed on an "AS IS" BASIS,
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import React,{useEffect,useState}  from "react";
+import React, { useEffect, useState } from "react";
 
-const HtmlTemplate = () =>{
+const HtmlTemplate = () => {
   const [data, setData] = useState(null);
   useEffect(() => {
-    localStorage.getItem('userData')?setData(JSON.parse(localStorage.getItem('userData'))):'';
-  } , []);
+    localStorage.getItem("userData")
+      ? setData(JSON.parse(localStorage.getItem("userData")))
+      : "";
+  }, []);
   function sliceIntoChunks(arr, chunkSize) {
     const res = [];
     for (let i = 0; i < arr.length; i += chunkSize) {
-        const chunk = arr.slice(i, i + chunkSize);
-        res.push(chunk);
+      const chunk = arr.slice(i, i + chunkSize);
+      res.push(chunk);
     }
     return res;
-}
-  
+  }
+
   return `
   <!DOCTYPE html>
 <!-- saved from url=(0049) -->
@@ -40,7 +42,7 @@ const HtmlTemplate = () =>{
     <link href="/sample/htmlTemplate/css" rel="stylesheet" />
     <link href="/sample/htmlTemplate/yellow-black.css" rel="stylesheet" />
     <link href="/sample/htmlTemplate/preview.css" rel="stylesheet" />
-    <title>${data?data.bio.fn+' '+data.bio.ln:''} | Portfolio</title>
+    <title>${data ? data.bio.fn + " " + data.bio.ln : ""} | Portfolio</title>
   </head>
   <body
     class="with-header position-relative"
@@ -119,10 +121,14 @@ const HtmlTemplate = () =>{
         </li>
         <li class="sections-nav-item">
           <div class="sections-nav-info">
-          ${data&&data.contact?`
+          ${
+            data && data.contact
+              ? `
           <a href="${data.contact.email}">${data.contact.email}</a><br />
           <a href="tel:${data.contact.phone}">${data.contact.phone}</a>
-          `:''}
+          `
+              : ""
+          }
           </div>
         </li>
         
@@ -139,17 +145,17 @@ const HtmlTemplate = () =>{
               <div class="section-body">
                 <div class="jumbotron jumbotron-fluid pt-6 pt-lg-8 pb-0 mb-0">
                   <img
-                    src="${data&&data.bio?data.bio.image.objURL:''}"
+                    src="${data && data.bio ? data.bio.image.objURL : ""}"
                     class="jumbotron-img animation-translate animation-item-1"
                     alt="Avatar"
                   />
                   <h1
                     class="display-1 display-animated display-animated-in animation-translate animation-item-2"
                   >
-                  ${data?data.bio.fn+'<br />'+data.bio.ln:''}
+                  ${data ? data.bio.fn + "<br />" + data.bio.ln : ""}
                   </h1>
                   <p class="lead animation-translate animation-item-3">
-                  ${data?data.bio.role:''}
+                  ${data ? data.bio.role : ""}
                   </p>
                 </div>
               </div>
@@ -174,7 +180,7 @@ const HtmlTemplate = () =>{
                     <article
                       class="article animation-translate animation-item-2"
                     >
-                    ${data?data.bio.about:''}
+                    ${data ? data.bio.about : ""}
                     </article>
                     
                    
@@ -183,7 +189,9 @@ const HtmlTemplate = () =>{
               </div>
               <div>
                     <h5>I speak:</h3>
-                    <p className="card-tags">${data&&data.bio&&data.bio.languages.join(' - ')}</p>
+                    <p className="card-tags">${
+                      data && data.bio && data.bio.languages.join(" - ")
+                    }</p>
                     </div>
               <div class="section-footer animation-translate animation-item-3">
                 <a class="section-next goto-section" href="#section-03">
@@ -201,16 +209,25 @@ const HtmlTemplate = () =>{
                   Experiences
                 </h2>
                 <div class="timeline timeline-animated">
-                ${data&&data.experience?data.experience.map((item, index) => {
-                  return (
-                  `<div className="timeline-item" key=${'experience'+index}>
-                  <span className="timeline-date">${item.startMonth+'/'+item.startYear}&nbsp;–&nbsp;${item.endMonth+'/'+item.endYear}</span>
+                ${
+                  data && data.experience
+                    ? data.experience
+                        .map((item, index) => {
+                          return `<div className="timeline-item" key=${
+                            "experience" + index
+                          }>
+                  <span className="timeline-date">${
+                    item.startMonth + "/" + item.startYear
+                  }&nbsp;–&nbsp;${item.endMonth + "/" + item.endYear}</span>
                   <h3 className="timeline-title">${item.org}</h3>
                   <p className="timeline-text">
                     ${item.title}
                   </p>
-                </div>`)
-                }).join(''):''}
+                </div>`;
+                        })
+                        .join("")
+                    : ""
+                }
                 </div>
               </div>
               <div class="section-footer animation-translate animation-item-2">
@@ -228,27 +245,33 @@ const HtmlTemplate = () =>{
                 >
                   My Expertise
                 </h2>
-                ${data&&data.expertise?sliceIntoChunks(data.expertise,3).map((row, i) => {
-                  return (
-                    `<div className="row animation-translate animation-item-2">
-                      ${row.map((col, index) => {
-                        return (
-                          `<div className="col-12 col-md-4">
+                ${
+                  data && data.expertise
+                    ? sliceIntoChunks(data.expertise, 3)
+                        .map((row, i) => {
+                          return `<div className="row animation-translate animation-item-2">
+                      ${row
+                        .map((col, index) => {
+                          return `<div className="col-12 col-md-4">
                           <div className="card card">
                             <div className="card-body">
-                              <strong className="card-counter">${index+1}</strong>
+                              <strong className="card-counter">${
+                                index + 1
+                              }</strong>
                               <h3 className="card-title">${col.title}</h3>
                               <p className="card-text">
                                 ${col.desc}
                               </p>
                             </div>
                           </div>
-                        </div>`
-                        )
-                      }).join('')}
-                    </div>`
-                  )
-                }).join(''):''}
+                        </div>`;
+                        })
+                        .join("")}
+                    </div>`;
+                        })
+                        .join("")
+                    : ""
+                }
               </div>
               <div class="section-footer animation-translate animation-item-3">
                 <a class="section-next goto-section" href="#section-05">
@@ -265,12 +288,14 @@ const HtmlTemplate = () =>{
                 >
                   Skills
                 </h2>
-                ${data&&data.skills?sliceIntoChunks(data.skills,2).map((row, i) => {
-                  return (
-                    `<div className="row animation-translate animation-item-2">
-                      ${row.map((col, index) => {
-                        return (
-                          `<div className="col-12 col-md-6">
+                ${
+                  data && data.skills
+                    ? sliceIntoChunks(data.skills, 2)
+                        .map((row, i) => {
+                          return `<div className="row animation-translate animation-item-2">
+                      ${row
+                        .map((col, index) => {
+                          return `<div className="col-12 col-md-6">
                           <strong className="progress-label">${col}</strong>
                           <div className="progress progress-animated mb-9">
                             <div
@@ -282,12 +307,14 @@ const HtmlTemplate = () =>{
                               aria-valuemax="100"
                             ></div>
                           </div>
-                          </div>`
-                        )
-                      }).join('')}
-                    </div>`
-                  )
-                }).join(''):''}
+                          </div>`;
+                        })
+                        .join("")}
+                    </div>`;
+                        })
+                        .join("")
+                    : ""
+                }
               </div>
               <div class="section-footer animation-translate animation-item-3">
                 <a class="section-next goto-section" href="#section-06">
@@ -304,13 +331,17 @@ const HtmlTemplate = () =>{
                 >
                   Projects
                 </h2>
-                ${data&&data.projects?sliceIntoChunks(data.projects,3).map((row, i) => {
-                  return (
-                    `<div className="row animation-translate animation-item-2">
-                      ${row.map((col, index) => {
-                        return (
-                          `<div className="col-12 col-md-4">
-                          <a className="card" href="#modal-project-${index+1}" data-toggle="modal">
+                ${
+                  data && data.projects
+                    ? sliceIntoChunks(data.projects, 3)
+                        .map((row, i) => {
+                          return `<div className="row animation-translate animation-item-2">
+                      ${row
+                        .map((col, index) => {
+                          return `<div className="col-12 col-md-4">
+                          <a className="card" href="#modal-project-${
+                            index + 1
+                          }" data-toggle="modal">
                             <img
                               className="card-img-top"
                               src="${col.image.objURL}"
@@ -318,16 +349,22 @@ const HtmlTemplate = () =>{
                             />
                             <div className="card-body">
                               <h3 className="card-title">${col.name}</h3>
-                              <h4 className="card-subtitle">${col.shortDesc}</h4>
-                               <p className="card-tags">${col.techStack.join(' - ')}</p>
+                              <h4 className="card-subtitle">${
+                                col.shortDesc
+                              }</h4>
+                               <p className="card-tags">${col.techStack.join(
+                                 " - "
+                               )}</p>
                             </div>
                           </a>
-                        </div>`
-                        )
-                      }).join('')}
-                    </div>`
-                  )
-                }).join(''):''}
+                        </div>`;
+                        })
+                        .join("")}
+                    </div>`;
+                        })
+                        .join("")
+                    : ""
+                }
               </div>
               <div class="section-footer animation-translate animation-item-3">
                 <a class="section-next goto-section" href="#section-07">
@@ -344,12 +381,14 @@ const HtmlTemplate = () =>{
                 >
                   Certifications
                 </h2>
-                ${data&&data.certifications?sliceIntoChunks(data.certifications,3).map((row, i) => {
-                  return (
-                    `<div className="row animation-translate animation-item-2">
-                    ${row.map((col, index) => {
-                      return (
-                        `<div className="col-12 col-md-4">
+                ${
+                  data && data.certifications
+                    ? sliceIntoChunks(data.certifications, 3)
+                        .map((row, i) => {
+                          return `<div className="row animation-translate animation-item-2">
+                    ${row
+                      .map((col, index) => {
+                        return `<div className="col-12 col-md-4">
                         <a className="card" href="${col.url}" target="_blank">
                           <img
                             className="card-img-top"
@@ -360,12 +399,14 @@ const HtmlTemplate = () =>{
                             <h3 className="card-title">${col.name}</h3>
                           </div>
                         </a>
-                      </div>`
-                      )
-                    }).join('')}
-                    </div>`
-                  )
-              }).join(''):''}
+                      </div>`;
+                      })
+                      .join("")}
+                    </div>`;
+                        })
+                        .join("")
+                    : ""
+                }
               </div>
               <div class="section-footer animation-translate animation-item-3">
                 <a class="section-next goto-section" href="#section-08">
@@ -386,26 +427,55 @@ const HtmlTemplate = () =>{
                   <div class="col-12 col-md-4">
                     <div class="contact">
                       <strong class="contact-label">Stay in touch</strong>
-                      ${data&&data.contact?`
+                      ${
+                        data && data.contact
+                          ? `
                       <a href="${data.contact.email}">${data.contact.email}</a><br />
                       <a href="tel:${data.contact.phone}">${data.contact.phone}</a>
-                      `:''}
+                      `
+                          : ""
+                      }
                     </div>
                   </div>
-                  ${data&&data.contact&&(data.contact.website||data.contact.linkedin||data.contact.git||data.contact.twitter)?`
+                  ${
+                    data &&
+                    data.contact &&
+                    (data.contact.website ||
+                      data.contact.linkedin ||
+                      data.contact.git ||
+                      data.contact.twitter)
+                      ? `
                   <div class="col-12 col-md-4">
                     <div class="contact">
                       <strong class="contact-label">Social</strong>
-                      ${data.contact.website?`<a href="${data.contact.website}" target="_blank">Website</a><br />`:''}
-                      ${data.contact.linkedin?`<a href="${data.contact.linkedin}" target="_blank">LinkedIn</a><br />`:''}
-                      ${data.contact.git?`<a href="${data.contact.git}" target="_blank">Git</a><br />`:''}
-                      ${data.contact.twitter?`<a href="${data.contact.twitter}" target="_blank">Twitter</a><br />`:''}
+                      ${
+                        data.contact.website
+                          ? `<a href="${data.contact.website}" target="_blank">Website</a><br />`
+                          : ""
+                      }
+                      ${
+                        data.contact.linkedin
+                          ? `<a href="${data.contact.linkedin}" target="_blank">LinkedIn</a><br />`
+                          : ""
+                      }
+                      ${
+                        data.contact.git
+                          ? `<a href="${data.contact.git}" target="_blank">Git</a><br />`
+                          : ""
+                      }
+                      ${
+                        data.contact.twitter
+                          ? `<a href="${data.contact.twitter}" target="_blank">Twitter</a><br />`
+                          : ""
+                      }
                     </div>
-                  </div>`:''}
+                  </div>`
+                      : ""
+                  }
                   <div class="col-12 col-md-4">
                     <div class="contact">
                       <strong class="contact-label">Address</strong>
-                      ${data&&data.contact?data.contact.address:''}
+                      ${data && data.contact ? data.contact.address : ""}
                       
                     </div>
                   </div>
@@ -804,8 +874,7 @@ const HtmlTemplate = () =>{
     data-grammarly-shadow-root="true"
   ></grammarly-desktop-integration>
 </html>
-`
+`;
+};
 
-}
-
-export default HtmlTemplate
+export default HtmlTemplate;

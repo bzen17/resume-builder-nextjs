@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import React, { useState, useRef, useEffect } from "react";
-import { Button, Grid, Form, Message, Icon,Modal } from "semantic-ui-react";
+import { Button, Grid, Form, Message, Icon, Modal } from "semantic-ui-react";
 import Bio from "./Bio";
 import Experience from "./Experience";
 import Project from "./Project";
@@ -83,24 +83,24 @@ const TemplateForm = ({
   }, [errors]);
   console.log("Data", watch());
   const onSubmit = (data) => {
-    console.log("data", data)
-    localStorage.setItem('userData', JSON.stringify(data))  
-  }
+    console.log("data", data);
+    localStorage.setItem("userData", JSON.stringify(data));
+  };
   function exampleReducer(state, action) {
     switch (action.type) {
-      case 'close':
-        return { open: false }
-      case 'open':
-        return { open: true, size: action.size }
+      case "close":
+        return { open: false };
+      case "open":
+        return { open: true, size: action.size };
       default:
-        throw new Error('Unsupported action...')
+        throw new Error("Unsupported action...");
     }
   }
   const [state, dispatch] = React.useReducer(exampleReducer, {
     open: false,
     size: undefined,
-  })
-  const { open, size } = state
+  });
+  const { open, size } = state;
   const formRef = useRef(null);
   const renderForm = () => {
     if (activeItem === "bio") {
@@ -194,7 +194,7 @@ const TemplateForm = ({
             icon
             labelPosition="left"
             positive
-            onClick={(e) => dispatch({ type: 'open', size: 'tiny' })}//formRef.current.focus()}
+            onClick={(e) => dispatch({ type: "open", size: "tiny" })} //formRef.current.focus()}
           >
             <Icon name="settings" />
             Generate
@@ -207,33 +207,41 @@ const TemplateForm = ({
           />
         </Button.Group>
         <Modal
-        size={size}
-        open={open}
-        closeIcon
-        onClose={() => dispatch({ type: 'close' })}
-      >
-        <Modal.Header>Confirmation</Modal.Header>
-        <Modal.Content>
-          <p>Would you like to preview your HTML Resume before Confirming?</p>
-        </Modal.Content>
-        <Modal.Actions>
-          <Button animated='vertical' onClick={() => {
-            dispatch({ type: 'close' });
-            localStorage.setItem('userData', JSON.stringify(watch())) 
-            window.open( 
-              "/preview", "_blank");}}>
-            <Button.Content visible>Preview</Button.Content>
-            <Button.Content hidden>
-              <Icon name='eye' />
-            </Button.Content>
-          </Button>
-          <Button positive onClick={() => {dispatch({ type: 'close' });return formRef.current.focus();}}>
-            Confirm
-          </Button>
-        </Modal.Actions>
-      </Modal>
+          size={size}
+          open={open}
+          closeIcon
+          onClose={() => dispatch({ type: "close" })}
+        >
+          <Modal.Header>Confirmation</Modal.Header>
+          <Modal.Content>
+            <p>Would you like to preview your HTML Resume before Confirming?</p>
+          </Modal.Content>
+          <Modal.Actions>
+            <Button
+              animated="vertical"
+              onClick={() => {
+                dispatch({ type: "close" });
+                localStorage.setItem("userData", JSON.stringify(watch()));
+                window.open("/preview", "_blank");
+              }}
+            >
+              <Button.Content visible>Preview</Button.Content>
+              <Button.Content hidden>
+                <Icon name="eye" />
+              </Button.Content>
+            </Button>
+            <Button
+              positive
+              onClick={() => {
+                dispatch({ type: "close" });
+                return formRef.current.focus();
+              }}
+            >
+              Confirm
+            </Button>
+          </Modal.Actions>
+        </Modal>
       </Form>
-      
     </>
   );
 };

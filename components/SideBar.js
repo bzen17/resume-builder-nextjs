@@ -40,12 +40,14 @@ const SideBar = ({ activeItem, setActiveItem, errors, formState }) => {
         Object.values(v).map((err, index) => {
           if (err !== undefined) {
             count += Object.keys(err).length;
-            setErrCount(prevState=>{return { ...prevState, [k]: count }});
+            setErrCount((prevState) => {
+              return { ...prevState, [k]: count };
+            });
           }
         });
       }
     }
-  }, [formState,errors]);
+  }, [formState, errors]);
   const renderSideBarErrorLabel = (tabName) => {
     if (tabName === "bio" || tabName === "contact") {
       return (
@@ -121,64 +123,62 @@ const SideBar = ({ activeItem, setActiveItem, errors, formState }) => {
     }
   };
   return (
-    
-      <Menu fluid vertical tabular pointing>
-        <Menu.Item
-          key="bio"
-          name="bio"
-          active={activeItem === "bio"}
-          onClick={handleItemClick}
-        >
-          {renderSideBarErrorLabel("bio")}
-          Bio
-        </Menu.Item>
-        <Menu.Item
-          key="experience"
-          name="experience"
-          active={activeItem === "experience"}
-          onClick={handleItemClick}
-        >
-          {renderSideBarErrorLabel("experience")}
-          Experience
-        </Menu.Item>
-        <Menu.Item
-          key="skills"
-          name="skills"
-          active={activeItem === "skills"}
-          onClick={handleItemClick}
-        >
-          {renderSideBarErrorLabel("expertise")}
-          Skills
-        </Menu.Item>
-        <Menu.Item
-          key="projects"
-          name="projects"
-          active={activeItem === "projects"}
-          onClick={handleItemClick}
-        >
-          {renderSideBarErrorLabel("projects")}
-          Projects
-        </Menu.Item>
-        <Menu.Item
-          key="certifications"
-          name="certifications"
-          active={activeItem === "certifications"}
-          onClick={handleItemClick}
-        >
-          {renderSideBarErrorLabel("certifications")}
-          Certifications
-        </Menu.Item>
-        <Menu.Item
-          key="contact"
-          name="contact"
-          active={activeItem === "contact"}
-          onClick={handleItemClick}
-        >
-          {renderSideBarErrorLabel("contact")}
-          Contact
-        </Menu.Item>
-      </Menu>
-    
+    <Menu fluid vertical tabular pointing>
+      <Menu.Item
+        key="bio"
+        name="bio"
+        active={activeItem === "bio"}
+        onClick={handleItemClick}
+      >
+        {renderSideBarErrorLabel("bio")}
+        Bio
+      </Menu.Item>
+      <Menu.Item
+        key="experience"
+        name="experience"
+        active={activeItem === "experience"}
+        onClick={handleItemClick}
+      >
+        {renderSideBarErrorLabel("experience")}
+        Experience
+      </Menu.Item>
+      <Menu.Item
+        key="skills"
+        name="skills"
+        active={activeItem === "skills"}
+        onClick={handleItemClick}
+      >
+        {renderSideBarErrorLabel("expertise")}
+        Skills
+      </Menu.Item>
+      <Menu.Item
+        key="projects"
+        name="projects"
+        active={activeItem === "projects"}
+        onClick={handleItemClick}
+      >
+        {renderSideBarErrorLabel("projects")}
+        Projects
+      </Menu.Item>
+      <Menu.Item
+        key="certifications"
+        name="certifications"
+        active={activeItem === "certifications"}
+        onClick={handleItemClick}
+      >
+        {renderSideBarErrorLabel("certifications")}
+        Certifications
+      </Menu.Item>
+      <Menu.Item
+        key="contact"
+        name="contact"
+        active={activeItem === "contact"}
+        onClick={handleItemClick}
+      >
+        {renderSideBarErrorLabel("contact")}
+        Contact
+      </Menu.Item>
+    </Menu>
   );
 };
 

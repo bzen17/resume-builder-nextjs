@@ -33,38 +33,37 @@ export default function Home() {
   const [total, setTotal] = useState(27);
   useEffect(() => {
     console.log("Errors1", errors);
-  }, [formState,errors]);
+  }, [formState, errors]);
 
   return (
     <Layout>
       <Grid centered>
-      <Grid.Row>
-      <Grid.Column width={4} style={{marginTop:'6rem'}}>
-      <SideBar
-          activeItem={activeItem}
-          setActiveItem={setActiveItem}
-          errors={errors}
-          formState={formState}
-        />
-        </Grid.Column>
-        <Grid.Column stretched width={12}>
-        
-        <ProgressBar watch={watch} errors={errors} total={total} />
-          <Segment raised>
-            <TemplateForm
+        <Grid.Row>
+          <Grid.Column width={4} style={{ marginTop: "6rem" }}>
+            <SideBar
               activeItem={activeItem}
-              handleSubmit={handleSubmit}
-              watch={watch}
-              setValue={setValue}
-              control={control}
+              setActiveItem={setActiveItem}
               errors={errors}
-              setError={setError}
-              clearErrors={clearErrors}
-              reset={reset}
-              setTotal={setTotal}
+              formState={formState}
             />
-          </Segment>
-        </Grid.Column>
+          </Grid.Column>
+          <Grid.Column stretched width={12}>
+            <ProgressBar watch={watch} errors={errors} total={total} />
+            <Segment raised>
+              <TemplateForm
+                activeItem={activeItem}
+                handleSubmit={handleSubmit}
+                watch={watch}
+                setValue={setValue}
+                control={control}
+                errors={errors}
+                setError={setError}
+                clearErrors={clearErrors}
+                reset={reset}
+                setTotal={setTotal}
+              />
+            </Segment>
+          </Grid.Column>
         </Grid.Row>
       </Grid>
     </Layout>
