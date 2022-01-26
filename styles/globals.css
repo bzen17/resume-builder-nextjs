@@ -6,3 +6,10 @@
 .preview {
     margin-top: 3rem;
 }
+
+.display-pic {
+    display: block;
+    width: 10rem;
+    height: 10rem;
+    border-radius: 5rem;
+}

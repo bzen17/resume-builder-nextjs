@@ -21,8 +21,6 @@ import {
   Popup,
   Container,
 } from "semantic-ui-react";
-import validateField from "../../utility/formValidation";
-import ErrorMessage from "./Message";
 import { Controller, useFieldArray } from "react-hook-form";
 import { requiredFields } from "./schema";
 
@@ -316,12 +314,7 @@ const Experience = ({ errors, watch, control, setValue, setTotal }) => {
       </>
     );
   };
-  return (
-    <>
-      {renderWorkExperience()}
-      {/*  {errors.experience.length !== 0 ? ErrorMessage(errors.experience) : ""} */}
-    </>
-  );
+  return <>{renderWorkExperience()}</>;
 };
 
 export default Experience;

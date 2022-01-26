@@ -13,12 +13,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 import { Controller } from "react-hook-form";
-import React, { useEffect } from "react";
-import { Image, Input, Grid, Form, Header, Dropdown } from "semantic-ui-react";
-import validateField from "../../utility/formValidation";
-import ErrorMessage from "./Message";
-import { formError } from "./errors";
-
+import React, { useEffect, useState, useRef } from "react";
+import {
+  Image,
+  Input,
+  Grid,
+  Form,
+  Header,
+  Dropdown,
+  Button,
+} from "semantic-ui-react";
 const Bio = ({
   errors,
   formErrors,
@@ -38,19 +42,24 @@ const Bio = ({
       value: "Professional Summary",
     },
   ];
+  const fileRef = useRef(null);
   const onImgChange = (event) => {
     event.preventDefault();
     event.persist();
     if (event.target.name === "image") {
       if (event.target.files && event.target.files[0]) {
-        const file = event.target.files[0];
-        const img = {
-          objURL: /\.(gif|jpe?g|png)$/g.test(file.name)
-            ? URL.createObjectURL(file)
-            : null,
-          URL: file,
+        const [file] = event.target.files;
+        var reader = new FileReader();
+        reader.onloadend = function () {
+          const img = {
+            objURL: /\.(gif|jpe?g|png)$/g.test(file.name)
+              ? reader.result
+              : null,
+            URL: file,
+          };
+          setValue(`bio.${event.target.name}`, img);
         };
-        setValue(`bio.${event.target.name}`, img);
+        reader.readAsDataURL(file);
       }
     }
   };
@@ -181,32 +190,45 @@ const Bio = ({
       <Grid>
         <Grid.Row>
           <Grid.Column width={6} verticalAlign="top">
-            <Form.Input
-              error={
-                errors &&
-                errors.bio &&
-                errors.bio.image &&
-                !!errors.bio.image.message
-              }
-              type="file"
-              name="image"
-              required
-              label="Display Picture"
-              onChange={(e) => onImgChange(e)}
-            />
+            <Form.Group required>
+              <Form.Button
+                error={
+                  errors &&
+                  errors.bio &&
+                  errors.bio.image &&
+                  !!errors.bio.image.message
+                }
+                required
+                label="Display Picture"
+                content="Choose File"
+                labelPosition="left"
+                icon="file"
+                onClick={(e) => {
+                  e.preventDefault();
+                  fileRef.current.click();
+                }}
+              />
+              <input
+                ref={fileRef}
+                type="file"
+                name="image"
+                hidden
+                onChange={(e) => onImgChange(e)}
+              />
+            </Form.Group>
           </Grid.Column>
           <Grid.Column width={10} textAlign="center">
             <Image
               src={watch(`bio.image.objURL`)}
               as="a"
               size="medium"
+              circular
               href={watch(`bio.image.objURL`)}
               target="_blank"
             />
           </Grid.Column>
         </Grid.Row>
       </Grid>
-      {/* {errors.bio.length !== 0 ? ErrorMessage(errors.bio) : ""} */}
     </>
   );
 };

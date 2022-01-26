@@ -147,7 +147,6 @@ const HtmlTemplate = () => {
                   <img
                     src="${data && data.bio ? data.bio.image.objURL : ""}"
                     class="jumbotron-img animation-translate animation-item-1"
-                    alt="Avatar"
                   />
                   <h1
                     class="display-1 display-animated display-animated-in animation-translate animation-item-2"
@@ -190,7 +189,10 @@ const HtmlTemplate = () => {
               <div>
                     <h5>I speak:</h3>
                     <p className="card-tags">${
-                      data && data.bio && data.bio.languages.join(" - ")
+                      data &&
+                      data.bio &&
+                      data.bio.languages &&
+                      data.bio.languages.join(" - ")
                     }</p>
                     </div>
               <div class="section-footer animation-translate animation-item-3">

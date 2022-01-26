@@ -20,11 +20,6 @@ import Project from "./Project";
 import Skills from "./Skills";
 import Certifications from "./Certification";
 import Contact from "./Contact";
-import { validateForm } from "../../utility/formValidation";
-import { useForm, useFieldArray } from "react-hook-form";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { schema, initFormData } from "./schema";
-import { formError } from "./errors";
 
 const options = [
   { key: "1", text: "PDF", value: "pdf" },
@@ -53,6 +48,21 @@ const TemplateForm = ({
     certifications: [],
     contact: [],
   };
+  function exampleReducer(state, action) {
+    switch (action.type) {
+      case "close":
+        return { open: false };
+      case "open":
+        return { open: true, size: action.size };
+      default:
+        throw new Error("Unsupported action...");
+    }
+  }
+  const [state, dispatch] = React.useReducer(exampleReducer, {
+    open: false,
+    size: undefined,
+  });
+  const { open, size } = state;
   const techOptions = [
     { key: "HTML", text: "HTML", value: "HTML" },
     { key: "CSS", text: "CSS", value: "CSS" },
@@ -83,24 +93,10 @@ const TemplateForm = ({
   }, [errors]);
   console.log("Data", watch());
   const onSubmit = (data) => {
-    console.log("data", data);
+    console.log("submittedData", data);
     localStorage.setItem("userData", JSON.stringify(data));
   };
-  function exampleReducer(state, action) {
-    switch (action.type) {
-      case "close":
-        return { open: false };
-      case "open":
-        return { open: true, size: action.size };
-      default:
-        throw new Error("Unsupported action...");
-    }
-  }
-  const [state, dispatch] = React.useReducer(exampleReducer, {
-    open: false,
-    size: undefined,
-  });
-  const { open, size } = state;
+  const onError = (errors, e) => dispatch({ type: "close" });
   const formRef = useRef(null);
   const renderForm = () => {
     if (activeItem === "bio") {
@@ -174,74 +170,60 @@ const TemplateForm = ({
       );
     }
   };
-
   return (
     <>
-      <Form error onSubmit={handleSubmit(onSubmit)} id="templateForm">
+      <Form error onSubmit={handleSubmit(onSubmit, onError)} id="templateForm">
         {renderForm()}
-
-        <Button.Group floated="right" style={{ marginTop: "1rem" }}>
-          <Button
-            style={{ marginRight: "0.3rem" }}
-            onClick={() => reset()}
-            negative
-          >
-            Cancel
-          </Button>
-          <Button.Or />
-          <Button
-            style={{ marginLeft: "0.3rem", borderRadius: "0 0.3rem 0.3rem 0" }}
-            icon
-            labelPosition="left"
-            positive
-            onClick={(e) => dispatch({ type: "open", size: "tiny" })} //formRef.current.focus()}
-          >
-            <Icon name="settings" />
-            Generate
-          </Button>
-          <input
-            ref={formRef}
-            id="formSubmitBtn"
-            type="submit"
-            style={{ display: "none" }}
-          />
-        </Button.Group>
-        <Modal
-          size={size}
-          open={open}
-          closeIcon
-          onClose={() => dispatch({ type: "close" })}
-        >
-          <Modal.Header>Confirmation</Modal.Header>
-          <Modal.Content>
-            <p>Would you like to preview your HTML Resume before Confirming?</p>
-          </Modal.Content>
-          <Modal.Actions>
-            <Button
-              animated="vertical"
-              onClick={() => {
-                dispatch({ type: "close" });
-                localStorage.setItem("userData", JSON.stringify(watch()));
-                window.open("/preview", "_blank");
-              }}
-            >
-              <Button.Content visible>Preview</Button.Content>
-              <Button.Content hidden>
-                <Icon name="eye" />
-              </Button.Content>
-            </Button>
-            <Button
-              positive
-              onClick={() => {
-                dispatch({ type: "close" });
-                return formRef.current.focus();
-              }}
-            >
-              Confirm
-            </Button>
-          </Modal.Actions>
-        </Modal>
       </Form>
+      <Button.Group floated="right" style={{ marginTop: "1rem" }}>
+        <Button
+          style={{ marginRight: "0.3rem" }}
+          onClick={() => reset()}
+          negative
+        >
+          Cancel
+        </Button>
+        <Button.Or />
+        <Button
+          style={{ marginLeft: "0.3rem", borderRadius: "0 0.3rem 0.3rem 0" }}
+          icon
+          onClick={() => dispatch({ type: "open" })}
+          labelPosition="left"
+          positive
+        >
+          <Icon name="settings" />
+          Generate
+        </Button>
+      </Button.Group>
+      <Modal
+        size="tiny"
+        open={open}
+        closeIcon
+        onClose={() => dispatch({ type: "close" })}
+      >
+        <Modal.Header>Confirmation</Modal.Header>
+        <Modal.Content>
+          <p>Would you like to preview your HTML Resume before Confirming?</p>
+        </Modal.Content>
+        <Modal.Actions>
+          <Button
+            animated="vertical"
+            onClick={(e) => {
+              dispatch({ type: "close" });
+              localStorage.setItem("userData", JSON.stringify(watch()));
+              window.open("/preview", "_blank");
+            }}
+          >
+            <Button.Content visible>Preview</Button.Content>
+            <Button.Content hidden>
+              <Icon name="eye" />
+            </Button.Content>
+          </Button>
+          <Button positive id="submitConfirm" form="templateForm" type="submit">
+            Confirm
+          </Button>
+        </Modal.Actions>
+      </Modal>
     </>
   );
 };

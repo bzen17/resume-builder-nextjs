@@ -44,9 +44,7 @@ export const schema = yup
         .object()
         .shape({
           URL: yup.mixed(),
-          objURL: yup
-            .string()
-            .matches(/^blob:https?:\/\//, "Image:  Invalid Image"),
+          objURL: yup.string(),
         })
         .nullable(true)
         .required("Image:  Required"),
