@@ -13,7 +13,7 @@
 // limitations under the License.
 
 import React from "react";
-import Image from "next/image";
+import { Image } from "semantic-ui-react";
 
 export default function Top() {
   return (

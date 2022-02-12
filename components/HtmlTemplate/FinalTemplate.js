@@ -14,7 +14,7 @@
 
 import React, { useEffect, useState } from "react";
 
-const HtmlTemplate = () => {
+const FinalTemplate = () => {
   const [data, setData] = useState(null);
   useEffect(() => {
     localStorage.getItem("userData")
@@ -145,7 +145,11 @@ const HtmlTemplate = () => {
               <div class="section-body">
                 <div class="jumbotron jumbotron-fluid pt-6 pt-lg-8 pb-0 mb-0">
                   <img
-                    src="${data && data.bio ? data.bio.image.objURL : ""}"
+                  ${
+                    data && data.bio && data.bio.image
+                      ? `src="${data.bio.image.objURL}"`
+                      : ""
+                  }
                     class="jumbotron-img animation-translate animation-item-1"
                   />
                   <h1
@@ -787,44 +791,6 @@ const HtmlTemplate = () => {
         </div>
       </div>
     </div>
-    <div class="preview-themes">
-      <a
-        href="#theme-yellow-black"
-        class="preview-theme preview-color-yellow-black"
-        title=""
-        data-toggle="tooltip"
-        data-theme="/sample/htmlTemplate/yellow-black.css"
-        data-theme-bg="light"
-        data-original-title="Select theme"
-      ></a>
-      <a
-        href="#theme-black-white"
-        class="preview-theme preview-color-black-white"
-        title=""
-        data-toggle="tooltip"
-        data-theme="/sample/htmlTemplate/black-white.css"
-        data-theme-bg="dark"
-        data-original-title="Select theme"
-      ></a>
-      <a
-        href="#theme-pink-black"
-        class="preview-theme preview-color-pink-black"
-        title=""
-        data-toggle="tooltip"
-        data-theme="/sample/htmlTemplate/pink-black.css"
-        data-theme-bg="light"
-        data-original-title="Select theme"
-      ></a>
-      <a
-        href="#theme-blue-black"
-        class="preview-theme preview-color-blue-black"
-        title=""
-        data-toggle="tooltip"
-        data-theme="/sample/htmlTemplate/blue-black.css"
-        data-theme-bg="light"
-        data-original-title="Select theme"
-      ></a>
-    </div>
 
     <script src="/sample/htmlTemplate/all.js"></script>
     <script>
@@ -879,4 +845,4 @@ const HtmlTemplate = () => {
 `;
 };
 
-export default HtmlTemplate;
+export default FinalTemplate;

@@ -1,4 +1,37 @@
-<!DOCTYPE html>
+// Copyright 2022 Ayan Banerjee
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+import React, { useEffect, useState } from "react";
+
+const PreviewTemplate = () => {
+  const [data, setData] = useState(null);
+  useEffect(() => {
+    localStorage.getItem("userData")
+      ? setData(JSON.parse(localStorage.getItem("userData")))
+      : "";
+  }, []);
+  function sliceIntoChunks(arr, chunkSize) {
+    const res = [];
+    for (let i = 0; i < arr.length; i += chunkSize) {
+      const chunk = arr.slice(i, i + chunkSize);
+      res.push(chunk);
+    }
+    return res;
+  }
+
+  return `
+  <!DOCTYPE html>
 <!-- saved from url=(0049) -->
 <html lang="cs">
   <head>
@@ -9,7 +42,7 @@
     <link href="/sample/htmlTemplate/css" rel="stylesheet" />
     <link href="/sample/htmlTemplate/yellow-black.css" rel="stylesheet" />
     <link href="/sample/htmlTemplate/preview.css" rel="stylesheet" />
-    <title>John Wilson | Portfolio</title>
+    <title>${data ? data.bio.fn + " " + data.bio.ln : ""} | Portfolio</title>
   </head>
   <body
     class="with-header position-relative"
@@ -23,7 +56,8 @@
       <div
         class="container-fluid-limited d-flex align-items-center justify-content-between"
       >
-        <div></div>
+        <div>
+        <div/>
         <button class="sections-nav-toggler" aria-label="Toggle navigation">
           <span class="sections-nav-toggler-bar"></span>
           <span class="sections-nav-toggler-bar"></span>
@@ -82,21 +116,22 @@
         <li class="sections-nav-item">
           <a href="#section-08" class="nav-link sections-nav-link goto-section">
             <span class="sections-nav-counter">08</span>
-            Languages
-          </a>
-        </li>
-        <li class="sections-nav-item">
-          <a href="#section-09" class="nav-link sections-nav-link goto-section">
-            <span class="sections-nav-counter">09</span>
             Contact
           </a>
         </li>
         <li class="sections-nav-item">
           <div class="sections-nav-info">
-            <a href="mailto:john@wilson.com">john@wilson.com</a><br />
-            <a href="tel:+420652887351">+420 652 887 351</a>
+          ${
+            data && data.contact
+              ? `
+          <a href="${data.contact.email}">${data.contact.email}</a><br />
+          <a href="tel:${data.contact.phone}">${data.contact.phone}</a>
+          `
+              : ""
+          }
           </div>
         </li>
+        
       </ul>
     </nav>
     <main class="content">
@@ -105,28 +140,31 @@
           <div class="col col-xl-9">
             <section
               id="section-01"
-              class="section section-sub-header animation interaction-in"
+              class="section animation interaction-in"
             >
               <div class="section-body">
                 <div class="jumbotron jumbotron-fluid pt-6 pt-lg-8 pb-0 mb-0">
                   <img
-                    src="/sample/htmlTemplate/avatar.jpg"
+                  ${
+                    data && data.bio && data.bio.image
+                      ? `src="${data.bio.image.objURL}"`
+                      : ""
+                  }
                     class="jumbotron-img animation-translate animation-item-1"
-                    alt="Avatar"
                   />
                   <h1
                     class="display-1 display-animated display-animated-in animation-translate animation-item-2"
                   >
-                    John<br />Wilson
+                  ${data ? data.bio.fn + "<br />" + data.bio.ln : ""}
                   </h1>
                   <p class="lead animation-translate animation-item-3">
-                    FREELANCE WEBDEVELOPER
+                  ${data ? data.bio.role : ""}
                   </p>
                 </div>
               </div>
               <div class="section-footer animation-translate animation-item-4">
                 <a class="section-next goto-section" href="#section-02">
-                  <span class="section-next-counter">01/09</span>
+                  <span class="section-next-counter">01/08</span>
                   <span class="section-next-label">Next chapter</span>
                   <span class="section-next-icon"></span>
                 </a>
@@ -141,46 +179,29 @@
                     >
                       About me
                     </h2>
+                    
                     <article
                       class="article animation-translate animation-item-2"
                     >
-                      <p>
-                        I'm freelance webdeveloper lorem ipsum dolor sit amet,
-                        consetetur sadipscing elitr, sed diam nonumy eirmod
-                        tempor invidunt ut labore et dolore magna aliquyam erat,
-                        sed diam voluptua. At vero eos et accusam et justo duo
-                        dolores et ea rebum. Stet clita kasd gubergren, no sea
-                        takimata sanctus est Lorem ipsum dolor sit amet. Lorem
-                        ipsum dolor sit amet, consetetur sadipscing elitr, sed
-                        diam nonumy eirmod tempor invidunt ut labore et dolore
-                        magna aliquyam erat, sed diam voluptua. At vero eos et
-                        accusam et justo duo dolores et ea rebum.
-                      </p>
-                      <p>
-                        Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
-                        sed diam nonumy eirmod tempor invidunt ut labore et
-                        dolore magna aliquyam erat, sed diam voluptua. At vero
-                        eos et accusam et justo duo dolores et ea rebum. Stet
-                        clita kasd gubergren, no sea takimata sanctus est Lorem
-                        ipsum dolor sit amet. Lorem ipsum dolor sit amet,
-                        consetetur sadipscing elitr, sed diam nonumy eirmod
-                        tempor invidunt ut labore et dolore magna.
-                      </p>
-                      <p>
-                        Lorem ipsum dolor sit amet, consetetur sadipscing elitr,
-                        sed diam nonumy eirmod tempor invidunt ut labore et
-                        dolore magna aliquyam erat, sed diam voluptua. At vero
-                        eos et accusam et justo duo dolores et ea rebum. Stet
-                        clita kasd gubergren, no sea takimata sanctus est Lorem
-                        ipsum dolor sit amet.
-                      </p>
+                    ${data ? data.bio.about : ""}
                     </article>
+                    
+                   
                   </div>
                 </div>
               </div>
+              <div>
+                    <h5>I speak:</h3>
+                    <p className="card-tags">${
+                      data &&
+                      data.bio &&
+                      data.bio.languages &&
+                      data.bio.languages.join(" - ")
+                    }</p>
+                    </div>
               <div class="section-footer animation-translate animation-item-3">
                 <a class="section-next goto-section" href="#section-03">
-                  <span class="section-next-counter">02/09</span>
+                  <span class="section-next-counter">02/08</span>
                   <span class="section-next-label">Next chapter</span>
                   <span class="section-next-icon"></span>
                 </a>
@@ -194,35 +215,30 @@
                   Experiences
                 </h2>
                 <div class="timeline timeline-animated">
-                  <div class="timeline-item">
-                    <span class="timeline-date">2018&nbsp;–&nbsp;now</span>
-                    <h3 class="timeline-title">Freelance</h3>
-                    <p class="timeline-text">Full stack web developer</p>
-                  </div>
-                  <div class="timeline-item">
-                    <span class="timeline-date">2015&nbsp;–&nbsp;2018</span>
-                    <h3 class="timeline-title">Facebook</h3>
-                    <p class="timeline-text">
-                      Senior front-end coder, team leader
-                    </p>
-                  </div>
-                  <div class="timeline-item">
-                    <span class="timeline-date">2013&nbsp;–&nbsp;2015</span>
-                    <h3 class="timeline-title">Amazon</h3>
-                    <p class="timeline-text">Junior front-end coder</p>
-                  </div>
-                  <div class="timeline-item">
-                    <span class="timeline-date">2007&nbsp;–&nbsp;2013</span>
-                    <h3 class="timeline-title">MIT</h3>
-                    <p class="timeline-text">
-                      Computer Science &amp; Artificial Intelligence Lab
-                    </p>
-                  </div>
+                ${
+                  data && data.experience
+                    ? data.experience
+                        .map((item, index) => {
+                          return `<div className="timeline-item" key=${
+                            "experience" + index
+                          }>
+                  <span className="timeline-date">${
+                    item.startMonth + "/" + item.startYear
+                  }&nbsp;–&nbsp;${item.endMonth + "/" + item.endYear}</span>
+                  <h3 className="timeline-title">${item.org}</h3>
+                  <p className="timeline-text">
+                    ${item.title}
+                  </p>
+                </div>`;
+                        })
+                        .join("")
+                    : ""
+                }
                 </div>
               </div>
               <div class="section-footer animation-translate animation-item-2">
                 <a class="section-next goto-section" href="#section-04">
-                  <span class="section-next-counter">03/09</span>
+                  <span class="section-next-counter">03/08</span>
                   <span class="section-next-label">Next chapter</span>
                   <span class="section-next-icon"></span>
                 </a>
@@ -235,58 +251,37 @@
                 >
                   My Expertise
                 </h2>
-                <div class="row animation-translate animation-item-2">
-                  <div class="col-12 col-md-4">
-                    <div class="card card">
-                      <div class="card-body">
-                        <strong class="card-counter">1</strong>
-                        <h3 class="card-title">Web<br />development</h3>
-                        <p class="card-text">
-                          Lorem ipsum dolor sit amet, consetetur sadipscing
-                          elitr, sed diam nonumy eirmod tempor invidunt ut
-                          labore et dolore magna aliquyam erat, sed diam
-                          voluptua. At vero eos et accusam et justo duo dolores
-                          et ea rebum. Stet clita kasd gubergren, no sea
-                          takimata sanctus est.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-12 col-md-4">
-                    <div class="card card">
-                      <div class="card-body">
-                        <strong class="card-counter">2</strong>
-                        <h3 class="card-title">Web<br />design</h3>
-                        <p class="card-text">
-                          Stet clita kasd gubergren, no sea takimata sanctus
-                          est. Lorem ipsum dolor sit amet. Lorem ipsum dolor sit
-                          amet, consetetur sadipscing elitr, sed diam nonumy
-                          eirmod tempor invidunt ut labore et dolore magna
-                          aliquyam erat, sed diam.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="col-12 col-md-4">
-                    <div class="card card">
-                      <div class="card-body">
-                        <strong class="card-counter">3</strong>
-                        <h3 class="card-title">Web<br />consulting</h3>
-                        <p class="card-text">
-                          At vero eos et accusam et justo duo dolores et ea
-                          rebum. Stet clita kasd gubergren, no sea takimata
-                          sanctus est. Lorem ipsum dolor sit amet. Lorem ipsum
-                          dolor sit amet, consetetur sadipscing elitr, sed diam
-                          nonumy eirmod tempor invidunt ut labore et.
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                ${
+                  data && data.expertise
+                    ? sliceIntoChunks(data.expertise, 3)
+                        .map((row, i) => {
+                          return `<div className="row animation-translate animation-item-2">
+                      ${row
+                        .map((col, index) => {
+                          return `<div className="col-12 col-md-4">
+                          <div className="card card">
+                            <div className="card-body">
+                              <strong className="card-counter">${
+                                index + 1
+                              }</strong>
+                              <h3 className="card-title">${col.title}</h3>
+                              <p className="card-text">
+                                ${col.desc}
+                              </p>
+                            </div>
+                          </div>
+                        </div>`;
+                        })
+                        .join("")}
+                    </div>`;
+                        })
+                        .join("")
+                    : ""
+                }
               </div>
               <div class="section-footer animation-translate animation-item-3">
                 <a class="section-next goto-section" href="#section-05">
-                  <span class="section-next-counter">04/09</span>
+                  <span class="section-next-counter">04/08</span>
                   <span class="section-next-label">Next chapter</span>
                   <span class="section-next-icon"></span>
                 </a>
@@ -299,82 +294,37 @@
                 >
                   Skills
                 </h2>
-                <div class="row animation-translate animation-item-2">
-                  <div class="col-12 col-md-6">
-                    <strong class="progress-label">CSS</strong>
-                    <div class="progress progress-animated mb-9">
-                      <div
-                        class="progress-bar"
-                        role="progressbar"
-                        style="width: 75%"
-                        aria-valuenow="75"
-                        aria-valuemin="0"
-                        aria-valuemax="100"
-                      ></div>
-                    </div>
-                    <strong class="progress-label">Html</strong>
-                    <div class="progress progress-animated mb-9">
-                      <div
-                        class="progress-bar"
-                        role="progressbar"
-                        style="width: 80%"
-                        aria-valuenow="80"
-                        aria-valuemin="0"
-                        aria-valuemax="100"
-                      ></div>
-                    </div>
-                    <strong class="progress-label">Javascript</strong>
-                    <div class="progress progress-animated mb-9">
-                      <div
-                        class="progress-bar"
-                        role="progressbar"
-                        style="width: 70%"
-                        aria-valuenow="70"
-                        aria-valuemin="0"
-                        aria-valuemax="100"
-                      ></div>
-                    </div>
-                  </div>
-                  <div class="col-12 col-md-6">
-                    <strong class="progress-label">Adobe XD</strong>
-                    <div class="progress progress-animated mb-9">
-                      <div
-                        class="progress-bar"
-                        role="progressbar"
-                        style="width: 95%"
-                        aria-valuenow="95"
-                        aria-valuemin="0"
-                        aria-valuemax="100"
-                      ></div>
-                    </div>
-                    <strong class="progress-label">Photoshop</strong>
-                    <div class="progress progress-animated mb-9">
-                      <div
-                        class="progress-bar"
-                        role="progressbar"
-                        style="width: 87%"
-                        aria-valuenow="87"
-                        aria-valuemin="0"
-                        aria-valuemax="100"
-                      ></div>
-                    </div>
-                    <strong class="progress-label">Sketch</strong>
-                    <div class="progress progress-animated mb-9">
-                      <div
-                        class="progress-bar"
-                        role="progressbar"
-                        style="width: 80%"
-                        aria-valuenow="80"
-                        aria-valuemin="0"
-                        aria-valuemax="100"
-                      ></div>
-                    </div>
-                  </div>
-                </div>
+                ${
+                  data && data.skills
+                    ? sliceIntoChunks(data.skills, 2)
+                        .map((row, i) => {
+                          return `<div className="row animation-translate animation-item-2">
+                      ${row
+                        .map((col, index) => {
+                          return `<div className="col-12 col-md-6">
+                          <strong className="progress-label">${col}</strong>
+                          <div className="progress progress-animated mb-9">
+                            <div
+                              className="progress-bar"
+                              role="progressbar"
+                              style="width: 75%"
+                              aria-valuenow="75"
+                              aria-valuemin="0"
+                              aria-valuemax="100"
+                            ></div>
+                          </div>
+                          </div>`;
+                        })
+                        .join("")}
+                    </div>`;
+                        })
+                        .join("")
+                    : ""
+                }
               </div>
               <div class="section-footer animation-translate animation-item-3">
                 <a class="section-next goto-section" href="#section-06">
-                  <span class="section-next-counter">05/09</span>
+                  <span class="section-next-counter">05/08</span>
                   <span class="section-next-label">Next chapter</span>
                   <span class="section-next-icon"></span>
                 </a>
@@ -387,56 +337,44 @@
                 >
                   Projects
                 </h2>
-                <div class="row animation-translate animation-item-2">
-                  <div class="col-12 col-md-4">
-                    <a class="card" href="#modal-project-1" data-toggle="modal">
-                      <img
-                        class="card-img-top"
-                        src="/sample/htmlTemplate/project_1.jpg"
-                        alt="Nanovo"
-                      />
-                      <div class="card-body">
-                        <h3 class="card-title">Nanovo</h3>
-                        <h4 class="card-subtitle">Design e-shop</h4>
-                        <p class="card-tags">Frontend — Backend</p>
-                      </div>
-                    </a>
-                  </div>
-                  <div class="col-12 col-md-4">
-                    <a class="card" href="#modal-project-2" data-toggle="modal">
-                      <img
-                        class="card-img-top"
-                        src="/sample/htmlTemplate/project_2.jpg"
-                        alt="Bbop"
-                      />
-                      <div class="card-body">
-                        <h3 class="card-title">Bbop</h3>
-                        <h4 class="card-subtitle">
-                          Social Network for Musicians
-                        </h4>
-                        <p class="card-tags">Design — Frontend — Backend</p>
-                      </div>
-                    </a>
-                  </div>
-                  <div class="col-12 col-md-4">
-                    <a class="card" href="#modal-project-3" data-toggle="modal">
-                      <img
-                        class="card-img-top"
-                        src="/sample/htmlTemplate/project_3.jpg"
-                        alt="Janja Prokić"
-                      />
-                      <div class="card-body">
-                        <h3 class="card-title">Janja Prokić</h3>
-                        <h4 class="card-subtitle">Jewelry e-shop</h4>
-                        <p class="card-tags">Frontend — Backend</p>
-                      </div>
-                    </a>
-                  </div>
-                </div>
+                ${
+                  data && data.projects
+                    ? sliceIntoChunks(data.projects, 3)
+                        .map((row, i) => {
+                          return `<div className="row animation-translate animation-item-2">
+                      ${row
+                        .map((col, index) => {
+                          return `<div className="col-12 col-md-4">
+                          <a className="card" href="#modal-project-${
+                            index + 1
+                          }" data-toggle="modal">
+                            <img
+                              className="card-img-top"
+                              src="${col.image.objURL}"
+                              alt="${col.name}"
+                            />
+                            <div className="card-body">
+                              <h3 className="card-title">${col.name}</h3>
+                              <h4 className="card-subtitle">${
+                                col.shortDesc
+                              }</h4>
+                               <p className="card-tags">${col.techStack.join(
+                                 " - "
+                               )}</p>
+                            </div>
+                          </a>
+                        </div>`;
+                        })
+                        .join("")}
+                    </div>`;
+                        })
+                        .join("")
+                    : ""
+                }
               </div>
               <div class="section-footer animation-translate animation-item-3">
                 <a class="section-next goto-section" href="#section-07">
-                  <span class="section-next-counter">06/09</span>
+                  <span class="section-next-counter">06/08</span>
                   <span class="section-next-label">Next chapter</span>
                   <span class="section-next-icon"></span>
                 </a>
@@ -449,194 +387,42 @@
                 >
                   Certifications
                 </h2>
-                <div class="row animation-translate animation-item-2">
-                  <div class="col-6 col-lg-3">
-                    <a href="#" class="logo-link">
-                      <img
-                        src="/sample/htmlTemplate/reference_1_b.svg"
-                        data-light-src="/sample/htmlTemplate/reference_1.svg"
-                        data-dark-src="/sample/htmlTemplate/reference_1_b.svg"
-                        class="logo-img"
-                        alt="Reference 1"
-                      />
-                    </a>
-                  </div>
-                  <div class="col-6 col-lg-3">
-                    <a href="#" class="logo-link">
-                      <img
-                        src="/sample/htmlTemplate/reference_2_b.svg"
-                        data-light-src="/sample/htmlTemplate/reference_2.svg"
-                        data-dark-src="/sample/htmlTemplate/reference_2_b.svg"
-                        class="logo-img"
-                        alt="Reference 2"
-                      />
-                    </a>
-                  </div>
-                  <div class="col-6 col-lg-3">
-                    <a href="#" class="logo-link">
-                      <img
-                        src="/sample/htmlTemplate/reference_3_b.svg"
-                        data-light-src="/sample/htmlTemplate/reference_3.svg"
-                        data-dark-src="/sample/htmlTemplate/reference_3_b.svg"
-                        class="logo-img"
-                        alt="Reference 3"
-                      />
-                    </a>
-                  </div>
-                  <div class="col-6 col-lg-3">
-                    <a href="#" class="logo-link">
-                      <img
-                        src="/sample/htmlTemplate/reference_4_b.svg"
-                        data-light-src="/sample/htmlTemplate/reference_4.svg"
-                        data-dark-src="/sample/htmlTemplate/reference_4_b.svg"
-                        class="logo-img"
-                        alt="Reference 4"
-                      />
-                    </a>
-                  </div>
-                  <div class="col-6 col-lg-3">
-                    <a href="#" class="logo-link">
-                      <img
-                        src="/sample/htmlTemplate/reference_5_b.svg"
-                        data-light-src="/sample/htmlTemplate/reference_5.svg"
-                        data-dark-src="/sample/htmlTemplate/reference_5_b.svg"
-                        class="logo-img"
-                        alt="Reference 5"
-                      />
-                    </a>
-                  </div>
-                  <div class="col-6 col-lg-3">
-                    <a href="#" class="logo-link">
-                      <img
-                        src="/sample/htmlTemplate/reference_6_b.svg"
-                        data-light-src="/sample/htmlTemplate/reference_6.svg"
-                        data-dark-src="/sample/htmlTemplate/reference_6_b.svg"
-                        class="logo-img"
-                        alt="Reference 6"
-                      />
-                    </a>
-                  </div>
-                  <div class="col-6 col-lg-3">
-                    <a href="#" class="logo-link">
-                      <img
-                        src="/sample/htmlTemplate/reference_7_b.svg"
-                        data-light-src="/sample/htmlTemplate/reference_7.svg"
-                        data-dark-src="/sample/htmlTemplate/reference_7_b.svg"
-                        class="logo-img"
-                        alt="Reference 7"
-                      />
-                    </a>
-                  </div>
-                  <div class="col-6 col-lg-3">
-                    <a href="#" class="logo-link">
-                      <img
-                        src="/sample/htmlTemplate/reference_8_b.svg"
-                        data-light-src="/sample/htmlTemplate/reference_8.svg"
-                        data-dark-src="/sample/htmlTemplate/reference_8_b.svg"
-                        class="logo-img"
-                        alt="Reference 8"
-                      />
-                    </a>
-                  </div>
-                </div>
+                ${
+                  data && data.certifications
+                    ? sliceIntoChunks(data.certifications, 3)
+                        .map((row, i) => {
+                          return `<div className="row animation-translate animation-item-2">
+                    ${row
+                      .map((col, index) => {
+                        return `<div className="col-12 col-md-4">
+                        <a className="card" href="${col.url}" target="_blank">
+                          <img
+                            className="card-img-top"
+                            src="${col.image.objURL}"
+                            alt="${col.name}"
+                          />
+                          <div className="card-body">
+                            <h3 className="card-title">${col.name}</h3>
+                          </div>
+                        </a>
+                      </div>`;
+                      })
+                      .join("")}
+                    </div>`;
+                        })
+                        .join("")
+                    : ""
+                }
               </div>
               <div class="section-footer animation-translate animation-item-3">
                 <a class="section-next goto-section" href="#section-08">
-                  <span class="section-next-counter">07/09</span>
+                  <span class="section-next-counter">07/08</span>
                   <span class="section-next-label">Next chapter</span>
                   <span class="section-next-icon"></span>
                 </a>
               </div>
             </section>
-            <section id="section-08" class="section animation interaction-in">
-              <div class="section-body">
-                <h2
-                  class="section-title animation-translate-overline animation-item-1"
-                >
-                  Languages
-                </h2>
-                <div class="row animation-translate animation-item-2">
-                  <div class="col-12 col-md-6">
-                    <strong class="progress-label">CSS</strong>
-                    <div class="progress progress-animated mb-9">
-                      <div
-                        class="progress-bar"
-                        role="progressbar"
-                        style="width: 75%"
-                        aria-valuenow="75"
-                        aria-valuemin="0"
-                        aria-valuemax="100"
-                      ></div>
-                    </div>
-                    <strong class="progress-label">Html</strong>
-                    <div class="progress progress-animated mb-9">
-                      <div
-                        class="progress-bar"
-                        role="progressbar"
-                        style="width: 80%"
-                        aria-valuenow="80"
-                        aria-valuemin="0"
-                        aria-valuemax="100"
-                      ></div>
-                    </div>
-                    <strong class="progress-label">Javascript</strong>
-                    <div class="progress progress-animated mb-9">
-                      <div
-                        class="progress-bar"
-                        role="progressbar"
-                        style="width: 70%"
-                        aria-valuenow="70"
-                        aria-valuemin="0"
-                        aria-valuemax="100"
-                      ></div>
-                    </div>
-                  </div>
-                  <div class="col-12 col-md-6">
-                    <strong class="progress-label">Adobe XD</strong>
-                    <div class="progress progress-animated mb-9">
-                      <div
-                        class="progress-bar"
-                        role="progressbar"
-                        style="width: 95%"
-                        aria-valuenow="95"
-                        aria-valuemin="0"
-                        aria-valuemax="100"
-                      ></div>
-                    </div>
-                    <strong class="progress-label">Photoshop</strong>
-                    <div class="progress progress-animated mb-9">
-                      <div
-                        class="progress-bar"
-                        role="progressbar"
-                        style="width: 87%"
-                        aria-valuenow="87"
-                        aria-valuemin="0"
-                        aria-valuemax="100"
-                      ></div>
-                    </div>
-                    <strong class="progress-label">Sketch</strong>
-                    <div class="progress progress-animated mb-9">
-                      <div
-                        class="progress-bar"
-                        role="progressbar"
-                        style="width: 80%"
-                        aria-valuenow="80"
-                        aria-valuemin="0"
-                        aria-valuemax="100"
-                      ></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="section-footer animation-translate animation-item-3">
-                <a class="section-next goto-section" href="#section-09">
-                  <span class="section-next-counter">08/09</span>
-                  <span class="section-next-label">Next chapter</span>
-                  <span class="section-next-icon"></span>
-                </a>
-              </div>
-            </section>
-            <section id="section-09" class="section animation">
+            <section id="section-08" class="section animation">
               <div class="section-body">
                 <h2
                   class="section-title animation-translate-overline animation-item-1"
@@ -647,24 +433,56 @@
                   <div class="col-12 col-md-4">
                     <div class="contact">
                       <strong class="contact-label">Stay in touch</strong>
-                      <a href="mailto:john@wilson.com">john@wilson.com</a><br />
-                      <a href="tel:+420652887351">+420 652 887 351</a>
+                      ${
+                        data && data.contact
+                          ? `
+                      <a href="${data.contact.email}">${data.contact.email}</a><br />
+                      <a href="tel:${data.contact.phone}">${data.contact.phone}</a>
+                      `
+                          : ""
+                      }
                     </div>
                   </div>
+                  ${
+                    data &&
+                    data.contact &&
+                    (data.contact.website ||
+                      data.contact.linkedin ||
+                      data.contact.git ||
+                      data.contact.twitter)
+                      ? `
                   <div class="col-12 col-md-4">
                     <div class="contact">
                       <strong class="contact-label">Social</strong>
-                      <a href="https://www.facebook.com/">Facebook</a><br />
-                      <a href="https://www.linked.com/">LinekdIn</a><br />
-                      <a href="https://www.twitter.com/">Twitter</a>
+                      ${
+                        data.contact.website
+                          ? `<a href="${data.contact.website}" target="_blank">Website</a><br />`
+                          : ""
+                      }
+                      ${
+                        data.contact.linkedin
+                          ? `<a href="${data.contact.linkedin}" target="_blank">LinkedIn</a><br />`
+                          : ""
+                      }
+                      ${
+                        data.contact.git
+                          ? `<a href="${data.contact.git}" target="_blank">Git</a><br />`
+                          : ""
+                      }
+                      ${
+                        data.contact.twitter
+                          ? `<a href="${data.contact.twitter}" target="_blank">Twitter</a><br />`
+                          : ""
+                      }
                     </div>
-                  </div>
+                  </div>`
+                      : ""
+                  }
                   <div class="col-12 col-md-4">
                     <div class="contact">
                       <strong class="contact-label">Address</strong>
-                      1234 Houston Street<br />
-                      New York<br />
-                      NY 123456<br />
+                      ${data && data.contact ? data.contact.address : ""}
+                      
                     </div>
                   </div>
                 </div>
@@ -736,7 +554,7 @@
               </div>
               <div class="section-footer animation-translate animation-item-5">
                 <span class="section-next goto-section">
-                  <span class="section-next-counter">09/09</span>
+                  <span class="section-next-counter">08/08</span>
                 </span>
               </div>
             </section>
@@ -1062,3 +880,7 @@
     data-grammarly-shadow-root="true"
   ></grammarly-desktop-integration>
 </html>
+`;
+};
+
+export default PreviewTemplate;

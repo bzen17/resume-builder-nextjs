@@ -14,8 +14,6 @@
 
 import React from "react";
 import { Button, Header, Form, Icon, Input } from "semantic-ui-react";
-import validateField from "../../utility/formValidation";
-
 import { Controller } from "react-hook-form";
 
 const Contact = ({ errors, watch, control, setValue }) => {

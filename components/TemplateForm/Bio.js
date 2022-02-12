@@ -42,6 +42,7 @@ const Bio = ({
       value: "Professional Summary",
     },
   ];
+  
   const fileRef = useRef(null);
   const onImgChange = (event) => {
     event.preventDefault();
@@ -95,8 +96,8 @@ const Bio = ({
         <Controller
           name="bio.fn"
           control={control}
-          render={({ field }) => (
-            <Form.Input
+          render={({ field }) => {
+            return (<Form.Input
               error={
                 errors && errors.bio && errors.bio.fn && !!errors.bio.fn.message
               }
@@ -106,8 +107,8 @@ const Bio = ({
               label="First name"
               placeholder="First name"
               {...field}
-            />
-          )}
+            />)
+}}
         />
         <Controller
           name="bio.ln"
@@ -203,6 +204,7 @@ const Bio = ({
                 content="Choose File"
                 labelPosition="left"
                 icon="file"
+                color="blue"
                 onClick={(e) => {
                   e.preventDefault();
                   fileRef.current.click();

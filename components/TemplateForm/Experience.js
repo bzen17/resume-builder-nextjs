@@ -25,7 +25,7 @@ import { Controller, useFieldArray } from "react-hook-form";
 import { requiredFields } from "./schema";
 
 const Experience = ({ errors, watch, control, setValue, setTotal }) => {
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append, prepend, remove } = useFieldArray({
     name: "experience",
     control,
   });
@@ -50,7 +50,7 @@ const Experience = ({ errors, watch, control, setValue, setTotal }) => {
                 ) : (
                   <div></div>
                 )}
-                {fields.length - 1 === i ? (
+                {i === 0 ? (
                   <Popup
                     content="Add Work Experience"
                     position="left center"
@@ -63,7 +63,7 @@ const Experience = ({ errors, watch, control, setValue, setTotal }) => {
                                 prevState + requiredFields.experience.length
                               );
                             });
-                            append({
+                            prepend({
                               org: "",
                               title: "",
                               startMonth: "",

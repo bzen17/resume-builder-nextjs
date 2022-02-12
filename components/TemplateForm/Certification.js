@@ -34,7 +34,7 @@ const Certifications = ({ errors, watch, control, setValue, setTotal }) => {
     update,
     remove,
   } = useFieldArray({ name: "certifications", control });
-  const fileRef = useRef(null);
+  const fileRef = useRef([]);
   const onImgChange = (event, i) => {
     event.preventDefault();
     event.persist();
@@ -195,13 +195,14 @@ const Certifications = ({ errors, watch, control, setValue, setTotal }) => {
                           content="Choose File"
                           labelPosition="left"
                           icon="file"
+                          color="blue"
                           onClick={(e) => {
                             e.preventDefault();
-                            fileRef.current.click();
+                            fileRef.current[i].click();
                           }}
                         />
                         <input
-                          ref={fileRef}
+                          ref={el => (fileRef.current[i] = el)}
                           type="file"
                           name="image"
                           hidden

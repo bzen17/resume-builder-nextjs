@@ -13,7 +13,8 @@
 // limitations under the License.
 
 import React, { useState, useRef, useEffect } from "react";
-import { Button, Grid, Form, Message, Icon, Modal } from "semantic-ui-react";
+import { Button, Grid, Form, Step, Icon, Modal,Popup,Header,Container } from "semantic-ui-react";
+import GooglePicker from 'react-google-picker';
 import Bio from "./Bio";
 import Experience from "./Experience";
 import Project from "./Project";
@@ -38,6 +39,7 @@ const TemplateForm = ({
   clearErrors,
   reset,
   setTotal,
+  API_KEY,CLIENT_ID
 }) => {
   const initErrors = {
     bio: [],
@@ -48,6 +50,17 @@ const TemplateForm = ({
     certifications: [],
     contact: [],
   };
+  const steps = ["Download", "Upload", "Info"];
+  const [submitFlag, setSubmitFlag] = useState(false);
+  const [activeStep, setActiveStep] = useState('Download');
+  const [stepCompleted, setStepCompleted] = useState({Download:false,Upload:false});
+  const onStepClick = (e, { title }) => {
+    setActiveStep(title);
+  }
+  const onStepComplete = (e) => {
+    setActiveStep(steps[steps.indexOf(activeStep)+1]);
+    setStepCompleted({ ...stepCompleted, [activeStep]: true });
+  }
   function exampleReducer(state, action) {
     switch (action.type) {
       case "close":
@@ -95,9 +108,11 @@ const TemplateForm = ({
   const onSubmit = (data) => {
     console.log("submittedData", data);
     localStorage.setItem("userData", JSON.stringify(data));
+    setSubmitFlag(true)
+    //dispatch({ type: "close" });
+    //window.open("/generate", "_blank");
   };
   const onError = (errors, e) => dispatch({ type: "close" });
-  const formRef = useRef(null);
   const renderForm = () => {
     if (activeItem === "bio") {
       return (
@@ -170,6 +185,134 @@ const TemplateForm = ({
       );
     }
   };
+  const renderStep = () => {
+    switch (activeStep) {
+      case "Download":
+        return (
+          <Grid.Row>
+            <Grid.Column width={16}>
+              <Container style={{padding:"2rem 6rem",textAlign: "center"}}>
+              <p style={{fontSize:'16px'}}>Open your HTML resume in a new tab and press <b>Ctrl + S (Windows)</b> or <b>Cmd + S (MacOS)</b> to save the complete webpage.</p>
+              <Button primary style={{margin:"1rem"}} onClick={(e)=>window.open("/generate", "_blank")}>Open in New Tab</Button>
+              </Container>
+              
+            </Grid.Column>
+          </Grid.Row>
+        )
+      case "Upload":
+        return (
+          <Grid.Row>
+            <Grid.Column width={16}>
+              <Container style={{padding:"2rem 6rem",textAlign: "center"}}>
+              <p style={{fontSize:'16px'}}>Upload the downloaded HTML file and accompanied folder to your Google Drive in a seperate folder (example: /Portfolio).</p>
+              <GooglePicker clientId={CLIENT_ID}
+              developerKey={API_KEY}
+              scope={['https://www.googleapis.com/auth/drive.readonly']}
+              onChange={data => console.log('on change:', data)}
+              onAuthFailed={data => console.log('on auth failed:', data)}
+              navHidden={true}
+              authImmediate={false}
+              viewId={'DOCS'}
+              mimeTypes={['image/png', 'image/jpeg', 'image/jpg']}
+              createPicker={ (google, oauthToken) => {
+                const uploadView = new google.picker.DocsUploadView().setIncludeFolders(true);
+                const picker = new window.google.picker.PickerBuilder()
+                .enableFeature(google.picker.Feature.MINE_ONLY)
+                .enableFeature(google.picker.Feature.MULTISELECT_ENABLED)
+                    .addView(uploadView)/*DocsUploadView added*/
+                    .setOAuthToken(oauthToken)
+                    .setDeveloperKey(API_KEY)
+                    .setCallback((data)=>{
+                      if (data.action == google.picker.Action.PICKED) {
+                          var fileId = data.docs[0].id;
+                          alert('The user selected: ' + fileId);
+                          picker();
+                      }
+                    });
+                picker.build().setVisible(true);
+            }}>
+            <Button primary style={{margin:"1rem"}}>Upload to G-Drive</Button>
+            <div className="google"></div>
+        </GooglePicker>
+              </Container>
+              
+            </Grid.Column>
+          </Grid.Row>
+        )
+  }
+}
+  const renderModal = () => {
+    if (submitFlag) {
+      return (
+        <Modal
+          size="large"
+          open={open}
+          closeIcon
+          onClose={() => dispatch({ type: "close" })}
+        >
+          <Modal.Header style={{textAlign:"center"}}>✅ All Set!</Modal.Header>
+          <Modal.Content>
+          <Header as="h2" textAlign="center">Follow the below steps to get your Resume hosted right now!</Header>
+            <Step.Group widths={3}>
+              <Step active={activeStep === steps[0]}
+              icon='download'
+              link
+              completed={stepCompleted[steps[0]]}
+              onClick={onStepClick}
+              title='Download'
+              description='Save Webpage'
+              />
+              <Step active={activeStep === steps[1]}
+              icon='google drive'
+              link
+              completed={stepCompleted[steps[1]]}
+              onClick={onStepClick}
+              title='Upload'
+              description='Upload to GDrive'
+              />
+            </Step.Group>
+            {renderStep()}
+            
+            <p style={{textAlign:'center'}}>Click Done once this step is completed</p>
+          </Modal.Content>
+          <Modal.Actions style={{textAlign:'center'}}>
+              <Button positive onClick={onStepComplete}>Done</Button>
+          </Modal.Actions>
+        </Modal>)
+    } else {
+      return (
+        <Modal
+          size="tiny"
+          open={open}
+          closeIcon
+          onClose={() => dispatch({ type: "close" })}
+        >
+          <Modal.Header>Confirmation</Modal.Header>
+          <Modal.Content>
+            <p>Would you like to preview your HTML Resume before Confirming?</p>
+          </Modal.Content>
+          <Modal.Actions>
+            <Button
+              animated="vertical"
+              onClick={(e) => {
+                dispatch({ type: "close" });
+                localStorage.setItem("userData", JSON.stringify(watch()));
+                window.open("/preview", "_blank");
+              }}
+            >
+              <Button.Content visible>Preview</Button.Content>
+              <Button.Content hidden>
+                <Icon name="eye" />
+              </Button.Content>
+            </Button>
+            <Button positive id="submitConfirm" form="templateForm" type="submit">
+              Confirm
+            </Button>
+          </Modal.Actions>
+        </Modal>)
+    }
+    
+  }
   return (
     <>
       <Form error onSubmit={handleSubmit(onSubmit, onError)} id="templateForm">
@@ -195,35 +338,7 @@ const TemplateForm = ({
           Generate
         </Button>
       </Button.Group>
-      <Modal
-        size="tiny"
-        open={open}
-        closeIcon
-        onClose={() => dispatch({ type: "close" })}
-      >
-        <Modal.Header>Confirmation</Modal.Header>
-        <Modal.Content>
-          <p>Would you like to preview your HTML Resume before Confirming?</p>
-        </Modal.Content>
-        <Modal.Actions>
-          <Button
-            animated="vertical"
-            onClick={(e) => {
-              dispatch({ type: "close" });
-              localStorage.setItem("userData", JSON.stringify(watch()));
-              window.open("/preview", "_blank");
-            }}
-          >
-            <Button.Content visible>Preview</Button.Content>
-            <Button.Content hidden>
-              <Icon name="eye" />
-            </Button.Content>
-          </Button>
-          <Button positive id="submitConfirm" form="templateForm" type="submit">
-            Confirm
-          </Button>
-        </Modal.Actions>
-      </Modal>
+      {renderModal()}
     </>
   );
 };

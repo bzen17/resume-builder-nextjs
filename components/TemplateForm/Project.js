@@ -44,7 +44,7 @@ const Project = ({
     update,
     remove,
   } = useFieldArray({ name: "projects", control });
-  const fileRef = useRef(null);
+  const fileRef = useRef([]);
   const onImgChange = (event, i) => {
     event.preventDefault();
     event.persist();
@@ -277,14 +277,15 @@ const Project = ({
                           label="Project Image"
                           content="Choose File"
                           labelPosition="left"
+                          color="blue"
                           icon="file"
                           onClick={(e) => {
                             e.preventDefault();
-                            fileRef.current.click();
+                            fileRef.current[i].click();
                           }}
                         />
                         <input
-                          ref={fileRef}
+                          ref={el => (fileRef.current[i] = el)}
                           type="file"
                           name="image"
                           hidden

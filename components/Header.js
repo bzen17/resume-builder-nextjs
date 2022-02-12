@@ -13,15 +13,19 @@
 // limitations under the License.
 
 import React from "react";
-import { Menu, Dropdown, Button, Icon } from "semantic-ui-react";
+import { Menu, Dropdown, Button, Icon, Image } from "semantic-ui-react";
 import Link from "next/link";
 
 export default function Header() {
   return (
-    <Menu style={{ marginTop: "10px" }}>
-      <Link href="/">
-        <a className="item">Resume Builder</a>
-      </Link>
+    <Menu style={{ marginTop: "10px" }} stackable>
+      <Image
+        width="150"
+        height="52"
+        alt="logo"
+        src="/assets/logo.png"
+        className="logo"
+      />
 
       <Menu.Menu position="right">
         <Dropdown item text="Sample Resume">

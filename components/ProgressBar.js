@@ -29,12 +29,6 @@ const ProgressBar = ({ watch, errors, total }) => {
       } else {
         fields.forEach((field) => {
           if (section === "bio" || section === "contact") {
-            console.log(
-              "setTotal",
-              section,
-              field,
-              watch(`${section}.${field}`)
-            );
             if (
               watch(`${section}.${field}`) !== "" &&
               watch(`${section}.${field}`) !== undefined &&
@@ -90,6 +84,7 @@ const ProgressBar = ({ watch, errors, total }) => {
       total={total}
       precision={0}
       indicating
+      style={{ margin: "0 0 1.5em 0" }}
     ></Progress>
   );
 };

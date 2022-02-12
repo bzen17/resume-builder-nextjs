@@ -124,7 +124,6 @@ export const schema = yup
             URL: yup.mixed(),
             objURL: yup
               .string()
-              .matches(/^blob:https?:\/\//, "Image:  Invalid Image"),
           })
           .nullable(true)
           .required("Image:  Required"),
@@ -151,7 +150,6 @@ export const schema = yup
             URL: yup.mixed(),
             objURL: yup
               .string()
-              .matches(/^blob:https?:\/\//, "Image:  Invalid Image"),
           })
           .nullable(true)
           .required("Image:  Required"),
@@ -199,7 +197,6 @@ export const initFormData = {
       endMonth: "",
       endYear: "",
       desc: "",
-      languages: [],
     },
   ],
   expertise: [
