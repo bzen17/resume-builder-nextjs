@@ -5,14 +5,13 @@
   "scripts": {
     "format": "prettier --write '**/*.{ts,tsx,js,jsx,json,md,yml,yaml}'",
     "dev": "next dev",
-    "build": "next build && next export",
+    "build": "next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
     "@hookform/resolvers": "^2.8.5",
     "cors": "^2.8.5",
-    "dotenv": "^16.0.0",
     "formidable": "^2.0.1",
     "html-pdf": "^3.0.1",
     "jquery": "^3.6.0",
