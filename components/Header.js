@@ -18,13 +18,12 @@ import Link from "next/link";
 
 export default function Header() {
   return (
-    <Menu style={{ marginTop: "10px" }} stackable>
+    <Menu style={{ marginTop: "10px", borderRadius:"10px" }} stackable>
       <Image
-        width="150"
-        height="52"
+        width="48"
+        height="48"
         alt="logo"
         src="/assets/logo.png"
-        className="logo"
       />
 
       <Menu.Menu position="right">

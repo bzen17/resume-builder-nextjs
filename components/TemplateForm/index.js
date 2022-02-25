@@ -50,7 +50,7 @@ const TemplateForm = ({
     certifications: [],
     contact: [],
   };
-  const steps = ["Download", "Upload", "Info"];
+  const steps = ["Download", "Public Folder", "Upload", "Drive to Web","Success"];
   const [submitFlag, setSubmitFlag] = useState(false);
   const [activeStep, setActiveStep] = useState('Download');
   const [stepCompleted, setStepCompleted] = useState({Download:false,Upload:false});
@@ -199,43 +199,46 @@ const TemplateForm = ({
             </Grid.Column>
           </Grid.Row>
         )
+      case "Public Folder":
+        return (
+          <Grid.Row>
+            <Grid.Column width={16}>
+              <Container style={{padding:"2rem 6rem",textAlign: "center"}}>
+              <p style={{fontSize:'16px'}}>Create a folder to upload your Portfolio in your G-Drive and create a public folder</p>
+              <Button primary style={{margin:"1rem"}} onClick={(e)=>window.open("https://drive.google.com/", "_blank")}>Open G-Drive</Button>
+              </Container>
+            </Grid.Column>
+          </Grid.Row>
+        )
       case "Upload":
         return (
           <Grid.Row>
             <Grid.Column width={16}>
               <Container style={{padding:"2rem 6rem",textAlign: "center"}}>
-              <p style={{fontSize:'16px'}}>Upload the downloaded HTML file and accompanied folder to your Google Drive in a seperate folder (example: /Portfolio).</p>
-              <GooglePicker clientId={CLIENT_ID}
-              developerKey={API_KEY}
-              scope={['https://www.googleapis.com/auth/drive.readonly']}
-              onChange={data => console.log('on change:', data)}
-              onAuthFailed={data => console.log('on auth failed:', data)}
-              navHidden={true}
-              authImmediate={false}
-              viewId={'DOCS'}
-              mimeTypes={['image/png', 'image/jpeg', 'image/jpg']}
-              createPicker={ (google, oauthToken) => {
-                const uploadView = new google.picker.DocsUploadView().setIncludeFolders(true);
-                const picker = new window.google.picker.PickerBuilder()
-                .enableFeature(google.picker.Feature.MINE_ONLY)
-                .enableFeature(google.picker.Feature.MULTISELECT_ENABLED)
-                    .addView(uploadView)/*DocsUploadView added*/
-                    .setOAuthToken(oauthToken)
-                    .setDeveloperKey(API_KEY)
-                    .setCallback((data)=>{
-                      if (data.action == google.picker.Action.PICKED) {
-                          var fileId = data.docs[0].id;
-                          alert('The user selected: ' + fileId);
-                          picker();
-                      }
-                    });
-                picker.build().setVisible(true);
-            }}>
-            <Button primary style={{margin:"1rem"}}>Upload to G-Drive</Button>
-            <div className="google"></div>
-        </GooglePicker>
+              <p style={{fontSize:'16px'}}>Drag and Drop both <b>HTML file</b> and <b>folder with suffix _files</b> downloaded in First Step into the public folder created in Second Step</p>
+              <Button primary style={{margin:"1rem"}} onClick={(e)=>window.open("https://drive.google.com/", "_blank")}>Open G-Drive</Button>
               </Container>
-              
+            </Grid.Column>
+          </Grid.Row>
+        )
+      case "Drive to Web":
+        return (
+          <Grid.Row>
+            <Grid.Column width={16}>
+              <Container style={{padding:"2rem 6rem",textAlign: "center"}}>
+              <p style={{fontSize:'16px'}}>Connect your Google Drive and get Public URL to the folder you created</p>
+              <Button primary style={{margin:"1rem"}} onClick={(e)=>window.open("https://www.drv.tw/", "_blank")}>Open Drive to Web</Button>
+              </Container>
+            </Grid.Column>
+          </Grid.Row>
+        )
+      case "Success":
+        return (
+          <Grid.Row>
+            <Grid.Column width={16}>
+              <Container style={{padding:"2rem 6rem",textAlign: "center"}}>
+              <p style={{fontSize:'16px'}}>Your Resume is ready! All the best!</p>
+              </Container>
             </Grid.Column>
           </Grid.Row>
         )
@@ -253,7 +256,7 @@ const TemplateForm = ({
           <Modal.Header style={{textAlign:"center"}}>✅ All Set!</Modal.Header>
           <Modal.Content>
           <Header as="h2" textAlign="center">Follow the below steps to get your Resume hosted right now!</Header>
-            <Step.Group widths={3}>
+            <Step.Group widths={5}>
               <Step active={activeStep === steps[0]}
               icon='download'
               link
@@ -263,12 +266,35 @@ const TemplateForm = ({
               description='Save Webpage'
               />
               <Step active={activeStep === steps[1]}
-              icon='google drive'
+              icon='folder open'
               link
               completed={stepCompleted[steps[1]]}
               onClick={onStepClick}
+              title='Public Folder'
+              description='Create a public folder'
+              />
+              <Step active={activeStep === steps[2]}
+              icon='google drive'
+              link
+              completed={stepCompleted[steps[2]]}
+              onClick={onStepClick}
               title='Upload'
               description='Upload to GDrive'
+              />
+              <Step active={activeStep === steps[3]}
+              icon='world'
+              link
+              completed={stepCompleted[steps[3]]}
+              onClick={onStepClick}
+              title='Drive to Web'
+              description='Get public URL from Drive to Web'
+              />
+              <Step active={activeStep === steps[4]}
+              icon='handshake'
+              link
+              completed={stepCompleted[steps[4]]}
+              onClick={onStepClick}
+              title='Success'
               />
             </Step.Group>
             {renderStep()}
