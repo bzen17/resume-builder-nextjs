@@ -1,3 +1,20 @@
-@import 'tailwindcss/base';
-@import 'tailwindcss/components';
-@import 'tailwindcss/utilities';
+.sidebar-item {
+    font-size: '1rem';
+    color: black
+}
+
+.preview {
+    margin-top: 3rem;
+}
+
+.display-pic {
+    display: block;
+    width: 10rem;
+    height: 10rem;
+    border-radius: 5rem;
+}
+
+.logo {
+    padding: 0.5rem !important;
+    border-radius: 0.5rem;
+}

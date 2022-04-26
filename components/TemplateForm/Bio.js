@@ -1,23 +1,15 @@
-// Copyright 2022 Ayan Banerjee
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+/* eslint-disable jsx-a11y/alt-text */
 import { Controller } from "react-hook-form";
-import React, { useEffect } from "react";
-import { Button, Grid, Form, Header, Dropdown } from "semantic-ui-react";
-import validateField from "../../utility/formValidation";
-import ErrorMessage from "./Message";
-import { formError } from "./errors";
-
+import React, { useEffect, useState, useRef } from "react";
+import {
+  Image,
+  Input,
+  Grid,
+  Form,
+  Header,
+  Dropdown,
+  Button,
+} from "semantic-ui-react";
 const Bio = ({
   errors,
   formErrors,
@@ -37,6 +29,28 @@ const Bio = ({
       value: "Professional Summary",
     },
   ];
+  
+  const fileRef = useRef(null);
+  const onImgChange = (event) => {
+    event.preventDefault();
+    event.persist();
+    if (event.target.name === "image") {
+      if (event.target.files && event.target.files[0]) {
+        const [file] = event.target.files;
+        var reader = new FileReader();
+        reader.onloadend = function () {
+          const img = {
+            objURL: /\.(gif|jpe?g|png)$/g.test(file.name)
+              ? reader.result
+              : null,
+            URL: file,
+          };
+          setValue(`bio.${event.target.name}`, img);
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+  };
   const handleAddition = (e, { value }) => {
     setLanguageOptions((prevState) => [
       { key: value, text: value, value },
@@ -62,6 +76,38 @@ const Bio = ({
       </Form.Field>
     );
   };
+  const renderSelectField = (e) => {
+    return (
+      <Form.Select
+          error={
+            errors &&
+            errors.bio &&
+            errors.bio.sumHeader &&
+            !!errors.bio.sumHeader.message
+          }
+          name="sumHeader"
+          fluid
+          required
+          label="Summary Header"
+          options={sumHeaderOptions}
+          placeholder="Summary Header"
+          width={4}
+          value={watch("bio.sumHeader")}
+          onChange={(e, { value }) => setValue("bio.sumHeader", value)}
+          
+        />
+    )
+  }
+  const renderImgField = (e) => {
+    return (<Image
+      src={watch('bio.image.objURL')}
+      as="a"
+      size="medium"
+      circular
+      href={watch('bio.image.objURL')}
+      target="_blank"
+    />)
+  }
   return (
     <>
       <Header as="h3">Personal Information</Header>
@@ -69,8 +115,8 @@ const Bio = ({
         <Controller
           name="bio.fn"
           control={control}
-          render={({ field }) => (
-            <Form.Input
+          render={({ field }) => {
+            return (<Form.Input
               error={
                 errors && errors.bio && errors.bio.fn && !!errors.bio.fn.message
               }
@@ -80,8 +126,8 @@ const Bio = ({
               label="First name"
               placeholder="First name"
               {...field}
-            />
-          )}
+            />)
+}}
         />
         <Controller
           name="bio.ln"
@@ -122,23 +168,7 @@ const Bio = ({
       </Form.Group>
       {renderLanguageField()}
       <Form.Group>
-        <Form.Select
-          error={
-            errors &&
-            errors.bio &&
-            errors.bio.sumHeader &&
-            !!errors.bio.sumHeader.message
-          }
-          name="sumHeader"
-          fluid
-          required
-          label="Summary Header"
-          options={sumHeaderOptions}
-          placeholder="Summary Header"
-          width={4}
-          onChange={(e, { value }) => setValue("bio.sumHeader", value)}
-          value={watch("bio.sumHeader")}
-        />
+        {renderSelectField()}
 
         <Controller
           name="bio.about"
@@ -161,7 +191,43 @@ const Bio = ({
           )}
         />
       </Form.Group>
-      {/* {errors.bio.length !== 0 ? ErrorMessage(errors.bio) : ""} */}
+      <Grid>
+        <Grid.Row>
+          <Grid.Column width={6} verticalAlign="top">
+            <Form.Group required>
+              <Form.Button
+                error={
+                  errors &&
+                  errors.bio &&
+                  errors.bio.image &&
+                  !!errors.bio.image.message
+                }
+                required
+                label="Display Picture"
+                content="Choose File"
+                labelPosition="left"
+                icon="file"
+                color="blue"
+                onClick={(e) => {
+                  e.preventDefault();
+                  fileRef.current.click();
+                }}
+              />
+              <input
+                ref={fileRef}
+                type="file"
+                name="image"
+                hidden
+                onChange={(e) => onImgChange(e)}
+              />
+            </Form.Group>            
+          </Grid.Column>
+          <Grid.Column width={10} textAlign="center">
+            
+            {renderImgField()}
+          </Grid.Column>
+        </Grid.Row>
+      </Grid>
     </>
   );
 };

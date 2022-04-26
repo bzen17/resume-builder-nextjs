@@ -1,16 +1,3 @@
-// Copyright 2022 Ayan Banerjee
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
 
 import * as yup from "yup";
 
@@ -39,7 +26,15 @@ export const schema = yup
       about: yup
         .string()
         .required("About:  Required")
-        .max(300, "About:  Cannot be more than 300 characters"),
+        .max(3000, "About:  Cannot be more than 1000 characters"),
+      image: yup
+        .object()
+        .shape({
+          URL: yup.mixed(),
+          objURL: yup.string(),
+        })
+        .nullable(true)
+        .required("Image:  Required"),
     }),
     experience: yup.array().of(
       yup.object().shape({
@@ -113,11 +108,11 @@ export const schema = yup
         image: yup
           .object()
           .shape({
-            URL: yup.object(),
+            URL: yup.mixed(),
             objURL: yup
               .string()
-              .matches(/^blob:https?:\/\//, "Image:  Invalid Image"),
           })
+          .nullable(true)
           .required("Image:  Required"),
         techStack: yup
           .array()
@@ -139,11 +134,11 @@ export const schema = yup
         image: yup
           .object()
           .shape({
-            URL: yup.object(),
+            URL: yup.mixed(),
             objURL: yup
               .string()
-              .matches(/^blob:https?:\/\//, "Image:  Invalid Image"),
           })
+          .nullable(true)
           .required("Image:  Required"),
       })
     ),
@@ -178,6 +173,7 @@ export const initFormData = {
     sumHeader: "",
     about: "",
     role: "",
+    image: "",
   },
   experience: [
     {
@@ -188,7 +184,6 @@ export const initFormData = {
       endMonth: "",
       endYear: "",
       desc: "",
-      languages: [],
     },
   ],
   expertise: [

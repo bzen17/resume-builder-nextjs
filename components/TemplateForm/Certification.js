@@ -1,18 +1,6 @@
-// Copyright 2022 Ayan Banerjee
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
+/* eslint-disable jsx-a11y/alt-text */
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   Button,
   Image,
@@ -23,8 +11,6 @@ import {
   Popup,
   Container,
 } from "semantic-ui-react";
-import validateField from "../../utility/formValidation";
-import ErrorMessage from "./Message";
 import { Controller, useFieldArray } from "react-hook-form";
 import { requiredFields } from "./schema";
 
@@ -35,17 +21,25 @@ const Certifications = ({ errors, watch, control, setValue, setTotal }) => {
     update,
     remove,
   } = useFieldArray({ name: "certifications", control });
-  console.log("requiredField", requiredFields);
+  const fileRef = useRef([]);
   const onImgChange = (event, i) => {
     event.preventDefault();
     event.persist();
-    if (event.target.files && event.target.files[0]) {
-      const file = event.target.files[0];
-      const img = {
-        objURL: URL.createObjectURL(file),
-        URL: file,
-      };
-      setValue(`certifications.${i}.${event.target.name}`, img);
+    if (event.target.name === "image") {
+      if (event.target.files && event.target.files[0]) {
+        const [file] = event.target.files;
+        var reader = new FileReader();
+        reader.onloadend = function () {
+          const img = {
+            objURL: /\.(gif|jpe?g|png)$/g.test(file.name)
+              ? reader.result
+              : null,
+            URL: file,
+          };
+          setValue(`certifications.${i}.${event.target.name}`, img);
+        };
+        reader.readAsDataURL(file);
+      }
     }
   };
 
@@ -174,22 +168,38 @@ const Certifications = ({ errors, watch, control, setValue, setTotal }) => {
                 <Grid>
                   <Grid.Row>
                     <Grid.Column width={6} verticalAlign="top">
-                      <Input
-                        error={
-                          errors &&
-                          errors.certifications &&
-                          errors.certifications[i].image &&
-                          !!errors.certifications[i].image.message
-                        }
-                        type="file"
-                        name="image"
-                        onChange={(e) => onImgChange(e, i)}
-                      />
+                      <Form.Group required>
+                        <Form.Button
+                          error={
+                            errors &&
+                            errors.certifications &&
+                            errors.certifications[i] &&
+                            errors.certifications[i].image &&
+                            !!errors.certifications[i].image.message
+                          }
+                          required
+                          label="Certificate Image"
+                          content="Choose File"
+                          labelPosition="left"
+                          icon="file"
+                          color="blue"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            fileRef.current[i].click();
+                          }}
+                        />
+                        <input
+                          ref={el => (fileRef.current[i] = el)}
+                          type="file"
+                          name="image"
+                          hidden
+                          onChange={(e) => onImgChange(e, i)}
+                        />
+                      </Form.Group>
                     </Grid.Column>
                     <Grid.Column width={10} textAlign="center">
                       <Image
                         src={watch(`certifications.${i}.image.objURL`)}
-                        alt={`project${i + 1}`}
                         as="a"
                         size="medium"
                         href={watch(`certifications.${i}.image.objURL`)}
@@ -205,14 +215,7 @@ const Certifications = ({ errors, watch, control, setValue, setTotal }) => {
       </>
     );
   };
-  return (
-    <>
-      {renderCertifications()}
-      {/* {errors.certifications.length !== 0
-        ? ErrorMessage(errors.certifications)
-        : ""} */}
-    </>
-  );
+  return <>{renderCertifications()}</>;
 };
 
 export default Certifications;
