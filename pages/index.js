@@ -10,7 +10,7 @@ import { useForm, useFieldArray } from "react-hook-form";
 import ProgressBar from "../components/ProgressBar";
 import "semantic-ui-css/semantic.min.css";
 
-export default function Home({API_KEY,CLIENT_ID}) {
+export default function Home() {
   const [activeItem, setActiveItem] = useState("bio");
   const fileRef = useRef(null);
   const {
@@ -78,8 +78,6 @@ export default function Home({API_KEY,CLIENT_ID}) {
                 clearErrors={clearErrors}
                 reset={reset}
                 setTotal={setTotal}
-                API_KEY={API_KEY}
-                CLIENT_ID={CLIENT_ID}
               />
             </Segment>
           </Grid.Column>
@@ -89,12 +87,3 @@ export default function Home({API_KEY,CLIENT_ID}) {
   );
 }
 
-export async function getStaticProps() {
-  return {
-    props:{
-      API_KEY:process.env.GOOGLE_API_KEY,
-      CLIENT_ID:process.env.GOOGLE_CLIENT_ID,
-    }
-  }
-  // ...
-}
