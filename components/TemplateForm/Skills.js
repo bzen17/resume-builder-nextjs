@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from "react";
 import { Button, Grid, Form, Popup, Header, Dropdown } from "semantic-ui-react";
 import validateField from "../../utility/formValidation";
-
 import { Controller, useFieldArray } from "react-hook-form";
 import { requiredFields } from "./schema";
 

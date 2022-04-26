@@ -26,7 +26,6 @@ const TemplateForm = ({
   clearErrors,
   reset,
   setTotal,
-  API_KEY,CLIENT_ID
 }) => {
   const initErrors = {
     bio: [],
