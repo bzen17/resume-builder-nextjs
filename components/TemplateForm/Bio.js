@@ -29,7 +29,7 @@ const Bio = ({
       value: "Professional Summary",
     },
   ];
-  
+
   const fileRef = useRef(null);
   const onImgChange = (event) => {
     event.preventDefault();
@@ -79,35 +79,36 @@ const Bio = ({
   const renderSelectField = (e) => {
     return (
       <Form.Select
-          error={
-            errors &&
-            errors.bio &&
-            errors.bio.sumHeader &&
-            !!errors.bio.sumHeader.message
-          }
-          name="sumHeader"
-          fluid
-          required
-          label="Summary Header"
-          options={sumHeaderOptions}
-          placeholder="Summary Header"
-          width={4}
-          value={watch("bio.sumHeader")}
-          onChange={(e, { value }) => setValue("bio.sumHeader", value)}
-          
-        />
-    )
-  }
+        error={
+          errors &&
+          errors.bio &&
+          errors.bio.sumHeader &&
+          !!errors.bio.sumHeader.message
+        }
+        name="sumHeader"
+        fluid
+        required
+        label="Summary Header"
+        options={sumHeaderOptions}
+        placeholder="Summary Header"
+        width={4}
+        value={watch("bio.sumHeader")}
+        onChange={(e, { value }) => setValue("bio.sumHeader", value)}
+      />
+    );
+  };
   const renderImgField = (e) => {
-    return (<Image
-      src={watch('bio.image.objURL')}
-      as="a"
-      size="medium"
-      circular
-      href={watch('bio.image.objURL')}
-      target="_blank"
-    />)
-  }
+    return (
+      <Image
+        src={watch("bio.image.objURL")}
+        as="a"
+        size="medium"
+        circular
+        href={watch("bio.image.objURL")}
+        target="_blank"
+      />
+    );
+  };
   return (
     <>
       <Header as="h3">Personal Information</Header>
@@ -116,18 +117,23 @@ const Bio = ({
           name="bio.fn"
           control={control}
           render={({ field }) => {
-            return (<Form.Input
-              error={
-                errors && errors.bio && errors.bio.fn && !!errors.bio.fn.message
-              }
-              name="fn"
-              fluid
-              required
-              label="First name"
-              placeholder="First name"
-              {...field}
-            />)
-}}
+            return (
+              <Form.Input
+                error={
+                  errors &&
+                  errors.bio &&
+                  errors.bio.fn &&
+                  !!errors.bio.fn.message
+                }
+                name="fn"
+                fluid
+                required
+                label="First name"
+                placeholder="First name"
+                {...field}
+              />
+            );
+          }}
         />
         <Controller
           name="bio.ln"
@@ -220,10 +226,9 @@ const Bio = ({
                 hidden
                 onChange={(e) => onImgChange(e)}
               />
-            </Form.Group>            
+            </Form.Group>
           </Grid.Column>
           <Grid.Column width={10} textAlign="center">
-            
             {renderImgField()}
           </Grid.Column>
         </Grid.Row>

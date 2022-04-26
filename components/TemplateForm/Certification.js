@@ -189,7 +189,7 @@ const Certifications = ({ errors, watch, control, setValue, setTotal }) => {
                           }}
                         />
                         <input
-                          ref={el => (fileRef.current[i] = el)}
+                          ref={(el) => (fileRef.current[i] = el)}
                           type="file"
                           name="image"
                           hidden

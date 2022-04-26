@@ -26,7 +26,12 @@ export default function Home() {
   } = useForm({
     resolver: yupResolver(schema),
     mode: "onChange",
-    defaultValues:  typeof window !== 'undefined'?localStorage.getItem("userData")?JSON.parse(localStorage.getItem("userData")):initFormData:initFormData,
+    defaultValues:
+      typeof window !== "undefined"
+        ? localStorage.getItem("userData")
+          ? JSON.parse(localStorage.getItem("userData"))
+          : initFormData
+        : initFormData,
   });
   const onFileUpload = (e) => {};
   const [total, setTotal] = useState(27);
@@ -86,4 +91,3 @@ export default function Home() {
     </Layout>
   );
 }
-

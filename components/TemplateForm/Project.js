@@ -272,7 +272,7 @@ const Project = ({
                           }}
                         />
                         <input
-                          ref={el => (fileRef.current[i] = el)}
+                          ref={(el) => (fileRef.current[i] = el)}
                           type="file"
                           name="image"
                           hidden

@@ -1,4 +1,3 @@
-
 const fieldValidationErrors = {
   charLimit(key, value, charLimit) {
     var isValid = value.length <= charLimit;

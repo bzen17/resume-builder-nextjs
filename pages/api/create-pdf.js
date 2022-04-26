@@ -1,4 +1,3 @@
-
 import Cors from "cors";
 const pdf = require("html-pdf");
 const pdfTemplate = require("../../utility/docTemplate");

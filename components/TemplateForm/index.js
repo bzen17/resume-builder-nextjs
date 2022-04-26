@@ -1,7 +1,16 @@
-
 import React, { useState, useRef, useEffect } from "react";
-import { Button, Grid, Form, Step, Icon, Modal,Popup,Header,Container } from "semantic-ui-react";
-import GooglePicker from 'react-google-picker';
+import {
+  Button,
+  Grid,
+  Form,
+  Step,
+  Icon,
+  Modal,
+  Popup,
+  Header,
+  Container,
+} from "semantic-ui-react";
+import GooglePicker from "react-google-picker";
 import Bio from "./Bio";
 import Experience from "./Experience";
 import Project from "./Project";
@@ -36,17 +45,26 @@ const TemplateForm = ({
     certifications: [],
     contact: [],
   };
-  const steps = ["Download", "Public Folder", "Upload", "Drive to Web","Success"];
+  const steps = [
+    "Download",
+    "Public Folder",
+    "Upload",
+    "Drive to Web",
+    "Success",
+  ];
   const [submitFlag, setSubmitFlag] = useState(false);
-  const [activeStep, setActiveStep] = useState('Download');
-  const [stepCompleted, setStepCompleted] = useState({Download:false,Upload:false});
+  const [activeStep, setActiveStep] = useState("Download");
+  const [stepCompleted, setStepCompleted] = useState({
+    Download: false,
+    Upload: false,
+  });
   const onStepClick = (e, { title }) => {
     setActiveStep(title);
-  }
+  };
   const onStepComplete = (e) => {
-    setActiveStep(steps[steps.indexOf(activeStep)+1]);
+    setActiveStep(steps[steps.indexOf(activeStep) + 1]);
     setStepCompleted({ ...stepCompleted, [activeStep]: true });
-  }
+  };
   function exampleReducer(state, action) {
     switch (action.type) {
       case "close":
@@ -94,7 +112,7 @@ const TemplateForm = ({
   const onSubmit = (data) => {
     console.log("submittedData", data);
     localStorage.setItem("userData", JSON.stringify(data));
-    setSubmitFlag(true)
+    setSubmitFlag(true);
     //dispatch({ type: "close" });
     //window.open("/generate", "_blank");
   };
@@ -177,59 +195,102 @@ const TemplateForm = ({
         return (
           <Grid.Row>
             <Grid.Column width={16}>
-              <Container style={{padding:"2rem 6rem",textAlign: "center"}}>
-              <p style={{fontSize:'16px'}}>Open your HTML resume in a new tab and press <b>Ctrl + S (Windows)</b> or <b>Cmd + S (MacOS)</b> to save the complete webpage.</p>
-              <Button primary style={{margin:"1rem"}} onClick={(e)=>window.open("/generate", "_blank")}>Open in New Tab</Button>
+              <Container style={{ padding: "2rem 6rem", textAlign: "center" }}>
+                <p style={{ fontSize: "16px" }}>
+                  Open your HTML resume in a new tab and press{" "}
+                  <b>Ctrl + S (Windows)</b> or <b>Cmd + S (MacOS)</b> to save
+                  the complete webpage.
+                </p>
+                <Button
+                  primary
+                  style={{ margin: "1rem" }}
+                  onClick={(e) => window.open("/generate", "_blank")}
+                >
+                  Open in New Tab
+                </Button>
               </Container>
-              
             </Grid.Column>
           </Grid.Row>
-        )
+        );
       case "Public Folder":
         return (
           <Grid.Row>
             <Grid.Column width={16}>
-              <Container style={{padding:"2rem 6rem",textAlign: "center"}}>
-              <p style={{fontSize:'16px'}}>Create a folder to upload your Portfolio in your G-Drive and create a public folder</p>
-              <Button primary style={{margin:"1rem"}} onClick={(e)=>window.open("https://drive.google.com/", "_blank")}>Open G-Drive</Button>
+              <Container style={{ padding: "2rem 6rem", textAlign: "center" }}>
+                <p style={{ fontSize: "16px" }}>
+                  Create a folder to upload your Portfolio in your G-Drive and
+                  create a public folder
+                </p>
+                <Button
+                  primary
+                  style={{ margin: "1rem" }}
+                  onClick={(e) =>
+                    window.open("https://drive.google.com/", "_blank")
+                  }
+                >
+                  Open G-Drive
+                </Button>
               </Container>
             </Grid.Column>
           </Grid.Row>
-        )
+        );
       case "Upload":
         return (
           <Grid.Row>
             <Grid.Column width={16}>
-              <Container style={{padding:"2rem 6rem",textAlign: "center"}}>
-              <p style={{fontSize:'16px'}}>Drag and Drop both <b>HTML file</b> and <b>folder with suffix _files</b> downloaded in First Step into the public folder created in Second Step</p>
-              <Button primary style={{margin:"1rem"}} onClick={(e)=>window.open("https://drive.google.com/", "_blank")}>Open G-Drive</Button>
+              <Container style={{ padding: "2rem 6rem", textAlign: "center" }}>
+                <p style={{ fontSize: "16px" }}>
+                  Drag and Drop both <b>HTML file</b> and{" "}
+                  <b>folder with suffix _files</b> downloaded in First Step into
+                  the public folder created in Second Step
+                </p>
+                <Button
+                  primary
+                  style={{ margin: "1rem" }}
+                  onClick={(e) =>
+                    window.open("https://drive.google.com/", "_blank")
+                  }
+                >
+                  Open G-Drive
+                </Button>
               </Container>
             </Grid.Column>
           </Grid.Row>
-        )
+        );
       case "Drive to Web":
         return (
           <Grid.Row>
             <Grid.Column width={16}>
-              <Container style={{padding:"2rem 6rem",textAlign: "center"}}>
-              <p style={{fontSize:'16px'}}>Connect your Google Drive and get Public URL to the folder you created</p>
-              <Button primary style={{margin:"1rem"}} onClick={(e)=>window.open("https://www.drv.tw/", "_blank")}>Open Drive to Web</Button>
+              <Container style={{ padding: "2rem 6rem", textAlign: "center" }}>
+                <p style={{ fontSize: "16px" }}>
+                  Connect your Google Drive and get Public URL to the folder you
+                  created
+                </p>
+                <Button
+                  primary
+                  style={{ margin: "1rem" }}
+                  onClick={(e) => window.open("https://www.drv.tw/", "_blank")}
+                >
+                  Open Drive to Web
+                </Button>
               </Container>
             </Grid.Column>
           </Grid.Row>
-        )
+        );
       case "Success":
         return (
           <Grid.Row>
             <Grid.Column width={16}>
-              <Container style={{padding:"2rem 6rem",textAlign: "center"}}>
-              <p style={{fontSize:'16px'}}>Your Resume is ready! All the best!</p>
+              <Container style={{ padding: "2rem 6rem", textAlign: "center" }}>
+                <p style={{ fontSize: "16px" }}>
+                  Your Resume is ready! All the best!
+                </p>
               </Container>
             </Grid.Column>
           </Grid.Row>
-        )
-  }
-}
+        );
+    }
+  };
   const renderModal = () => {
     if (submitFlag) {
       return (
@@ -239,58 +300,72 @@ const TemplateForm = ({
           closeIcon
           onClose={() => dispatch({ type: "close" })}
         >
-          <Modal.Header style={{textAlign:"center"}}>✅ All Set!</Modal.Header>
+          <Modal.Header style={{ textAlign: "center" }}>
+            ✅ All Set!
+          </Modal.Header>
           <Modal.Content>
-          <Header as="h2" textAlign="center">Follow the below steps to get your Resume hosted right now!</Header>
+            <Header as="h2" textAlign="center">
+              Follow the below steps to get your Resume hosted right now!
+            </Header>
             <Step.Group widths={5}>
-              <Step active={activeStep === steps[0]}
-              icon='download'
-              link
-              completed={stepCompleted[steps[0]]}
-              onClick={onStepClick}
-              title='Download'
-              description='Save Webpage'
+              <Step
+                active={activeStep === steps[0]}
+                icon="download"
+                link
+                completed={stepCompleted[steps[0]]}
+                onClick={onStepClick}
+                title="Download"
+                description="Save Webpage"
               />
-              <Step active={activeStep === steps[1]}
-              icon='folder open'
-              link
-              completed={stepCompleted[steps[1]]}
-              onClick={onStepClick}
-              title='Public Folder'
-              description='Create a public folder'
+              <Step
+                active={activeStep === steps[1]}
+                icon="folder open"
+                link
+                completed={stepCompleted[steps[1]]}
+                onClick={onStepClick}
+                title="Public Folder"
+                description="Create a public folder"
               />
-              <Step active={activeStep === steps[2]}
-              icon='google drive'
-              link
-              completed={stepCompleted[steps[2]]}
-              onClick={onStepClick}
-              title='Upload'
-              description='Upload to GDrive'
+              <Step
+                active={activeStep === steps[2]}
+                icon="google drive"
+                link
+                completed={stepCompleted[steps[2]]}
+                onClick={onStepClick}
+                title="Upload"
+                description="Upload to GDrive"
               />
-              <Step active={activeStep === steps[3]}
-              icon='world'
-              link
-              completed={stepCompleted[steps[3]]}
-              onClick={onStepClick}
-              title='Drive to Web'
-              description='Get public URL from Drive to Web'
+              <Step
+                active={activeStep === steps[3]}
+                icon="world"
+                link
+                completed={stepCompleted[steps[3]]}
+                onClick={onStepClick}
+                title="Drive to Web"
+                description="Get public URL from Drive to Web"
               />
-              <Step active={activeStep === steps[4]}
-              icon='handshake'
-              link
-              completed={stepCompleted[steps[4]]}
-              onClick={onStepClick}
-              title='Success'
+              <Step
+                active={activeStep === steps[4]}
+                icon="handshake"
+                link
+                completed={stepCompleted[steps[4]]}
+                onClick={onStepClick}
+                title="Success"
               />
             </Step.Group>
             {renderStep()}
-            
-            <p style={{textAlign:'center'}}>Click Done once this step is completed</p>
+
+            <p style={{ textAlign: "center" }}>
+              Click Done once this step is completed
+            </p>
           </Modal.Content>
-          <Modal.Actions style={{textAlign:'center'}}>
-              <Button positive onClick={onStepComplete}>Done</Button>
+          <Modal.Actions style={{ textAlign: "center" }}>
+            <Button positive onClick={onStepComplete}>
+              Done
+            </Button>
           </Modal.Actions>
-        </Modal>)
+        </Modal>
+      );
     } else {
       return (
         <Modal
@@ -317,14 +392,19 @@ const TemplateForm = ({
                 <Icon name="eye" />
               </Button.Content>
             </Button>
-            <Button positive id="submitConfirm" form="templateForm" type="submit">
+            <Button
+              positive
+              id="submitConfirm"
+              form="templateForm"
+              type="submit"
+            >
               Confirm
             </Button>
           </Modal.Actions>
-        </Modal>)
+        </Modal>
+      );
     }
-    
-  }
+  };
   return (
     <>
       <Form error onSubmit={handleSubmit(onSubmit, onError)} id="templateForm">

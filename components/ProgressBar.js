@@ -71,7 +71,7 @@ const ProgressBar = ({ watch, errors, total }) => {
       total={total}
       precision={0}
       indicating
-      style={{ margin: "0 0 1.5em 0", flexGrow:'0'}}
+      style={{ margin: "0 0 1.5em 0", flexGrow: "0" }}
     ></Progress>
   );
 };

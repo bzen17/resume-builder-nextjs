@@ -1,4 +1,3 @@
-
 import * as yup from "yup";
 
 export const schema = yup
@@ -109,8 +108,7 @@ export const schema = yup
           .object()
           .shape({
             URL: yup.mixed(),
-            objURL: yup
-              .string()
+            objURL: yup.string(),
           })
           .nullable(true)
           .required("Image:  Required"),
@@ -135,8 +133,7 @@ export const schema = yup
           .object()
           .shape({
             URL: yup.mixed(),
-            objURL: yup
-              .string()
+            objURL: yup.string(),
           })
           .nullable(true)
           .required("Image:  Required"),
