@@ -2,7 +2,7 @@
 
 > Create, style and host your own HTML Resume onto the web simply by filling a form.
 
-Sample: [Resume]('https://p2a2jxck6npi5gyzjti2fw.on.drv.tw/CV/Ayan%20Banerjee%20_%20Portfolio.html')
+Sample: <a href='https://p2a2jxck6npi5gyzjti2fw.on.drv.tw/CV/Ayan%20Banerjee%20_%20Portfolio.html' target="_blank">Resume</a>
 ### Features
 
 - [x] Sectional form to fill resume information
@@ -51,7 +51,7 @@ To run the project locally after installation execute `npm run dev`
 - **Preview (Previews resume with any sections filled)** [Path: /preview]
     You can preview your resume here till however much you have filled.
 
-    Sample: [Preview]('https://p2a2jxck6npi5gyzjti2fw.on.drv.tw/CV/Ayan%20Banerjee%20_%20Portfolio.html')
+    Sample: <a href='https://p2a2jxck6npi5gyzjti2fw.on.drv.tw/CV/Ayan%20Banerjee%20_%20Portfolio.html' target="_blank">Preview</a>
 
     ---
 
