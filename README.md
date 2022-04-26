@@ -1,34 +1,43 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## Resume Builder (Next.js)
+> Create, style and host your own HTML Resume onto the web simply by filling a form.
 
-## Getting Started
+### Features
 
-First, run the development server:
+- [x] Sectional form to fill resume information
+- [x] Progress bar to show progress of resume creation
+- [x] Resume preview
+- [x] Steps to download and host resume
+- [ ] Automate HTML resume hosting
+- [ ] Download resume as PDF
+- [ ] Import and export resume
+
+### Installation
+
+Local installation:
 
 ```bash
-npm run dev
-# or
-yarn dev
+    npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+To run the project locally after installation execute `npm run dev`
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+### Pages
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
-
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+ - **Home (Form to fill resume information)** [Path: /] 
+    - **`Sections`**
+        - ==Bio==
+        <img src="./src/formSections/Bio.png" alt="Bio" width="800"/>
+        - ==Experience==
+        <img src="./src/formSections/Exp.png" alt="Exp" width="800"/>
+        - ==Skills==
+        <img src="./src/formSections/Skills.png" alt="Skills" width="800"/>
+        - ==Certifications==
+        <img src="./src/formSections/Cert.png" alt="Cert" width="800"/>
+        - ==Contact==
+        <img src="./src/formSections/Contact.png" alt="Contact" width="800"/>
+    - **`Error Handling`**
+    <img src="./src/formError.png" alt="formError" width="800"/>
+    - **`Submit`** (On click of ==Generate== button)
+    <img src="./src/formSubmit.png" alt="formSubmit" width="400"/>
+ - **Preview (Previews resume with any sections filled)** [Path: /preview] 
+ - **Generate (Previews resume with all sections filled)** [Path: /generate] 

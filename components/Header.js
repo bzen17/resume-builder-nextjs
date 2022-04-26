@@ -1,31 +1,21 @@
-// Copyright 2022 Ayan Banerjee
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
 
 import React from "react";
-import { Menu, Dropdown, Button, Icon, Image } from "semantic-ui-react";
+import { Menu, Dropdown, Button, Header, Icon, Image } from "semantic-ui-react";
 import Link from "next/link";
 
-export default function Header() {
+export default function CustomHeader() {
   return (
-    <Menu style={{ marginTop: "10px", borderRadius:"10px" }} stackable>
+    <Menu style={{ marginTop: "10px", borderRadius:"10px" }}>
       <Image
         width="48"
         height="48"
         alt="logo"
         src="/assets/logo.png"
       />
-
+        <Menu.Item style={{display:'flex',flexDirection:'column', alignItems: 'flex-start', paddingTop: '0.75em', paddingBottom: '0.75em'}}>
+            <Menu.Header><b>Resume Builder</b></Menu.Header>
+            <Menu.Header style={{fontSize:'0.75rem'}}>Form to HTML Resume in seconds</Menu.Header>
+        </Menu.Item>
       <Menu.Menu position="right">
         <Dropdown item text="Sample Resume">
           <Dropdown.Menu>
